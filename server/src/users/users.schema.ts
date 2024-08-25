@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 export const UserSchema = new mongoose.Schema({
+    qr: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Qr',
+        required: true
+    },
     email: {
         required: true,
         type: String
