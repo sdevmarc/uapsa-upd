@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
 
 export const PointsSchema = new mongoose.Schema({
-    user: {
+    qr: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Qr',
         required: true
     },
     points: {
         required: true,
-        type: String
+        type: Number,
+        default: 0
     }
 }, { timestamps: true })
