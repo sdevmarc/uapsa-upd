@@ -1,9 +1,16 @@
 import mongoose from "mongoose";
 
 export const QRSchema = new mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+    idNumber: {
+        type: Number,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    degree: {
+        type: String,
         required: true
     },
     qr: {
