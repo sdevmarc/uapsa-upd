@@ -13,7 +13,7 @@ import { PointsModule } from './points/points.module';
     MongooseModule.forRoot('mongodb://localhost:27017/upoints-kiosk'),
     AttendanceModule,
     QrModule,
-    PointsModule
+    PointsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
