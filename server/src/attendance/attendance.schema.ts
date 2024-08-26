@@ -6,9 +6,14 @@ export const AttendanceSchema = new mongoose.Schema({
         ref: 'Qr',
         required: true
     },
-    date: {
+    attended: {
+        type: Number,
         required: true,
-        type: Date,
-        default: Date.now()
+        default: 0
     },
+    absences: {
+        type: Number,
+        required: true,
+        default: 0
+    }
 }, { timestamps: true })
