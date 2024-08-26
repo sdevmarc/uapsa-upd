@@ -13,6 +13,20 @@ export class UsersService {
         private readonly jwtService: JwtService
     ) { }
 
+    async findAll()
+        : Promise<{ success: boolean, message: string, data: IUsers[] }> {
+        const data = await this.UserModel.find()
+        if (data.length <= 0) return { success: true, message: 'No existing users!', data }
+        return { success: true, message: 'Users retrieved successfully!', data }
+    }
+
+    async findOne({ email })
+        : Promise<{ success: boolean, message: string, data: IUsers }> {
+        const data = await this.UserModel.findOne({ email })
+        if (!data) return { success: true, message: 'Cannot find user!', data }
+        return { success: true, message: 'User retrieved successfully!', data }
+    }
+
     async InsertUser({ qr, email, password }: { qr: string, email: string, password: string })
         : Promise<{ success: boolean, message: string, qr: string }> {
         const salt = await bcrypt.genSalt()
