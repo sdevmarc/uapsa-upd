@@ -10,25 +10,25 @@ export class AttendanceController {
         private readonly pointService: PointsService
     ) { }
 
-    @Get()
-    async ViewAllAttendance() {
-        try {
-            return await this.attendanceService.findAll()
-        } catch (error) {
-            throw new HttpException({ success: false, message: 'Failed to retrieved attendance.' }, HttpStatus.BAD_REQUEST)
-        }
-    }
+    // @Get()
+    // async ViewAllAttendance() {
+    //     try {
+    //         return await this.attendanceService.findAll()
+    //     } catch (error) {
+    //         throw new HttpException({ success: false, message: 'Failed to retrieved attendance.' }, HttpStatus.BAD_REQUEST)
+    //     }
+    // }
 
-    @Get(':qr')
-    async ViewOneAttendance(
-        @Param() { qr }: { qr: string }
-    ) {
-        try {
-            return await this.attendanceService.findOne({ qr })
-        } catch (error) {
-            throw new HttpException({ success: false, message: 'Failed to retrieved user attendance.' }, HttpStatus.BAD_REQUEST)
-        }
-    }
+    // @Get(':qr')
+    // async ViewOneAttendance(
+    //     @Param() { qr }: { qr: string }
+    // ) {
+    //     try {
+    //         return await this.attendanceService.findOne({ qr })
+    //     } catch (error) {
+    //         throw new HttpException({ success: false, message: 'Failed to retrieved user attendance.' }, HttpStatus.BAD_REQUEST)
+    //     }
+    // }
 
     @Post('create-attended')
     async CreateAttended(@Body() { qr }: { qr: string }) {
