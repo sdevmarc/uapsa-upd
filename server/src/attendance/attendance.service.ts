@@ -19,8 +19,10 @@ export class AttendanceService {
 
     async findOne({ qr }: { qr: string })
         : Promise<{ success: boolean, message: string, data: IAttendance }> {
+
         const data = await this.AttendanceModel.findOne({ qr })
         if (!data) return { success: true, message: 'Cannot find attendance!', data }
+        
         return { success: true, message: 'User attendance retrieved successfully!', data }
     }
 
