@@ -1,6 +1,7 @@
-import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpException, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { QrService } from './qr.service';
 import { IQr } from './qr.interface';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('qr')
 export class QrController {
@@ -8,6 +9,7 @@ export class QrController {
         private readonly qrService: QrService
     ) { }
 
+    @UseGuards(AuthGuard)
     @Post('create-qr')
     async CreateQr(@Body() { idNumber, name, degree }: IQr) {
         try {
@@ -17,6 +19,7 @@ export class QrController {
         }
     }
 
+    @UseGuards(AuthGuard)
     @Post('delete-qr')
     async RemoveQrUser(@Body() { idNumber }: { idNumber: string }) {
         try {
@@ -26,6 +29,7 @@ export class QrController {
         }
     }
 
+    @UseGuards(AuthGuard)
     @Post('reset')
     async DeleteQr() {
         try {
