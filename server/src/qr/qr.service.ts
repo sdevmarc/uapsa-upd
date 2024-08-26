@@ -15,4 +15,16 @@ export class QrService {
         await this.QrModel.create({ idNumber, name, degree })
         return { success: true, message: 'Qr created successfully!' }
     }
+
+    async DeleteQr({ idNumber }: { idNumber: string })
+        : Promise<{ success: boolean, message: string }> {
+        await this.QrModel.deleteOne({ idNumber })
+        return { success: true, message: 'Qr deleted successfully!' }
+    }
+
+    async ResetQr()
+        : Promise<{ success: boolean, message: string }> {
+        await this.QrModel.deleteMany({})
+        return { success: true, message: 'Qr resetted successfully!' }
+    }
 }
