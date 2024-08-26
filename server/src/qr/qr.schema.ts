@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export const QRSchema = new mongoose.Schema({
     idNumber: {
-        type: Number,
+        type: String,
         required: true
     },
     name: {
@@ -12,9 +12,5 @@ export const QRSchema = new mongoose.Schema({
     degree: {
         type: String,
         required: true
-    },
-    qr: {
-        required: true,
-        type: String
     }
 }, { timestamps: true })
