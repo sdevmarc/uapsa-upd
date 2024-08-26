@@ -1,5 +1,6 @@
-import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpException, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -24,6 +25,7 @@ export class UsersController {
     }
 
 
+    @UseGuards(AuthGuard)
     @Post('delete-user')
     async RemoveUser(@Body() { email }: { email: string }) {
         try {
