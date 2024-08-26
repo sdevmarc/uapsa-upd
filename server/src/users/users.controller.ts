@@ -22,4 +22,14 @@ export class UsersController {
             throw new HttpException({ success: false, message: 'User failed to login!', error }, HttpStatus.BAD_REQUEST)
         }
     }
+
+
+    @Post('delete-user')
+    async RemoveUser(@Body() { email }: { email: string }) {
+        try {
+            return this.userService.DeleteUser({ email })
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'User failed to login!', error }, HttpStatus.BAD_REQUEST)
+        }
+    }
 }
