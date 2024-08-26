@@ -1,6 +1,7 @@
-import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpException, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { AttendanceService } from './attendance.service';
 import { PointsService } from 'src/points/points.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('attendance')
 export class AttendanceController {
@@ -28,6 +29,7 @@ export class AttendanceController {
         }
     }
 
+    @UseGuards(AuthGuard)
     @Post('reset')
     async DeleteAttendance() {
         try {
