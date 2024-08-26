@@ -1,1 +1,5 @@
-export interface Qr {}
+export interface IQr {
+    idNumber: string
+    name: string
+    degree: string
+}
