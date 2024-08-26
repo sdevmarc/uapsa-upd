@@ -51,7 +51,7 @@ export class UsersController {
     @Post('update-user')
     async UpdateUser(@Body() { id, role }: { id: string, role: string }) {
         try {
-            await this.userService.UpdateUser({ id, role })
+            return await this.userService.UpdateUser({ id, role })
         } catch (error) {
             throw new HttpException({ success: false, message: 'User failed to update.' }, HttpStatus.BAD_REQUEST)
         }
