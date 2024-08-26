@@ -1,1 +1,4 @@
-export interface Points {}
+export interface IPoints {
+    qr?: string
+    points?: number
+}
