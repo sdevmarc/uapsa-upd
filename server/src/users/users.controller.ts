@@ -47,6 +47,15 @@ export class UsersController {
         }
     }
 
+    @UseGuards(AuthGuard)
+    @Post('update-user')
+    async UpdateUser(@Body() { id, role }: { id: string, role: string }) {
+        try {
+            await this.userService.UpdateUser({ id, role })
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'User failed to update.' }, HttpStatus.BAD_REQUEST)
+        }
+    }
 
     @UseGuards(AuthGuard)
     @Post('delete-user')
