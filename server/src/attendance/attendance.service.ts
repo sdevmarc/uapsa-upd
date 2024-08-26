@@ -10,6 +10,20 @@ export class AttendanceService {
         @InjectModel('Attendance') private readonly AttendanceModel: Model<IAttendance>
     ) { }
 
+    async findAll()
+        : Promise<{ success: boolean, message: string, data: IAttendance[] }> {
+        const data = await this.AttendanceModel.find()
+        if (data.length <= 0) return { success: true, message: 'No existing attendance.', data }
+        return { success: true, message: 'Attendance retrieved successfully', data }
+    }
+
+    async findOne({ qr }: { qr: string })
+        : Promise<{ success: boolean, message: string, data: IAttendance }> {
+        const data = await this.AttendanceModel.findOne({ qr })
+        if (!data) return { success: true, message: 'Cannot find attendance!', data }
+        return { success: true, message: 'User attendance retrieved successfully!', data }
+    }
+
     async InsertAttended({ qr }: IAttendance)
         : Promise<{ success: boolean, message: string }> {
 
@@ -18,7 +32,7 @@ export class AttendanceService {
             { $inc: { attended: 1 } },
             { new: true, upsert: true }
         )
-        
+
         return { success: true, message: 'Attended created sucessfully!' }
     }
 
