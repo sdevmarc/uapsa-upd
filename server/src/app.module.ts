@@ -6,16 +6,26 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AttendanceModule } from './attendance/attendance.module';
 import { QrModule } from './qr/qr.module';
 import { PointsModule } from './points/points.module';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [
-    UsersModule,
-    MongooseModule.forRoot('mongodb://localhost:27017/upoints-kiosk'),
-    AttendanceModule,
-    QrModule,
-    PointsModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        JwtModule.registerAsync({
+            imports: [ConfigModule],
+            useFactory: async (configService: ConfigService) => ({
+                secret: configService.get<string>('SECRET_JWT_TOKEN'),
+                signOptions: { expiresIn: '1' },
+            }),
+            inject: [ConfigService],
+        }),
+        UsersModule,
+        MongooseModule.forRoot('mongodb://localhost:27017/upoints-kiosk'),
+        AttendanceModule,
+        QrModule,
+        PointsModule,
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule { }
