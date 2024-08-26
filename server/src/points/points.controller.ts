@@ -21,7 +21,16 @@ export class PointsController {
         try {
             return await this.pointService.LessPoint({ qr })
         } catch (error) {
-            throw new HttpException({ success: false, message: 'Point failed to add to the user.' }, HttpStatus.BAD_REQUEST)
+            throw new HttpException({ success: false, message: 'Point failed to less point to the user.' }, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    @Post('reset')
+    async ResetPoints() {
+        try {
+            return await this.pointService.ResetPoints()
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Point failed to reset points.' }, HttpStatus.BAD_REQUEST)
         }
     }
 }
