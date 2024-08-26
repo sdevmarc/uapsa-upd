@@ -9,6 +9,7 @@ export class QrController {
         private readonly qrService: QrService
     ) { }
 
+    @UseGuards(AuthGuard)
     @Get()
     async ViewAllQrUsers() {
         try {
@@ -18,18 +19,17 @@ export class QrController {
         }
     }
 
-    @Get(':idNumber')
+    @Get(':qr')
     async ViewOneQrUser(
-        @Param() { idNumber }: { idNumber: string }
+        @Param() { qr }: { qr: string }
     ) {
         try {
-            return await this.qrService.findOne({ idNumber })
+            return await this.qrService.findOne({ qr })
         } catch (error) {
             throw new HttpException({ success: false, message: 'Qr user data failed to retrieved!' }, HttpStatus.BAD_REQUEST)
         }
     }
 
-    @UseGuards(AuthGuard)
     @Post('create-qr')
     async CreateQr(@Body() { idNumber, name, degree }: IQr) {
         try {
