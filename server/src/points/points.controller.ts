@@ -1,5 +1,6 @@
-import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpException, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { PointsService } from './points.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('points')
 export class PointsController {
@@ -16,6 +17,7 @@ export class PointsController {
         }
     }
 
+    @UseGuards(AuthGuard)
     @Post('less-point')
     async MinusPoint(@Body() { qr }: { qr: string }) {
         try {
@@ -25,6 +27,7 @@ export class PointsController {
         }
     }
 
+    @UseGuards(AuthGuard)
     @Post('reset')
     async ResetPoints() {
         try {
