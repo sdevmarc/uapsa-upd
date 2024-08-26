@@ -34,4 +34,10 @@ export class UsersService {
         const jwt = await this.jwtService.signAsync(payload)
         return { success: true, message: 'Logged in successfully!', access_token: jwt }
     }
+
+    async DeleteUser({ email }: { email: string })
+        : Promise<{ success: boolean, message: string }> {
+        await this.UserModel.deleteOne({ email })
+        return { success: true, message: 'Qr resetted successfully!' }
+    }
 }
