@@ -1,4 +1,4 @@
-import { Body, Controller, HttpException, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
 import { AttendanceService } from './attendance.service';
 import { PointsService } from 'src/points/points.service';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -9,6 +9,26 @@ export class AttendanceController {
         private readonly attendanceService: AttendanceService,
         private readonly pointService: PointsService
     ) { }
+
+    @Get()
+    async ViewAllAttendance() {
+        try {
+            return await this.attendanceService.findAll()
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Failed to retrieved attendance.' }, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    @Get(':qr')
+    async ViewOneAttendance(
+        @Param() { qr }: { qr: string }
+    ) {
+        try {
+            return await this.attendanceService.findOne({ qr })
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Failed to retrieved user attendance.' }, HttpStatus.BAD_REQUEST)
+        }
+    }
 
     @Post('create-attended')
     async CreateAttended(@Body() { qr }: { qr: string }) {
