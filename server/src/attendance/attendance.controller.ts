@@ -24,7 +24,7 @@ export class AttendanceController {
         try {
             return await this.attendanceService.InsertAbsent({ qr })
         } catch (error) {
-            throw new HttpException({ success: false, message: 'Creating attended failed to create.', error }, HttpStatus.BAD_REQUEST)
+            throw new HttpException({ success: false, message: 'Creating absent failed to create.', error }, HttpStatus.BAD_REQUEST)
         }
     }
 
@@ -33,7 +33,7 @@ export class AttendanceController {
         try {
             return await this.attendanceService.ResetAttendance()
         } catch (error) {
-            throw new HttpException({ success: false, message: 'Creating attended failed to create.', error }, HttpStatus.BAD_REQUEST)
+            throw new HttpException({ success: false, message: 'Failed to execute reset attendance', error }, HttpStatus.BAD_REQUEST)
         }
     }
 }
