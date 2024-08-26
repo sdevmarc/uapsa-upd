@@ -16,4 +16,22 @@ export class QrController {
             throw new HttpException({ success: false, message: 'Qr failed to create.' }, HttpStatus.BAD_REQUEST)
         }
     }
+
+    @Post('delete-qr')
+    async RemoveQrUser(@Body() { idNumber }: { idNumber: string }) {
+        try {
+            return await this.qrService.DeleteQr({ idNumber })
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Qr failed to create.' }, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    @Post('reset')
+    async DeleteQr() {
+        try {
+            return await this.qrService.ResetQr()
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Qr failed to clear data.' }, HttpStatus.BAD_REQUEST)
+        }
+    }
 }
