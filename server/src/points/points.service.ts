@@ -27,6 +27,12 @@ export class PointsService {
             { $inc: { points: -1 } },
             { new: true, upsert: true }
         )
-        return { success: true, message: 'Point lessen to the user successfully!' }
+        return { success: true, message: 'Point resetted successfully!' }
+    }
+
+    async ResetPoints()
+        : Promise<{ success: boolean, message: string }> {
+        await this.PointModel.deleteMany({})
+        return { success: true, message: 'Points resetted successfully!' }
     }
 }
