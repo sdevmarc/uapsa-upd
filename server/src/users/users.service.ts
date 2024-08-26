@@ -49,6 +49,12 @@ export class UsersService {
         return { success: true, message: 'Logged in successfully!', access_token: jwt }
     }
 
+    async UpdateUser({ id, role }: { id: string, role: string })
+        : Promise<{ success: boolean, message: string }> {
+        await this.UserModel.findByIdAndUpdate(id, { role }, { new: true })
+        return { success: true, message: 'User updated successfully!' }
+    }
+
     async DeleteUser({ email }: { email: string })
         : Promise<{ success: boolean, message: string }> {
         await this.UserModel.deleteOne({ email })
