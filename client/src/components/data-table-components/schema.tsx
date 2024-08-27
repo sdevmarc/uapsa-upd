@@ -6,9 +6,8 @@ export const qrschemas = z.object({
     id: z.number(),
     name: z.string(),
     course: z.string(),
-    attended: z.string(),
+    attended: z.number(),
     points: z.number(),
-    date: z.string()
 });
 
 export type QR = z.infer<typeof qrschemas>;
