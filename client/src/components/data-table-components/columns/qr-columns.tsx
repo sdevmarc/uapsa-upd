@@ -12,7 +12,7 @@ export const qrcolumns: ColumnDef<QR>[] = [
             <DataTableColumnHeader column={column} title="ID No." className="text-text" />
         ),
         cell: ({ row }) => (
-            <div className="w-[100px] capitalize">{row.getValue("id")}</div>
+            <div className="w-[80px] capitalize">{row.getValue("id")}</div>
         ),
         enableSorting: false,
         enableHiding: false
