@@ -1,106 +1,106 @@
 [
     {
         "id": 1,
-        "name": "salary",
-        "course": "monthly salary",
+        "name": "Sarah Lee",
+        "course": "BS Information Technology",
         "attended": 10,
         "points": 5000
     },
     {
         "id": 2,
-        "name": "groceries",
-        "course": "weekly grocery shopping",
+        "name": "Grace Martinez",
+        "course": "BS Nutrition",
         "attended": 5,
         "points": 150
     },
     {
         "id": 3,
-        "name": "electricity bill",
-        "course": "monthly electricity bill",
+        "name": "Eliot Brown",
+        "course": "BS Electrical Engineering",
         "attended": 3,
         "points": 100
     },
     {
         "id": 4,
-        "name": "freelance work",
-        "course": "payment for freelance project",
+        "name": "Freddie Walker",
+        "course": "BS Graphic Design",
         "attended": 10,
         "points": 800
     },
     {
         "id": 5,
-        "name": "rent",
-        "course": "monthly rent payment",
+        "name": "Rita Patel",
+        "course": "BS Real Estate",
         "attended": 4,
         "points": 1200
     },
     {
         "id": 6,
-        "name": "gym membership",
-        "course": "monthly gym fee",
+        "name": "Jim Chen",
+        "course": "BS Physical Education",
         "attended": 5,
         "points": 50
     },
     {
         "id": 7,
-        "name": "restaurant",
-        "course": "dinner at a restaurant",
+        "name": "Renee Clark",
+        "course": "BS Culinary Arts",
         "attended": 5,
         "points": 75
     },
     {
         "id": 8,
-        "name": "internet bill",
-        "course": "monthly internet bill",
+        "name": "Ian Carter",
+        "course": "BS Telecommunications",
         "attended": 3,
         "points": 60
     },
     {
         "id": 9,
-        "name": "transport",
-        "course": "public transport pass",
+        "name": "Tara Singh",
+        "course": "BS Urban Planning",
         "attended": 9,
         "points": 40
     },
     {
         "id": 10,
-        "name": "office supplies",
-        "course": "stationery items for office",
+        "name": "Omar Johnson",
+        "course": "BS Business Administration",
         "attended": 8,
         "points": 30
     },
     {
         "id": 11,
-        "name": "concert tickets",
-        "course": "tickets for a concert",
+        "name": "Cleo Rivers",
+        "course": "BA Music",
         "attended": 13,
         "points": 100
     },
     {
         "id": 12,
-        "name": "car maintenance",
-        "course": "annual car servicing",
+        "name": "Mason Ford",
+        "course": "BS Mechanical Engineering",
         "attended": 18,
         "points": 200
     },
     {
         "id": 13,
-        "name": "book purchase",
-        "course": "buying a new book",
+        "name": "Lila Greene",
+        "course": "BA Literature",
         "attended": 4,
         "points": 25
     },
     {
         "id": 14,
-        "name": "movie night",
-        "course": "tickets for a movie",
+        "name": "Max Taylor",
+        "course": "BS Film Studies",
         "attended": 91,
         "points": 30
     },
     {
         "id": 15,
-        "name": "gift",
-        "course": "birthday gift for a friend",
+        "name": "Gina Flores",
+        "course": "BS Psychology",
         "attended": 21,
         "points": 50
     }
