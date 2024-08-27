@@ -59,25 +59,6 @@ export const qrcolumns: ColumnDef<QR>[] = [
         },
     },
     {
-        accessorKey: "date",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Date" className="text-text" />
-        ),
-        cell: ({ row }) => {
-            const date = new Date(row.getValue("date"));
-            const formattedDate = date.toLocaleDateString("en-US", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric"
-            });
-            return (
-                <div className="flex w-[100px] items-center">
-                    <span className="capitalize">{formattedDate}</span>
-                </div>
-            );
-        }
-    },
-    {
         accessorKey: "points",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Points" className="text-text" />
