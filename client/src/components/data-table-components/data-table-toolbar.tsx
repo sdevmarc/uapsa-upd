@@ -4,9 +4,10 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { DataTableViewOptions } from "@/components/data-table-components/data-table-view-options";
 import { DialogContainer } from "../dialog";
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>;
@@ -42,10 +43,28 @@ export function DataTableToolbar<TData>({
             <div className="flex gap-2">
 
                 <DialogContainer
+                    title="Add Qr"
+                    description="Please fill-out the required fields."
                     Trigger={
                         <Button variant={`outline`} size={`sm`}>
                             Add Qr
                         </Button>
+                    }
+                    children={
+                        <>
+                            <Label htmlFor="name" className="text-right">
+                                Id Number
+                            </Label>
+                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                            <Label htmlFor="name" className="text-right">
+                                Name
+                            </Label>
+                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                            <Label htmlFor="name" className="text-right">
+                                Course
+                            </Label>
+                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                        </>
                     }
                 />
 
