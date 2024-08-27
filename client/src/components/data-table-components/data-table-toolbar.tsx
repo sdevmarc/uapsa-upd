@@ -6,6 +6,7 @@ import { Table } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DataTableViewOptions } from "@/components/data-table-components/data-table-view-options";
+import { DialogContainer } from "../dialog";
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>;
@@ -38,8 +39,20 @@ export function DataTableToolbar<TData>({
                     </Button>
                 )}
             </div>
+            <div className="flex gap-2">
 
-            <DataTableViewOptions table={table} />
+                <DialogContainer
+                    Trigger={
+                        <Button variant={`outline`} size={`sm`}>
+                            Add Qr
+                        </Button>
+                    }
+                />
+
+                <DataTableViewOptions table={table} />
+            </div>
+
+
         </div>
     );
 }
