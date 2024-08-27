@@ -3,120 +3,105 @@
         "id": 1,
         "name": "salary",
         "course": "monthly salary",
-        "attended": "income",
-        "points": 5000,
-        "date": "2024-06-25"
+        "attended": 10,
+        "points": 5000
     },
     {
         "id": 2,
         "name": "groceries",
         "course": "weekly grocery shopping",
-        "attended": "food",
-        "points": 150,
-        "date": "2024-06-24"
+        "attended": 5,
+        "points": 150
     },
     {
         "id": 3,
         "name": "electricity bill",
         "course": "monthly electricity bill",
-        "attended": "utilities",
-        "points": 100,
-        "date": "2024-06-23"
+        "attended": 3,
+        "points": 100
     },
     {
         "id": 4,
         "name": "freelance work",
         "course": "payment for freelance project",
-        "attended": "income",
-        "points": 800,
-        "date": "2024-06-22"
+        "attended": 10,
+        "points": 800
     },
     {
         "id": 5,
         "name": "rent",
         "course": "monthly rent payment",
-        "attended": "housing",
-        "points": 1200,
-        "date": "2024-06-21"
+        "attended": 4,
+        "points": 1200
     },
     {
         "id": 6,
         "name": "gym membership",
         "course": "monthly gym fee",
-        "attended": "health",
-        "points": 50,
-        "date": "2024-06-20"
+        "attended": 5,
+        "points": 50
     },
     {
         "id": 7,
         "name": "restaurant",
         "course": "dinner at a restaurant",
-        "attended": "food",
-        "points": 75,
-        "date": "2024-06-19"
+        "attended": 5,
+        "points": 75
     },
     {
         "id": 8,
         "name": "internet bill",
         "course": "monthly internet bill",
-        "attended": "utilities",
-        "points": 60,
-        "date": "2024-06-18"
+        "attended": 3,
+        "points": 60
     },
     {
         "id": 9,
         "name": "transport",
         "course": "public transport pass",
-        "attended": "transport",
-        "points": 40,
-        "date": "2024-06-17"
+        "attended": 9,
+        "points": 40
     },
     {
         "id": 10,
         "name": "office supplies",
         "course": "stationery items for office",
-        "attended": "work",
-        "points": 30,
-        "date": "2024-06-16"
+        "attended": 8,
+        "points": 30
     },
     {
         "id": 11,
         "name": "concert tickets",
         "course": "tickets for a concert",
-        "attended": "entertainment",
-        "points": 100,
-        "date": "2024-06-15"
+        "attended": 13,
+        "points": 100
     },
     {
         "id": 12,
         "name": "car maintenance",
         "course": "annual car servicing",
-        "attended": "transport",
-        "points": 200,
-        "date": "2024-06-14"
+        "attended": 18,
+        "points": 200
     },
     {
         "id": 13,
         "name": "book purchase",
         "course": "buying a new book",
-        "attended": "education",
-        "points": 25,
-        "date": "2024-06-13"
+        "attended": 4,
+        "points": 25
     },
     {
         "id": 14,
         "name": "movie night",
         "course": "tickets for a movie",
-        "attended": "entertainment",
-        "points": 30,
-        "date": "2024-06-12"
+        "attended": 91,
+        "points": 30
     },
     {
         "id": 15,
         "name": "gift",
         "course": "birthday gift for a friend",
-        "attended": "gifts",
-        "points": 50,
-        "date": "2024-06-11"
+        "attended": 21,
+        "points": 50
     }
 ]
