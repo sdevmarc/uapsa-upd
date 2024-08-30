@@ -47,7 +47,7 @@ export class UsersController {
     async CreateFirstTimeUser(@Body() { idNumber, name, degree, email, password }: { idNumber: string, name: string, degree: string, email: string, password: string }) {
         try {
             const data = await this.qrservice.InsertQr({ idNumber, name, degree })
-            return await this.userService.InsertUser({ qr: data.qr, email, password })
+            return await this.userService.InsertUser({ qr: data.qr, email, password, role: 'admin' })
         } catch (error) {
             throw new HttpException({ success: false, message: 'User not created successfully!', error }, HttpStatus.BAD_REQUEST)
         }
