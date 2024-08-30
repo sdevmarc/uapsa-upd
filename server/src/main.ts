@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // app.useGlobalGuards(new AuthGuard(app.get(JwtService)));
+  app.enableCors();
   await app.listen(process.env.PORT);
 }
 bootstrap();
