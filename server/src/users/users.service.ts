@@ -27,12 +27,12 @@ export class UsersService {
         return { success: true, message: 'User retrieved successfully!', data }
     }
 
-    async InsertUser({ qr, email, password }: { qr: string, email: string, password: string })
+    async InsertUser({ qr, email, password, role }: { qr: string, email: string, password: string, role?: string })
         : Promise<{ success: boolean, message: string, qr: string }> {
         const salt = await bcrypt.genSalt()
         const hashedpassword = await bcrypt.hash(password, salt)
 
-        const data = await this.UserModel.create({ qr, email, password: hashedpassword })
+        const data = await this.UserModel.create({ qr, email, password: hashedpassword, role })
         return { success: true, message: 'Qr created successfully', qr: data.qr }
     }
 
