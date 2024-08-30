@@ -41,7 +41,6 @@ export function DataTableToolbar<TData>({
                 )}
             </div>
             <div className="flex gap-2">
-
                 <DialogContainer
                     title="Add Qr"
                     description="Please fill-out the required fields."
@@ -67,7 +66,31 @@ export function DataTableToolbar<TData>({
                         </>
                     }
                 />
-
+                <DialogContainer
+                    title="Add Qr"
+                    description="Please fill-out the required fields."
+                    Trigger={
+                        <Button variant={`outline`} size={`sm`}>
+                            Add Attendance
+                        </Button>
+                    }
+                    children={
+                        <>
+                            <Label htmlFor="name" className="text-right">
+                                Id Number
+                            </Label>
+                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                            <Label htmlFor="name" className="text-right">
+                                Name
+                            </Label>
+                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                            <Label htmlFor="name" className="text-right">
+                                Course
+                            </Label>
+                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                        </>
+                    }
+                />
                 <DataTableViewOptions table={table} />
             </div>
 
