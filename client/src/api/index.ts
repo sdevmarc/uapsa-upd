@@ -1,12 +1,33 @@
 import { HOST } from '@/constants'
 import axios from 'axios'
 
-interface IUser {
+interface ISignIn {
     email: string
     password: string
 }
 
-export const API_SIGN_IN = async ({ email, password }: IUser) => {
+interface ISignUp {
+    idNumber: string
+    name: string
+    degree: string
+    email: string
+    password: string
+}
+
+export const API_INDEX = async ({ token }: { token: string }) => {
+    try {
+        const response = await axios.get(`${HOST}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const API_SIGN_IN = async ({ email, password }: ISignIn) => {
     try {
         const response = await axios.post(`${HOST}/users/login-user`, { email, password })
         return response.data
@@ -15,7 +36,7 @@ export const API_SIGN_IN = async ({ email, password }: IUser) => {
     }
 }
 
-export const API_SIGN_UP = async ({ idNumber, name, degree, email, password }: { idNumber: string, name: string, degree: string, email: string, password: string }) => {
+export const API_SIGN_UP = async ({ idNumber, name, degree, email, password }: ISignUp) => {
     try {
         const response = await axios.post(`${HOST}/users/create-first-time-user`,
             { idNumber, name, degree, email, password }
