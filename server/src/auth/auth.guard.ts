@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
 
         if (!token) throw new UnauthorizedException();
         try {
-           
+
             const payload = await this.jwtService.verifyAsync(token, {
                 secret: process.env.SECRET_JWT_TOKEN
             });
@@ -28,5 +28,19 @@ export class AuthGuard implements CanActivate {
     private extractTokenFromHeader(request: Request): string | undefined {
         const [type, token] = request.headers.authorization?.split(' ') ?? [];
         return type === 'Bearer' ? token : undefined;
+    }
+}
+
+@Injectable()
+export class SessionGuard implements CanActivate {
+    constructor(private readonly jwtService: JwtService) { }
+
+    async canActivate(context: ExecutionContext): Promise<boolean> {
+        const request = context.switchToHttp().getRequest();
+        const token = request.headers.authorization.split(' ')[1]
+        if (!token) throw new HttpException({ success: false, message: 'You are not authorized.' }, HttpStatus.BAD_REQUEST)
+        const role = this.jwtService.decode(token).role
+        request['role'] = role
+        return true
     }
 }
