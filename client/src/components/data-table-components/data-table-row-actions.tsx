@@ -31,6 +31,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
+                <DropdownMenuItem>View Attendance</DropdownMenuItem>
                 <DropdownMenuItem>Edit</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
