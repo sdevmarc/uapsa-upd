@@ -1,14 +1,22 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpException, HttpStatus, Req, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
-import { AuthGuard } from './auth/auth.guard';
+import { AuthGuard, SessionGuard } from './auth/auth.guard';
+import { Request } from 'express';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+    constructor(private readonly appService: AppService) { }
 
-  @UseGuards(AuthGuard)
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
+    @UseGuards(SessionGuard)
+    @Get()
+    async getHello(@Req() req: Request) {
+        try {
+            const role = (req as any).role;
+            const response = await this.appService.getHello();
+            if (response.success) return { success: true, message: 'You are authorized.', role }
+            return { success: false, message: 'You are not authorized.' }
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'You are not authenticated.' }, HttpStatus.BAD_REQUEST)
+        }
+    }
 }
