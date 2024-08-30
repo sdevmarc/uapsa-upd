@@ -5,23 +5,32 @@ import QRData from '@/components/data-table-components/data.json'
 import { useEffect, useState } from "react";
 import { qrcolumns } from "@/components/data-table-components/columns/qr-columns";
 import HeadSection, { SubHeadSectionDetails } from "@/components/head-section";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { API_INDEX } from "@/api";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+    const navigate = useNavigate()
     const [data, setData] = useState<QR[]>(QRData)
     const token = localStorage.getItem('token') || '';
 
-    const { mutateAsync: JwtAuthorized, isPending: jwtPending } = useMutation({
-        mutationFn: API_INDEX,
-        onSuccess: (data) => {
-            console.log(data)
-        }
+    const { data: jwtAuthorized = '', isLoading: jwtLoading, isFetched: jwtFetched } = useQuery({
+        queryFn: () => API_INDEX({ token }),
+        queryKey: ['dashboardJwt', { token }],
+        enabled: !!token
     })
 
+    if (jwtLoading) {
+        console.log('Loading');
+    }
+
     useEffect(() => {
-        JwtAuthorized({ token })
-    }, [])
+        if (jwtFetched) {
+            if (jwtAuthorized.success && jwtAuthorized.role === 'user') {
+                navigate('/');
+            }
+        }
+    }, [jwtFetched, jwtAuthorized, navigate]);
 
     return (
         <>
