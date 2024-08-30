@@ -17,6 +17,7 @@ export const UserAvatar = ({ image, initials }: IAvatar) => {
     const navigate = useNavigate()
 
     const handleLogout = () => {
+        localStorage.clear()
         navigate('/')
     }
 
