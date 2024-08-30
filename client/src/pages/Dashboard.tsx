@@ -2,12 +2,26 @@ import { DataTable } from "@/components/data-table-components/data-table";
 import { QR } from "@/components/data-table-components/schema";
 import Header from "@/components/header";
 import QRData from '@/components/data-table-components/data.json'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { qrcolumns } from "@/components/data-table-components/columns/qr-columns";
 import HeadSection, { SubHeadSectionDetails } from "@/components/head-section";
+import { useMutation } from "@tanstack/react-query";
+import { API_INDEX } from "@/api";
 
 export default function Dashboard() {
     const [data, setData] = useState<QR[]>(QRData)
+    const token = localStorage.getItem('token') || '';
+
+    const { mutateAsync: JwtAuthorized, isPending: jwtPending } = useMutation({
+        mutationFn: API_INDEX,
+        onSuccess: (data) => {
+            console.log(data)
+        }
+    })
+
+    useEffect(() => {
+        JwtAuthorized({ token })
+    }, [])
 
     return (
         <>
