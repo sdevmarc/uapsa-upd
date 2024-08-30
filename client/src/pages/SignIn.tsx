@@ -16,7 +16,7 @@ export default function SignIn() {
         mutationFn: API_SIGN_IN,
         onSuccess: (data) => {
             if (!data.success) return navigate('/signup')
-            if (data.success) return navigate('/dashboard')
+            if (data.success) localStorage.setItem('token', data.access_token); return navigate('/dashboard')
         }
     })
 
