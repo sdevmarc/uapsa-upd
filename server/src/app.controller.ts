@@ -11,12 +11,15 @@ export class AppController {
     @Get()
     async getHello(@Req() req: Request) {
         try {
-            const role = (req as any).role;
+            const role = (req as any).role
+            if (!role) return { success: false, message: 'You are not authorized.' }
+
             const response = await this.appService.getHello();
-            if (response.success) return { success: true, message: 'You are authorized.', role }
-            return { success: false, message: 'You are not authorized.' }
+            if (!response.success) return { success: true, message: 'You are not authorized.' }
+
+            return { success: true, message: 'You are authorized.', role }
         } catch (error) {
-            throw new HttpException({ success: false, message: 'You are not authenticated.' }, HttpStatus.BAD_REQUEST)
+            throw new HttpException({ success: false, message: 'You are not authorized.' }, HttpStatus.BAD_REQUEST)
         }
     }
 }
