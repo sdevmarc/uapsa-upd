@@ -4,12 +4,12 @@ import { Model } from 'mongoose';
 import { IUsers } from './users.interface';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { IQr } from 'src/qr/qr.interface';
 
 @Injectable()
 export class UsersService {
     constructor(
-        @InjectModel('User')
-        private readonly UserModel: Model<IUsers>,
+        @InjectModel('User') private readonly UserModel: Model<IUsers>,
         private readonly jwtService: JwtService
     ) { }
 
@@ -39,12 +39,15 @@ export class UsersService {
     async ReadLoginUser({ email, password }: { email: string, password: string })
         : Promise<{ success: boolean, message: string, access_token: string }> {
         const isemail = await this.UserModel.findOne({ email })
+        const existinguser = await this.UserModel.find()
+
+        if (existinguser.length <= 0) return ({ success: false, message: 'No existing account.', access_token: null })
         if (!isemail) throw new UnauthorizedException('Email does not recognized.')
 
         const ispassword = await bcrypt.compare(password, isemail.password)
         if (!ispassword) throw new UnauthorizedException('Password is incorrect.')
 
-        const payload = { sub: isemail._id }
+        const payload = { sub: isemail._id, role: isemail.role }
         const jwt = await this.jwtService.signAsync(payload)
         return { success: true, message: 'Logged in successfully!', access_token: jwt }
     }
