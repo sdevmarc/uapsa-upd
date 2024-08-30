@@ -46,3 +46,16 @@ export const API_SIGN_UP = async ({ idNumber, name, degree, email, password }: I
         throw error
     }
 }
+
+export const API_DATA_QR_HOLDERS = async ({ token }: { token: string }) => {
+    try {
+        const response = await axios.get(`${HOST}/qr`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
