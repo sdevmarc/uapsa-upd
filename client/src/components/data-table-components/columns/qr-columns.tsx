@@ -1,18 +1,18 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { QR } from "@/components/data-table-components/schema";
 import { DataTableColumnHeader } from "@/components/data-table-components/data-table-column-header";
 import { DataTableRowActions } from "@/components/data-table-components/data-table-row-actions";
+import { IQRSchema } from "../schema/qr-schema";
 
-export const qrcolumns: ColumnDef<QR>[] = [
+export const qrcolumns: ColumnDef<IQRSchema>[] = [
     {
-        accessorKey: "id",
+        accessorKey: "idNumber",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="ID No." className="text-text" />
         ),
         cell: ({ row }) => (
-            <div className="w-[80px] capitalize">{row.getValue("id")}</div>
+            <div className="w-[80px] capitalize">{row.getValue("idNumber")}</div>
         ),
         enableSorting: false,
         enableHiding: false
@@ -33,14 +33,14 @@ export const qrcolumns: ColumnDef<QR>[] = [
         }
     },
     {
-        accessorKey: "course",
+        accessorKey: "degree",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Course" className="text-text" />
         ),
         cell: ({ row }) => {
             return (
                 <div className="flex w-[100px] items-center">
-                    <span className="capitalize"> {row.getValue("course")}</span>
+                    <span className="capitalize"> {row.getValue("degree")}</span>
                 </div>
             );
         },
