@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/data-table-components/data-table-column-header";
 import { DataTableRowActions } from "@/components/data-table-components/data-table-row-actions";
-import { IQRSchema } from "../schema/qr-schema";
+import { IQRSchema } from "../schema";
 
 export const qrcolumns: ColumnDef<IQRSchema>[] = [
     {
