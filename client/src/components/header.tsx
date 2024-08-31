@@ -1,6 +1,7 @@
 import React from 'react'
 import { UserAvatar } from './user-avatar'
 import Image from '@/assets/donkey-logo.png'
+import { ModeToggle } from './moon-toggle'
 
 export default function Header({ children }: { children?: React.ReactNode }) {
     return (
@@ -12,7 +13,10 @@ export default function Header({ children }: { children?: React.ReactNode }) {
                     </h1>
                     {children}
                 </nav>
-                <UserAvatar image='https://github.com/shadcn.png' initials='CN' />
+                <div className="flex items-center gap-4">
+                    <ModeToggle />
+                    <UserAvatar image='https://github.com/shadcn.png' initials='CN' />
+                </div>
             </div>
         </div>
     )
