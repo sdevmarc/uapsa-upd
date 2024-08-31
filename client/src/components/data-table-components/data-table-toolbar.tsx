@@ -45,19 +45,19 @@ export function DataTableToolbar<TData>({
         name: '',
         degree: ''
     })
+    const [qr, setQr] = useState<string>('')
 
     const { mutateAsync: InsertQr, isPending: qrLoading } = useMutation({
         mutationFn: API_CREAT_QR,
-        onSuccess: (data) => {
-            console.log(data)
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['dashboardQr'] })
         }
     })
 
     const handleAddQr = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        await InsertQr(qrvalues)
-        await downloadQRCode({ idNumber: qrvalues.idNumber })
+        const response = await InsertQr(qrvalues)
+        downloadQRCode({ qr: response.qr })
     }
 
     const handleQrChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,14 +68,14 @@ export function DataTableToolbar<TData>({
         }))
     }
 
-    const downloadQRCode = async ({ idNumber }: { idNumber: string }) => {
+    const downloadQRCode = async ({ qr }: { qr: string }) => {
         if (canvasRef.current) {
             try {
-                await QRCode.toCanvas(canvasRef.current, idNumber, { width: 500 });
+                await QRCode.toCanvas(canvasRef.current, qr, { width: 500 });
                 const image = canvasRef.current.toDataURL("image/png");
                 const link = document.createElement('a');
                 link.href = image;
-                link.download = `qrcode-${idNumber}.png`;
+                link.download = `qrcode-${qr}.png`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
