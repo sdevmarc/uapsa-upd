@@ -12,6 +12,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { useRef } from "react";
+
 interface DataTableRowActionsProps<TData> {
     row: Row<TData>;
 }
@@ -21,7 +22,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
 
     const downloadQRCode = async () => {
         if (canvasRef.current) {
-            const idNumber = "12345"; // Replace this with the actual ID number from your row data
+            const idNumber = (row.original as any).idNumber
             try {
                 await QRCode.toCanvas(canvasRef.current, idNumber, { width: 500 });
                 const image = canvasRef.current.toDataURL("image/png");
@@ -52,7 +53,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                 <DropdownMenuItem onClick={downloadQRCode}>
                     Download Qr
                 </DropdownMenuItem>
-                
+
                 <canvas ref={canvasRef} style={{ display: 'none' }} />
                 <DropdownMenuItem>View Attendance</DropdownMenuItem>
                 {/* <DropdownMenuItem>Edit</DropdownMenuItem>
