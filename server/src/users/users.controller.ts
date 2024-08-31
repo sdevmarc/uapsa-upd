@@ -21,6 +21,15 @@ export class UsersController {
         }
     }
 
+    @Get('users-exist')
+    async ViewUsersExistence() {
+        try {
+            return await this.userService.findUsersExist()
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Failed to retrieved user existence.' }, HttpStatus.BAD_REQUEST)
+        }
+    }
+
     @UseGuards(AuthGuard)
     @Get(':email')
     async ViewOneIUser(
