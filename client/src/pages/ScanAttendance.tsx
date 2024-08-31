@@ -63,6 +63,10 @@ export default function ScanAttendance() {
                 return toast("Attendance recorded!", {
                     description: currentDate
                 })
+            } else {
+                return toast("Oops! Something went wrong.", {
+                    description: data.message
+                })
             }
 
         },
