@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useNavigate } from "react-router-dom"
-import { useMutation } from "@tanstack/react-query"
-import { API_SIGN_UP } from "@/api"
-import { useState } from "react"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { API_SIGN_UP, API_USER_EXIST } from "@/api"
+import { useEffect, useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
 
 export default function SignUp() {
@@ -18,6 +18,15 @@ export default function SignUp() {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const navigate = useNavigate()
+
+    const { data: userExist, isLoading: userexistLoading } = useQuery({
+        queryFn: () => API_USER_EXIST(),
+        queryKey: ['signupUserExist']
+    })
+
+    useEffect(() => {
+        if(!userexistLoading && !userExist.success) return navigate('/signin')
+    }, [userExist, navigate])
 
     const { mutateAsync: QuerySignUpUser, isPending: SignUpLoading } = useMutation({
         mutationFn: API_SIGN_UP,
@@ -100,13 +109,13 @@ export default function SignUp() {
                             Password
                         </label>
                         <div className="relative">
-                            <Input 
-                                id="password" 
-                                required 
-                                name="password" 
-                                className="pr-10" 
+                            <Input
+                                id="password"
+                                required
+                                name="password"
+                                className="pr-10"
                                 type={showPassword ? "text" : "password"}
-                                onChange={handleOnChange} 
+                                onChange={handleOnChange}
                             />
                             <button
                                 type="button"
@@ -126,12 +135,12 @@ export default function SignUp() {
                             Confirm Password
                         </label>
                         <div className="relative">
-                            <Input 
-                                id="confirmPassword" 
-                                required 
-                                className="pr-10" 
+                            <Input
+                                id="confirmPassword"
+                                required
+                                className="pr-10"
                                 type={showConfirmPassword ? "text" : "password"}
-                                onChange={handleChangeConfirm} 
+                                onChange={handleChangeConfirm}
                             />
                             <button
                                 type="button"
