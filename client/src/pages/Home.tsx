@@ -1,7 +1,15 @@
 import { Button } from '@/components/ui/button'
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 
 export default function Home() {
+    const navigate = useNavigate()
+    const token = localStorage.getItem('token')
+
+    useEffect(() => {
+        if (token) { navigate('/dashboard') }
+    }, [token, navigate]);
+
     return (
         <>
             <div className="w-full h-screen flex flex-col justify-start items-center">
