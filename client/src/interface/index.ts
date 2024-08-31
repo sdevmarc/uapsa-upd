@@ -10,4 +10,4 @@ export interface IFCChildren {
 export interface IAvatar {
     image: string
     initials: string
-} 
+}
