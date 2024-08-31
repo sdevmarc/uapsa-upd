@@ -39,7 +39,7 @@ export default function SignIn() {
     }
 
     const handleGoBack = () => {
-        navigate(-1)
+        navigate('/')
     }
 
     const toggleShowPassword = () => {
