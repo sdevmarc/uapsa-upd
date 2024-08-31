@@ -22,13 +22,12 @@ export class AttendanceService {
 
         const data = await this.AttendanceModel.findOne({ qr })
         if (!data) return { success: true, message: 'Cannot find attendance!', data }
-        
+
         return { success: true, message: 'User attendance retrieved successfully!', data }
     }
 
     async InsertAttended({ qr }: IAttendance)
         : Promise<{ success: boolean, message: string }> {
-
         await this.AttendanceModel.findOneAndUpdate(
             { qr },
             { $inc: { attended: 1 } },
