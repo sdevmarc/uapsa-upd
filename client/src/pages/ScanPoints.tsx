@@ -111,7 +111,7 @@ export default function ScanAttendance() {
         <>
             <div className="w-full h-screen flex justify-center items-center">
                 <Header>
-                    <Link to={`/dashboard`} className="hover:underline">
+                    <Link to={`/dashboard`} className="text-sm hover:underline">
                         Go Back
                     </Link>
                 </Header>
