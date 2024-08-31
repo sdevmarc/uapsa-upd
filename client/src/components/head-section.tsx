@@ -5,7 +5,7 @@ import { IoIosArrowBack } from "react-icons/io";
 export default function HeadSection({ children }: IFCChildren) {
     return (
         <>
-            <section className="w-full py-4 flex flex-col justify-center items-start gap-2 border-b">
+            <section className="w-full pt-[6rem] pb-4 flex flex-col justify-center items-start gap-2 border-b">
                 {children}
             </section>
         </>
