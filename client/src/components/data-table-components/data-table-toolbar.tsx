@@ -148,31 +148,6 @@ export function DataTableToolbar<TData>({
                     description={`This will direct you to a qr scanner to earn points.`}
                     btnContinue={() => navigate('/scanpoints')}
                 />
-                {/*  <DialogContainer
-                    title="Add Point"
-                    description="Please fill-out the required fields."
-                    Trigger={
-                        <Button variant={`outline`} size={`sm`}>
-                            Add Point
-                        </Button>
-                    }
-                    children={
-                        <>
-                            <Label htmlFor="name" className="text-right">
-                                Id Number
-                            </Label>
-                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
-                            <Label htmlFor="name" className="text-right">
-                                Name
-                            </Label>
-                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
-                            <Label htmlFor="name" className="text-right">
-                                Course
-                            </Label>
-                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
-                        </>
-                    }
-                /> */}
                 <DataTableViewOptions table={table} />
             </div>
         </div>
