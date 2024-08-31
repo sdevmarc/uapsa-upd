@@ -72,3 +72,21 @@ export const API_CREAT_QR = async ({ idNumber, name, degree }: { idNumber: strin
         throw error
     }
 }
+
+export const API_CREATE_ATTENDANCE = async ({ qr }: { qr: string }) => {
+    try {
+        const response = await axios.post(`${HOST}/attendance/create-attended`, { qr })
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const API_DATA_QR_HOLDER = async ({ qr }: { qr: string }) => {
+    try {
+        const response = await axios.get(`${HOST}/qr/${qr}`)
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
