@@ -26,68 +26,11 @@ export class UsersService {
     }
 
     async findAll()
-        : Promise<{ success: boolean, message: string, users: IUsers[] }> {
-        const users = await this.UserModel.aggregate([
-            {
-                $lookup: {
-                    from: 'qrs', // The name of the QR collection
-                    localField: 'qr',
-                    foreignField: '_id',
-                    as: 'qrData'
-                }
-            },
-            {
-                $unwind: {
-                    path: '$qrData',
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-            {
-                $lookup: {
-                    from: 'points', // The name of the Points collection
-                    localField: 'qr',
-                    foreignField: 'qr',
-                    as: 'pointsData'
-                }
-            },
-            {
-                $unwind: {
-                    path: '$pointsData',
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-            {
-                $lookup: {
-                    from: 'attendances', // The name of the Attendance collection
-                    localField: 'qr',
-                    foreignField: 'qr',
-                    as: 'attendanceData'
-                }
-            },
-            {
-                $unwind: {
-                    path: '$attendanceData',
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-            {
-                $project: {
-                    email: 1,
-                    password: 1,
-                    isactive: 1,
-                    role: 1,
-                    qr: '$qrData',
-                    points: { $ifNull: ['$pointsData.points', 0] },
-                    attendance: {
-                        attended: { $ifNull: ['$attendanceData.attended', 0] },
-                        absences: { $ifNull: ['$attendanceData.absences', 0] }
-                    }
-                }
-            }
-        ]);
+        : Promise<{ success: boolean, message: string, data: IUsers[] }> {
+        const data = await this.UserModel.find();
 
-        if (users.length <= 0) return { success: true, message: 'No existing users!', users }
-        return { success: true, message: 'Users retrieved successfully!', users }
+        if (data.length <= 0) return { success: true, message: 'No existing users!', data }
+        return { success: true, message: 'Users retrieved successfully!', data }
     }
 
     async findOne({ email })
