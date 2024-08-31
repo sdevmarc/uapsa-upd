@@ -27,6 +27,15 @@ export const API_INDEX = async ({ token }: { token: string }) => {
     }
 }
 
+export const API_USER_EXIST = async () => {
+    try {
+        const response = await axios.get(`${HOST}/users/users-exist`)
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
 export const API_SIGN_IN = async ({ email, password }: ISignIn) => {
     try {
         const response = await axios.post(`${HOST}/users/login-user`, { email, password })
