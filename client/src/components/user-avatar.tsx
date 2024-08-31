@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { IAvatar } from "@/interface/index"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export const UserAvatar = ({ image, initials }: IAvatar) => {
     const navigate = useNavigate()
@@ -35,19 +35,20 @@ export const UserAvatar = ({ image, initials }: IAvatar) => {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        Profile
-                        {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        Settings
-                        {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
+                    <DropdownMenuItem asChild>
+                        <Link to={`/management`}>
+                            Management
+                        </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>GitHub</DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <a href="https://www.linkedin.com/in/sdevmarc/" target="_blank">
+                        Contact Support
+                    </a>
+                </DropdownMenuItem>
+                {/* <DropdownMenuItem>Support</DropdownMenuItem> */}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
                     Log out
