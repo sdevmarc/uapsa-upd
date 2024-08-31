@@ -5,6 +5,8 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { API_SIGN_UP, API_USER_EXIST } from "@/api"
 import { useEffect, useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
+import Cycling from '@/assets/cycling.svg'
+import { toast } from "sonner"
 
 export default function SignUp() {
     const [values, setValues] = useState({
@@ -25,23 +27,24 @@ export default function SignUp() {
     })
 
     useEffect(() => {
-        if(!userexistLoading && !userExist.success) return navigate('/signin')
+        if (!userexistLoading && userExist.success) return navigate('/signin')
     }, [userExist, navigate])
 
     const { mutateAsync: QuerySignUpUser, isPending: SignUpLoading } = useMutation({
         mutationFn: API_SIGN_UP,
         onSuccess: (data) => {
-            if (!data.success) return alert(data.message)
-            if (data.success) {
-                alert(data.message)
-                navigate('/signin')
-            }
+            if (!data.success) return toast("Uh oh, Something went wrong.", { description: 'User and Qr created successfully!' })
+            toast("Yay! Success.",
+                {
+                    description: data.message
+                })
+            return navigate('/signin')
         }
     })
 
     const handleSignUp = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (confirm !== values.password) return alert('Passwords do not match!')
+        if (confirm !== values.password) return toast("Uh oh, Something went wrong.", { description: 'Password do not match!' })
         QuerySignUpUser({
             idNumber: values.idNumber,
             name: values.name,
@@ -102,7 +105,7 @@ export default function SignUp() {
                         <label htmlFor="email" className='text-sm'>
                             Email
                         </label>
-                        <Input placeholder="eg. m@example.com" className="placeholder:text-muted placeholder:text-sm" id="email" name="email" onChange={handleOnChange} required />
+                        <Input type="email" placeholder="eg. m@example.com" className="placeholder:text-muted placeholder:text-sm" id="email" name="email" onChange={handleOnChange} required />
                     </div>
                     <div className="w-full flex flex-col gap-1">
                         <label htmlFor="password" className='text-sm'>
@@ -162,7 +165,10 @@ export default function SignUp() {
                         Go back
                     </Button>
                 </form>
-                <div className="w-[65%] h-full bg-black">
+                <div className="w-[65%] h-full flex justify-center items-center">
+                    <div className="w-[80%] h-[80%] flex justify-center items-center">
+                        <img src={Cycling} alt="Image Background" className="object-cover w-full h-full" />
+                    </div>
                 </div>
             </div>
         </>
