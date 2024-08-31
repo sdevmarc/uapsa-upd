@@ -36,6 +36,19 @@ export const API_USER_EXIST = async () => {
     }
 }
 
+export const API_DATA_USER_MANAGEMENT = async ({ token }: { token: string }) => {
+    try {
+        const response = await axios.get(`${HOST}/users`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
 export const API_SIGN_IN = async ({ email, password }: ISignIn) => {
     try {
         const response = await axios.post(`${HOST}/users/login-user`, { email, password })
