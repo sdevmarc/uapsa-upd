@@ -2,8 +2,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useNavigate } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
-import { API_SIGN_IN, API_SIGN_UP } from "@/api"
+import { API_SIGN_UP } from "@/api"
 import { useState } from "react"
+import { Eye, EyeOff } from "lucide-react"
 
 export default function SignUp() {
     const [values, setValues] = useState({
@@ -14,19 +15,24 @@ export default function SignUp() {
         password: ''
     })
     const [confirm, setConfirm] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const navigate = useNavigate()
 
-    const { mutateAsync: QuerySignUpUser, isPending: SignInloading } = useMutation({
+    const { mutateAsync: QuerySignUpUser, isPending: SignUpLoading } = useMutation({
         mutationFn: API_SIGN_UP,
         onSuccess: (data) => {
             if (!data.success) return alert(data.message)
-            if (data.success) alert(data.message); return navigate('/signin')
+            if (data.success) {
+                alert(data.message)
+                navigate('/signin')
+            }
         }
     })
 
     const handleSignUp = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (confirm !== values.password) return alert('Password do not match!')
+        if (confirm !== values.password) return alert('Passwords do not match!')
         QuerySignUpUser({
             idNumber: values.idNumber,
             name: values.name,
@@ -52,6 +58,14 @@ export default function SignUp() {
         navigate(-1)
     }
 
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword)
+    }
+
+    const toggleShowConfirmPassword = () => {
+        setShowConfirmPassword(!showConfirmPassword)
+    }
+
     return (
         <>
             <div className="w-full h-screen flex justify-center items-center">
@@ -59,7 +73,7 @@ export default function SignUp() {
                     <h1 className='text-[2rem] font-bold'>Sign Up</h1>
                     <div className="w-full flex flex-col gap-1">
                         <label htmlFor="idNumber" className='text-sm'>
-                            Id Number
+                            ID Number
                         </label>
                         <Input placeholder="eg. 00012323" className="placeholder:text-muted placeholder:text-sm" id="idNumber" name="idNumber" onChange={handleOnChange} required />
                     </div>
@@ -85,18 +99,57 @@ export default function SignUp() {
                         <label htmlFor="password" className='text-sm'>
                             Password
                         </label>
-                        <Input id="password" required name="password" onChange={handleOnChange} />
+                        <div className="relative">
+                            <Input 
+                                id="password" 
+                                required 
+                                name="password" 
+                                className="pr-10" 
+                                type={showPassword ? "text" : "password"}
+                                onChange={handleOnChange} 
+                            />
+                            <button
+                                type="button"
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                onClick={toggleShowPassword}
+                            >
+                                {showPassword ? (
+                                    <EyeOff className="h-4 w-4 text-gray-400" />
+                                ) : (
+                                    <Eye className="h-4 w-4 text-gray-400" />
+                                )}
+                            </button>
+                        </div>
                     </div>
                     <div className="w-full flex flex-col gap-1">
-                        <label htmlFor="confirmpassword" className='text-sm'>
+                        <label htmlFor="confirmPassword" className='text-sm'>
                             Confirm Password
                         </label>
-                        <Input id="passconfirmpasswordword" required onChange={handleChangeConfirm} />
+                        <div className="relative">
+                            <Input 
+                                id="confirmPassword" 
+                                required 
+                                className="pr-10" 
+                                type={showConfirmPassword ? "text" : "password"}
+                                onChange={handleChangeConfirm} 
+                            />
+                            <button
+                                type="button"
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                onClick={toggleShowConfirmPassword}
+                            >
+                                {showConfirmPassword ? (
+                                    <EyeOff className="h-4 w-4 text-gray-400" />
+                                ) : (
+                                    <Eye className="h-4 w-4 text-gray-400" />
+                                )}
+                            </button>
+                        </div>
                     </div>
-                    <Button type="submit" variant={`default`} className="w-full" >
-                        Sign Up
+                    <Button type="submit" variant="default" className="w-full" disabled={SignUpLoading}>
+                        {SignUpLoading ? 'Signing Up...' : 'Sign Up'}
                     </Button>
-                    <Button onClick={handleGoBack} type="button" variant={`outline`} className="w-full">
+                    <Button onClick={handleGoBack} type="button" variant="outline" className="w-full">
                         Go back
                     </Button>
                 </form>
