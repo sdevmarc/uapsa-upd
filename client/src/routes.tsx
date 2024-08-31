@@ -6,9 +6,10 @@ import Attendance from "./pages/Attendance"
 import Management from "./pages/Management"
 import Settings from "./pages/Settings"
 import SignUp from "./pages/SignUp"
+import Home from "./pages/Home"
 
 const Routes = createBrowserRouter([
-    { path: '/', element: <ScanPoints /> },
+    { path: '/', element: <Home /> },
     { path: '/signin', element: <SignIn /> },
     { path: '/signup', element: <SignUp /> },
     { path: '/dashboard', element: <Dashboard /> },
