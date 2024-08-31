@@ -9,26 +9,26 @@ import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
     const navigate = useNavigate()
-    const token = localStorage.getItem('token') || '';
+    const token = localStorage.getItem('token')
 
-    const { data: jwtAuthorized = '', isFetched: jwtFetched } = useQuery({
-        queryFn: () => API_INDEX({ token }),
-        queryKey: ['dashboardJwt', { token }],
+    useEffect(() => {
+        if (!token) { navigate('/') }
+    }, [token, navigate]);
+
+    const { data: jwtAuthorized, isFetched: jwtFetched, isLoading: jwtLoading } = useQuery({
+        queryFn: () => API_INDEX({ token: token ?? '' }),
+        queryKey: ['dashboardJwt', { token: token ?? '' }],
         enabled: !!token
     })
 
-    const { data: qrHolders = [], isLoading: qrLoading } = useQuery({
-        queryFn: () => API_DATA_QR_HOLDERS({ token }),
-        queryKey: ['dashboardQr', { token }],
+    const { data: qrHolders = [], isLoading: qrLoading, isFetched: qrFetched } = useQuery({
+        queryFn: () => API_DATA_QR_HOLDERS({ token: token ?? '' }),
+        queryKey: ['dashboardQr', { token: token ?? '' }],
         enabled: !!token
     })
 
     useEffect(() => {
-        if (jwtFetched) {
-            if (jwtAuthorized.success && jwtAuthorized.role === 'user') {
-                navigate('/');
-            }
-        }
+        if (jwtFetched && !jwtAuthorized) { navigate('/') }
     }, [jwtFetched, jwtAuthorized, navigate]);
 
     return (
@@ -42,10 +42,8 @@ export default function Dashboard() {
                             description="Here's a list of registered qr holders."
                         />
                     </HeadSection>
-                    {
-                        qrLoading ? 'Loading...' :
-                            <DataTable columns={qrcolumns} data={qrHolders ? qrHolders.data : []} />
-                    }
+                    {(jwtLoading || qrLoading) && 'Loading...'}
+                    {(jwtFetched && qrFetched) && <DataTable columns={qrcolumns} data={qrHolders.data} />}
                 </div>
             </div>
         </>
