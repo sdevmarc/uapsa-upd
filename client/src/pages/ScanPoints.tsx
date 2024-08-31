@@ -2,7 +2,7 @@ import Header from "@/components/header";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { API_INDEX } from "@/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
 
 export default function ScanPoints() {
@@ -44,7 +44,11 @@ export default function ScanPoints() {
     return (
         <>
             <div className="w-full h-screen flex justify-center items-center">
-                <Header />
+                <Header>
+                    <Link to={`/dashboard`} className="hover:underline">
+                        Go Back
+                    </Link>
+                </Header>
                 <div className="z-[1] w-1/2 h-full pt-[6rem] px-4 pb-4 flex flex-col justify-center items-center">
                     <div className="w-full h-full flex flex-col justify-center items-center gap-3">
                         <h1 className='text-[2rem] font-bold'>
