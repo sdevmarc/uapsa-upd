@@ -5,7 +5,7 @@ import { qrcolumns } from "@/components/data-table-components/columns/qr-columns
 import HeadSection, { SubHeadSectionDetails } from "@/components/head-section";
 import { useQuery } from "@tanstack/react-query";
 import { API_DATA_QR_HOLDERS, API_INDEX } from "@/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 
 export default function Dashboard() {
     const navigate = useNavigate()
@@ -43,7 +43,9 @@ export default function Dashboard() {
                         />
                     </HeadSection>
                     {(jwtLoading || qrLoading) && 'Loading...'}
-                    {(jwtFetched && qrFetched) && <DataTable columns={qrcolumns} data={qrHolders.data} />}
+                    {(jwtFetched && qrFetched) &&
+                        <DataTable  columns={qrcolumns} data={qrHolders.data} toolbar="dashboard" />
+                    }
                 </div>
             </div>
         </>
