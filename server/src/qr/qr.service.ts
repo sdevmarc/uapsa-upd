@@ -113,7 +113,9 @@ export class QrService {
     }
 
     async InsertQr({ idNumber, name, degree }: IQr)
-        : Promise<{ success: boolean, message: string, qr: string }> {
+        : Promise<{ success: boolean, message: string, qr?: string }> {
+        const qruser = await this.QrModel.findOne({ idNumber })
+        if (qruser) return { success: false, message: 'Qr already exist!' }
 
         const data = await this.QrModel.create({ idNumber: idNumber, name, degree })
         return { success: true, message: 'Qr created successfully!', qr: data._id.toString() }
