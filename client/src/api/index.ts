@@ -59,3 +59,16 @@ export const API_DATA_QR_HOLDERS = async ({ token }: { token: string }) => {
         throw error
     }
 }
+
+export const API_CREAT_QR = async ({ idNumber, name, degree }: { idNumber: string, name: string, degree: string }) => {
+    try {
+        const response = await axios.post(`${HOST}/qr/create-qr`, {
+            idNumber,
+            name,
+            degree
+        })
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
