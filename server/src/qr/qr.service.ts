@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { IQr } from './qr.interface';
 import { IAttendance } from 'src/attendance/attendance.interface';
 import { IPoints } from 'src/points/points.interface';
@@ -18,22 +18,8 @@ export class QrService {
         const data = await this.QrModel.aggregate([
             {
                 $lookup: {
-                    from: 'qrs', // The name of the QR collection
-                    localField: 'qr',
-                    foreignField: '_id',
-                    as: 'qrData'
-                }
-            },
-            {
-                $unwind: {
-                    path: '$qrData',
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-            {
-                $lookup: {
                     from: 'points', // The name of the Points collection
-                    localField: 'qr',
+                    localField: '_id',
                     foreignField: 'qr',
                     as: 'pointsData'
                 }
@@ -46,8 +32,8 @@ export class QrService {
             },
             {
                 $lookup: {
-                    from: 'attendances', // The name of the Attendance collection
-                    localField: 'qr',
+                    from: 'attendances',
+                    localField: '_id',
                     foreignField: 'qr',
                     as: 'attendanceData'
                 }
@@ -75,14 +61,55 @@ export class QrService {
     }
 
     async findOne({ qr }: { qr: string })
-        : Promise<{ success: boolean, message: string, data?: IQr, attendance?: IAttendance, points?: IPoints }> {
-        const data = await this.QrModel.findById(qr)
-
-        const attendance = await this.AttendanceModel.findOne({ qr })
-        const points = await this.PointModel.findOne({ qr })
+        : Promise<{ success: boolean, message: string, data?: IQr }> {
+        const data = await this.QrModel.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(qr)
+                }
+            },
+            {
+                $lookup: {
+                    from: 'points',
+                    localField: '_id',
+                    foreignField: 'qr',
+                    as: 'pointsData'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$pointsData',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: 'attendances',
+                    localField: '_id',
+                    foreignField: 'qr',
+                    as: 'attendanceData'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$attendanceData',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $project: {
+                    idNumber: 1,
+                    name: 1,
+                    degree: 1,
+                    points: { $ifNull: ['$pointsData.points', 0] },
+                    attended: { $ifNull: ['$attendanceData.attended', 0] }
+                }
+            }
+        ]);
 
         if (!data) return { success: false, message: 'Cannot find qr user!' }
-        return { success: true, message: 'Qr user data retrieved successfully!', data, attendance, points }
+
+        return { success: true, message: 'Qr user data retrieved successfully!', data: data[0] };
     }
 
     async InsertQr({ idNumber, name, degree }: IQr)
