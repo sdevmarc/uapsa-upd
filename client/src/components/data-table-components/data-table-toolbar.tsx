@@ -8,21 +8,57 @@ import { DataTableViewOptions } from "@/components/data-table-components/data-ta
 import { DialogContainer } from "../dialog";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { API_CREAT_QR } from "@/api";
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>;
 }
 
+interface IQr {
+    idNumber: string
+    name: string
+    degree: string
+}
+
 export function DataTableToolbar<TData>({
     table
 }: DataTableToolbarProps<TData>) {
+    const queryClient = useQueryClient();
     const isFiltered = table.getState().columnFilters.length > 0;
+    const [qrvalues, setQrValues] = useState<IQr>({
+        idNumber: '',
+        name: '',
+        degree: ''
+    })
+
+    const { mutateAsync: InsertQr, isPending: qrLoading } = useMutation({
+        mutationFn: API_CREAT_QR,
+        onSuccess: (data) => {
+            console.log(data)
+            queryClient.invalidateQueries({ queryKey: ['dashboardQr'] })
+        }
+    })
+
+    const handleAddQr = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        InsertQr(qrvalues)
+    }
+
+    const handleQrChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setQrValues((prev) => ({
+            ...prev,
+            [name]: value
+        }))
+    }
 
     return (
         <div className="flex flex-wrap items-center justify-between">
             <div className="flex flex-1 flex-wrap items-center gap-2">
                 <Input
-                    placeholder="Filter labels..."
+                    placeholder="Search name..."
                     value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
                     onChange={(event) => {
                         table.getColumn("name")?.setFilterValue(event.target.value);
@@ -42,6 +78,7 @@ export function DataTableToolbar<TData>({
             </div>
             <div className="flex gap-2">
                 <DialogContainer
+                    submit={handleAddQr}
                     title="Add Qr"
                     description="Please fill-out the required fields."
                     Trigger={
@@ -54,20 +91,21 @@ export function DataTableToolbar<TData>({
                             <Label htmlFor="name" className="text-right">
                                 Id Number
                             </Label>
-                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                            <Input required id="name" name="idNumber" onChange={handleQrChange} placeholder="eg. 0001" className="col-span-3 placeholder:text-muted" />
                             <Label htmlFor="name" className="text-right">
                                 Name
                             </Label>
-                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                            <Input required id="name" name="name" onChange={handleQrChange} placeholder="eg. John Doe" className="col-span-3 placeholder:text-muted" />
                             <Label htmlFor="name" className="text-right">
                                 Course
                             </Label>
-                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                            <Input required id="name" name="degree" onChange={handleQrChange} placeholder="eg. BS--" className="col-span-3 placeholder:text-muted" />
                         </>
                     }
+
                 />
-                <DialogContainer
-                    title="Add Qr"
+                {/* <DialogContainer
+                    title="Add Attendance"
                     description="Please fill-out the required fields."
                     Trigger={
                         <Button variant={`outline`} size={`sm`}>
@@ -76,23 +114,15 @@ export function DataTableToolbar<TData>({
                     }
                     children={
                         <>
-                            <Label htmlFor="name" className="text-right">
-                                Id Number
-                            </Label>
-                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
-                            <Label htmlFor="name" className="text-right">
-                                Name
-                            </Label>
-                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
-                            <Label htmlFor="name" className="text-right">
-                                Course
-                            </Label>
-                            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                            <div className="w-full">
+                                <DatePickerAtendance />
+                            </div>
+
                         </>
                     }
                 />
-                 <DialogContainer
-                    title="Add Qr"
+                <DialogContainer
+                    title="Add Point"
                     description="Please fill-out the required fields."
                     Trigger={
                         <Button variant={`outline`} size={`sm`}>
@@ -115,11 +145,10 @@ export function DataTableToolbar<TData>({
                             <Input id="name" value="Pedro Duarte" className="col-span-3" />
                         </>
                     }
-                />
+                /> */}
                 <DataTableViewOptions table={table} />
             </div>
-
-
         </div>
     );
 }
+
