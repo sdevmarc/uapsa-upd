@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogContent,
@@ -9,31 +8,39 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import React from "react"
+import { Button } from "./ui/button"
+import { DialogClose } from "@radix-ui/react-dialog"
 
-export function DialogContainer({ Trigger, title, description, children }: { Trigger: React.ReactNode, title: string, description: string, children: React.ReactNode }) {
+export function DialogContainer({ Trigger, title, description, children, submit }: { submit?: React.FormEventHandler<HTMLFormElement>, Trigger?: React.ReactNode, title?: string, description?: string, children?: React.ReactNode }) {
     return (
         <Dialog>
             <DialogTrigger asChild>
                 {Trigger}
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>
-                        {title}
-                    </DialogTitle>
-                    <DialogDescription>
-                        {description}
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        {children}
+                <form onSubmit={submit}>
+                    <DialogHeader>
+                        <DialogTitle>
+                            {title}
+                        </DialogTitle>
+                        <DialogDescription>
+                            {description}
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            {children}
+                        </div>
                     </div>
-                </div>
-                <DialogFooter>
-                    <Button type="submit">Submit</Button>
-                </DialogFooter>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button type="submit" variant={`outline`} size={`sm`}>
+                                Submit
+                            </Button>
+                        </DialogClose>
+                    </DialogFooter>
+                </form>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     )
 }
