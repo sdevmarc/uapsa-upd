@@ -1,28 +1,27 @@
 import { DataTable } from "@/components/data-table-components/data-table";
-import { QR } from "@/components/data-table-components/schema";
 import Header from "@/components/header";
-import QRData from '@/components/data-table-components/data.json'
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { qrcolumns } from "@/components/data-table-components/columns/qr-columns";
 import HeadSection, { SubHeadSectionDetails } from "@/components/head-section";
 import { useQuery } from "@tanstack/react-query";
-import { API_INDEX } from "@/api";
+import { API_DATA_QR_HOLDERS, API_INDEX } from "@/api";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
     const navigate = useNavigate()
-    const [data, setData] = useState<QR[]>(QRData)
     const token = localStorage.getItem('token') || '';
 
-    const { data: jwtAuthorized = '', isLoading: jwtLoading, isFetched: jwtFetched } = useQuery({
+    const { data: jwtAuthorized = '', isFetched: jwtFetched } = useQuery({
         queryFn: () => API_INDEX({ token }),
         queryKey: ['dashboardJwt', { token }],
         enabled: !!token
     })
 
-    if (jwtLoading) {
-        console.log('Loading');
-    }
+    const { data: qrHolders = [], isLoading: qrLoading } = useQuery({
+        queryFn: () => API_DATA_QR_HOLDERS({ token }),
+        queryKey: ['dashboardQr', { token }],
+        enabled: !!token
+    })
 
     useEffect(() => {
         if (jwtFetched) {
@@ -43,7 +42,10 @@ export default function Dashboard() {
                             description="Here's a list of registered qr holders."
                         />
                     </HeadSection>
-                    <DataTable columns={qrcolumns} data={data} />
+                    {
+                        qrLoading ? 'Loading...' :
+                            <DataTable columns={qrcolumns} data={qrHolders ? qrHolders.data : []} />
+                    }
                 </div>
             </div>
         </>
