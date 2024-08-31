@@ -51,7 +51,7 @@ export default function ScanAttendance() {
 
     const { data: jwtAuthorized, isFetched: jwtFetched, isLoading: jwtLoading } = useQuery({
         queryFn: () => API_INDEX({ token: token ?? '' }),
-        queryKey: ['dashboardJwt', { token: token ?? '' }],
+        queryKey: ['attendanceJwt', { token: token ?? '' }],
         enabled: !!token
     })
 
