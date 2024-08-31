@@ -5,6 +5,8 @@ import { useMutation } from "@tanstack/react-query"
 import { API_SIGN_IN } from "@/api"
 import { useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
+import bgImage from '@/assets/sapiens.svg'
+import { toast } from "sonner"
 
 export default function SignIn() {
     const [values, setValues] = useState({
@@ -17,11 +19,22 @@ export default function SignIn() {
     const { mutateAsync: QuerySignInUser, isPending: SignInloading } = useMutation({
         mutationFn: API_SIGN_IN,
         onSuccess: (data) => {
-            if (!data.success) return navigate('/signup')
-            if (data.success) {
-                localStorage.setItem('token', data.access_token)
-                return navigate('/dashboard')
+            if (!data.success) {
+                toast("Oops, something went wrong!",
+                    {
+                        description: 'There are no registered user yet!'
+                    })
+                return navigate('/signup')
             }
+            localStorage.setItem('token', data.access_token)
+            return navigate('/dashboard')
+        },
+        onError: () => {
+            toast("Oops, something went wrong!",
+                {
+                    description: 'Please check your credentials, try again!'
+                })
+            return navigate('/signup')
         }
     })
 
@@ -55,13 +68,14 @@ export default function SignIn() {
                         <label htmlFor="email" className='text-sm'>
                             Email
                         </label>
-                        <Input 
-                            placeholder="eg. m@example.com" 
-                            className="placeholder:text-muted placeholder:text-sm text-sm" 
-                            id="email" 
-                            name="email" 
-                            onChange={handleOnChange} 
-                            required 
+                        <Input
+                            type="email"
+                            placeholder="eg. m@example.com"
+                            className="placeholder:text-muted placeholder:text-sm text-sm"
+                            id="email"
+                            name="email"
+                            onChange={handleOnChange}
+                            required
                         />
                     </div>
                     <div className="w-full flex flex-col gap-1">
@@ -69,12 +83,12 @@ export default function SignIn() {
                             Password
                         </label>
                         <div className="relative">
-                            <Input 
-                                id="password" 
-                                required 
-                                name="password" 
-                                className="text-sm pr-10" 
-                                onChange={handleOnChange} 
+                            <Input
+                                id="password"
+                                required
+                                name="password"
+                                className="text-sm pr-10"
+                                onChange={handleOnChange}
                                 type={showPassword ? "text" : "password"}
                             />
                             <button
@@ -97,7 +111,10 @@ export default function SignIn() {
                         Go back
                     </Button>
                 </form>
-                <div className="w-[65%] h-full bg-black">
+                <div className="w-[65%] h-full flex justify-center items-center">
+                    <div className="w-[80%] h-[80%] flex justify-center items-center">
+                        <img src={bgImage} alt="Image Background" className="object-cover w-full h-full" />
+                    </div>
                 </div>
             </div>
         </>
