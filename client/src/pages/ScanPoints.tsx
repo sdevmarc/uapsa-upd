@@ -1,27 +1,34 @@
-import { IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner';
-import { useEffect, useState } from 'react';
-import BlurYellow from '@/assets/Blur Ellipse.png'
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import Header from "@/components/header";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { API_INDEX } from "@/api";
+import { useNavigate } from "react-router-dom";
+import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
 
 export default function ScanPoints() {
     const navigate = useNavigate()
+    const token = localStorage.getItem('token')
     const [isScanning, setIsScanning] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-
     useEffect(() => {
-        // Simulate loading time
+        if (!token) { navigate('/') }
         const timer = setTimeout(() => {
             setIsLoading(false);
         }, 2000); // Adjust this time as needed
 
         return () => clearTimeout(timer);
-    }, []);
+    }, [token, navigate]);
 
-    const handleSignIn = () => {
-        navigate('/signin')
-    }
+    const { data: jwtAuthorized, isFetched: jwtFetched, isLoading: jwtLoading } = useQuery({
+        queryFn: () => API_INDEX({ token: token ?? '' }),
+        queryKey: ['dashboardJwt', { token: token ?? '' }],
+        enabled: !!token
+    })
+
+    useEffect(() => {
+        if (jwtFetched && !jwtAuthorized) { navigate('/') }
+    }, [jwtFetched, jwtAuthorized, navigate]);
 
     const handleScan = (detectedCodes: IDetectedBarcode[]) => {
         if (detectedCodes) {
@@ -36,10 +43,9 @@ export default function ScanPoints() {
 
     return (
         <>
-            <div className="relative w-full h-screen bg-background flex overflow-hidden">
-                <img src={BlurYellow} alt="Blur Image Asset" className="absolute top-[-10rem] left-[-20rem] w-[20rem] h-[20rem] scale-[4]" />
-                <img src={BlurYellow} alt="Blur Image Asset" className="absolute bottom-[-5rem] right-[-10rem] w-[20rem] h-[20rem] scale-[4]" />
-                <div className="z-[1] w-1/2 h-full p-14 flex flex-col justify-center items-center">
+            <div className="w-full h-screen flex justify-center items-center">
+                <Header />
+                <div className="z-[1] w-1/2 h-full pt-[6rem] px-4 pb-4 flex flex-col justify-center items-center">
                     <div className="w-full h-full flex flex-col justify-center items-center gap-3">
                         <h1 className='text-[2rem] font-bold'>
                             SCAN TO EARN POINTS
@@ -56,11 +62,6 @@ export default function ScanPoints() {
                     </div>
                 </div>
                 <div className="z-[1] w-1/2 h-full flex flex-col justify-start items-center px-10">
-                    <header className="w-full h-[4rem] flex justify-end items-center">
-                        <Button onClick={handleSignIn} variant={`default`}>
-                            Sign In
-                        </Button>
-                    </header>
                     <div className="w-full h-full flex justify-center items-center">
                         <div className="w-full flex flex-col justify-center items-center gap-7">
                             <div className="flex flex-col justify-center items-center">
@@ -86,7 +87,6 @@ export default function ScanPoints() {
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </>
