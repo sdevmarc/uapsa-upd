@@ -26,9 +26,7 @@ export default function Dashboard() {
     useEffect(() => {
         if (jwtFetched && !jwtAuthorized) {
             localStorage.clear()
-            toast("Uh oh! something went wrong.", {
-                description: 'Looks like you need to login again.'
-            })
+            toast("Uh, oh! Something went wrong.", { description: 'Looks like you need to login again.' })
             return navigate('/')
         }
     }, [jwtFetched, jwtAuthorized, navigate]);
