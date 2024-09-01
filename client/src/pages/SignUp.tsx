@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
 import Cycling from '@/assets/cycling.svg'
 import { toast } from "sonner"
+import ScreenLoading from "@/components/screen-loading"
 
 export default function SignUp() {
     const [values, setValues] = useState({
@@ -81,6 +82,7 @@ export default function SignUp() {
     return (
         <>
             <div className="w-full h-screen flex justify-center items-center">
+                {(userexistLoading || SignUpLoading) && <ScreenLoading />}
                 <form onSubmit={handleSignUp} className="w-[35%] h-full flex flex-col justify-center items-center px-[5rem] gap-4 overflow-auto">
                     <h1 className='text-[2rem] font-bold'>Sign Up</h1>
                     <div className="w-full flex flex-col gap-1">
