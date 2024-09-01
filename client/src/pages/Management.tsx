@@ -7,6 +7,7 @@ import { API_DATA_USER_MANAGEMENT, API_INDEX } from "@/api";
 import { Link, useNavigate } from "react-router-dom"
 import { managementcolumns } from "@/components/data-table-components/columns/management-columns";
 import ScreenLoading from "@/components/screen-loading";
+import { toast } from "sonner";
 
 export default function Management() {
     const navigate = useNavigate()
@@ -22,17 +23,21 @@ export default function Management() {
         enabled: !!token
     })
 
+    useEffect(() => {
+        if (jwtFetched && !jwtAuthorized) {
+            localStorage.clear()
+            toast("Uh oh! something went wrong.", {
+                description: 'Looks like you need to login again.'
+            })
+            return navigate('/')
+        }
+    }, [jwtFetched, jwtAuthorized, navigate]);
+
     const { data: usermanagement = [], isLoading: usermanagementLoading, isFetched: usermanagementFetched } = useQuery({
         queryFn: () => API_DATA_USER_MANAGEMENT({ token: token ?? '' }),
         queryKey: ['dashboardUserManagement', { token: token ?? '' }],
         enabled: !!token
     })
-
-    console.log(usermanagement)
-
-    useEffect(() => {
-        if (jwtFetched && !jwtAuthorized) { navigate('/') }
-    }, [jwtFetched, jwtAuthorized, navigate]);
 
     return (
         <>
