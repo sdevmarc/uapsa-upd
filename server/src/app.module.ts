@@ -21,7 +21,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
             inject: [ConfigService],
         }),
         UsersModule,
-        MongooseModule.forRoot('mongodb://localhost:27017/upoints-kiosk'),
+        MongooseModule.forRoot(process.env.MONGODB_URI),
         AttendanceModule,
         QrModule,
         PointsModule,
