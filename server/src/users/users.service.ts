@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { IUsers } from './users.interface';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -27,9 +27,33 @@ export class UsersService {
 
     async findAll()
         : Promise<{ success: boolean, message: string, data: IUsers[] }> {
-        const data = await this.UserModel.find();
+        const data = await this.UserModel.aggregate([
+            {
+                $lookup: {
+                    from: 'qrs',
+                    localField: 'qr',
+                    foreignField: '_id',
+                    as: 'qrData'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$qrData',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $project: {
+                    email: 1,
+                    role: 1,
+                    idNumber: '$qrData.idNumber',
+                    name: '$qrData.name',
+                    degree: '$qrData.degree',
+                }
+            }
+        ]);
 
-        if (data.length <= 0) return { success: true, message: 'No existing users!', data }
+        if (data.length <= 0) return { success: false, message: 'No existing users!', data }
         return { success: true, message: 'Users retrieved successfully!', data }
     }
 
@@ -41,12 +65,15 @@ export class UsersService {
     }
 
     async InsertUser({ qr, email, password, role }: { qr: string, email: string, password: string, role?: string })
-        : Promise<{ success: boolean, message: string, qr: string }> {
+        : Promise<{ success: boolean, message: string, qr?: string }> {
         const salt = await bcrypt.genSalt()
         const hashedpassword = await bcrypt.hash(password, salt)
 
+        const isemail = await this.UserModel.findOne({ email })
+        if (isemail) return { success: false, message: 'Email already exist!' }
+
         const data = await this.UserModel.create({ qr, email, password: hashedpassword, role })
-        return { success: true, message: 'Qr created successfully', qr: data.qr }
+        return { success: true, message: 'User created successfully', qr: data.qr }
     }
 
     async ReadLoginUser({ email, password }: { email: string, password: string })
@@ -71,9 +98,13 @@ export class UsersService {
         return { success: true, message: 'User updated successfully!' }
     }
 
-    async DeleteUser({ email }: { email: string })
+    async DeleteUser({ id }: { id: string })
         : Promise<{ success: boolean, message: string }> {
-        await this.UserModel.deleteOne({ email })
-        return { success: true, message: 'Qr resetted successfully!' }
+        const userdata = await this.UserModel.findById(id)
+        if (!userdata) return { success: false, message: 'User not found.' }
+
+        await this.QrModel.findByIdAndDelete(userdata.qr)
+        await this.UserModel.findByIdAndDelete(id)
+        return { success: true, message: 'User deleted successfully!' }
     }
 }
