@@ -7,6 +7,7 @@ import { useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
 import bgImage from '@/assets/sapiens.svg'
 import { toast } from "sonner"
+import ScreenLoading from "@/components/screen-loading"
 
 export default function SignIn() {
     const [values, setValues] = useState({
@@ -34,7 +35,6 @@ export default function SignIn() {
                 {
                     description: 'Please check your credentials, try again!'
                 })
-            return navigate('/signup')
         }
     })
 
@@ -62,6 +62,7 @@ export default function SignIn() {
     return (
         <>
             <div className="w-full h-screen flex justify-center items-center">
+                {SignInloading && <ScreenLoading />}
                 <form onSubmit={handleSignIn} className="w-[35%] h-full flex flex-col justify-center items-center px-[5rem] gap-4">
                     <h1 className='text-[2rem] font-bold'>Sign In</h1>
                     <div className="w-full flex flex-col gap-1">
