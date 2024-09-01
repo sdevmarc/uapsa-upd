@@ -21,7 +21,7 @@ export class UsersService {
     async findUsersExist()
         : Promise<{ success: boolean, message: string }> {
         const response = await this.UserModel.find()
-        if (response.length > 0) return { success: false, message: 'Users already exist!' }
+        if (response.length > 0) return { success: true, message: 'Users already exist!' }
         return { success: false, message: 'No users found.' }
     }
 
