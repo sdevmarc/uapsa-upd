@@ -56,6 +56,7 @@ export class UsersController {
     async CreateFirstTimeUser(@Body() { idNumber, name, degree, email, password }: { idNumber: string, name: string, degree: string, email: string, password: string }) {
         try {
             const data = await this.qrservice.InsertQr({ idNumber, name, degree })
+            if (!data.success) return { success: false, message: data.message }
             return await this.userService.InsertUser({ qr: data.qr, email, password, role: 'admin' })
         } catch (error) {
             throw new HttpException({ success: false, message: 'User not created successfully!', error }, HttpStatus.BAD_REQUEST)
@@ -85,9 +86,9 @@ export class UsersController {
 
     @UseGuards(AuthGuard)
     @Post('delete-user')
-    async RemoveUser(@Body() { email }: { email: string }) {
+    async RemoveUser(@Body() { id }: { id: string }) {
         try {
-            return this.userService.DeleteUser({ email })
+            return this.userService.DeleteUser({ id })
         } catch (error) {
             throw new HttpException({ success: false, message: 'User failed to login!', error }, HttpStatus.BAD_REQUEST)
         }
