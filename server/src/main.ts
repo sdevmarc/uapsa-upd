@@ -9,4 +9,11 @@ async function bootstrap() {
   app.enableCors();
   await app.listen(process.env.PORT);
 }
-bootstrap();
+
+let app: any;
+export default async (req, res) => {
+  if (!app) {
+    app = await bootstrap();
+  }
+  return app.getHttpAdapter().getInstance()(req, res);
+};
