@@ -14,7 +14,7 @@ export default function SignUp() {
         idNumber: '',
         name: '',
         degree: '',
-        email: ''.toLowerCase(),
+        email: '',
         password: ''
     })
     const [confirm, setConfirm] = useState('')
