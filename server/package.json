@@ -6,8 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/main.js",
+    "build": "nest build",
+    "start": "node dist/main",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -27,7 +27,6 @@
     "@nestjs/mongoose": "^10.0.10",
     "@nestjs/platform-express": "^10.0.0",
     "@vercel/node": "^3.2.10",
-    "bcryptjs": "^2.4.3",
     "mongoose": "^8.5.4",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
