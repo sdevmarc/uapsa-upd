@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IUsers } from './users.interface';
-import * as bcrypt from 'bcryptjs'
+import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { IQr } from 'src/qr/qr.interface';
 import { IPoints } from 'src/points/points.interface';
