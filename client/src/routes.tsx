@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom"
-import ScanPoints from "@/pages/ScanPoints"
-import SignIn from "./pages/SignIn"
+import ScanPoints from "@/pages/scan-points"
+import SignIn from "./pages/sign-in"
+import SignUp from "./pages/sign-up"
+import ScanAttendance from "./pages/scan-attendance"
+import NotFoundPage from "./pages/error-not-found"
 import Dashboard from "./pages/Dashboard"
 import Management from "./pages/Management"
-import SignUp from "./pages/SignUp"
 import Home from "./pages/Home"
-import ScanAttendance from "./pages/ScanAttendance"
-import NotFoundPage from "./pages/404Page"
 
 const Routes = createBrowserRouter([
     { path: '/', element: <Home /> },
