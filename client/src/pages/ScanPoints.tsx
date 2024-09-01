@@ -56,6 +56,16 @@ export default function ScanAttendance() {
         enabled: !!token
     })
 
+    useEffect(() => {
+        if (jwtFetched && !jwtAuthorized) {
+            localStorage.clear()
+            toast("Uh oh! something went wrong.", {
+                description: 'Looks like you need to login again.'
+            })
+            return navigate('/')
+        }
+    }, [jwtFetched, jwtAuthorized, navigate]);
+
     const { mutateAsync: InsertPoint, isPending: attendanceLoading } = useMutation({
         mutationFn: API_CREATE_POINT,
         onSuccess: (data) => {
@@ -79,10 +89,6 @@ export default function ScanAttendance() {
         queryKey: ['pointQr', { qr }],
         enabled: !!qr
     })
-
-    useEffect(() => {
-        if (jwtFetched && !jwtAuthorized) { navigate('/') }
-    }, [jwtFetched, jwtAuthorized, navigate]);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
