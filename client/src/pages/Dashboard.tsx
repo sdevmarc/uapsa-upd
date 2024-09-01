@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { API_DATA_QR_HOLDERS, API_INDEX } from "@/api";
 import { useNavigate } from "react-router-dom"
 import ScreenLoading from "@/components/screen-loading";
+import { toast } from "sonner";
 
 export default function Dashboard() {
     const navigate = useNavigate()
@@ -22,15 +23,21 @@ export default function Dashboard() {
         enabled: !!token
     })
 
+    useEffect(() => {
+        if (jwtFetched && !jwtAuthorized) {
+            localStorage.clear()
+            toast("Uh oh! something went wrong.", {
+                description: 'Looks like you need to login again.'
+            })
+            return navigate('/')
+        }
+    }, [jwtFetched, jwtAuthorized, navigate]);
+
     const { data: qrHolders = [], isLoading: qrLoading, isFetched: qrFetched } = useQuery({
         queryFn: () => API_DATA_QR_HOLDERS({ token: token ?? '' }),
         queryKey: ['dashboardQr', { token: token ?? '' }],
         enabled: !!token
     })
-
-    useEffect(() => {
-        if (jwtFetched && !jwtAuthorized) { navigate('/') }
-    }, [jwtFetched, jwtAuthorized, navigate]);
 
     return (
         <>
