@@ -26,16 +26,14 @@ export default function Management() {
     useEffect(() => {
         if (jwtFetched && !jwtAuthorized) {
             localStorage.clear()
-            toast("Uh oh! something went wrong.", {
-                description: 'Looks like you need to login again.'
-            })
+            toast("Uh, oh! Something went wrong.", { description: 'Looks like you need to login again.' })
             return navigate('/')
         }
     }, [jwtFetched, jwtAuthorized, navigate]);
 
     const { data: usermanagement = [], isLoading: usermanagementLoading, isFetched: usermanagementFetched } = useQuery({
         queryFn: () => API_DATA_USER_MANAGEMENT({ token: token ?? '' }),
-        queryKey: ['dashboardUserManagement', { token: token ?? '' }],
+        queryKey: ['userManagement', { token: token ?? '' }],
         enabled: !!token
     })
 
