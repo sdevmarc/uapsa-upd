@@ -5,6 +5,7 @@ import { API_CREATE_ATTENDANCE, API_DATA_QR_HOLDER, API_INDEX } from "@/api";
 import { Link, useNavigate } from "react-router-dom";
 import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
 import { toast } from "sonner"
+import ScreenLoading from "@/components/screen-loading";
 
 function formatCurrentDate() {
     const date = new Date();
@@ -77,7 +78,7 @@ export default function ScanAttendance() {
         }
     })
 
-    const { data: qruser, isLoading: qrLoading, isError: qrError } = useQuery({
+    const { data: qruser, isLoading: qrLoading } = useQuery({
         queryFn: () => API_DATA_QR_HOLDER({ qr }),
         queryKey: ['attendanceQr', { qr }],
         enabled: !!qr
@@ -114,6 +115,7 @@ export default function ScanAttendance() {
     return (
         <>
             <div className="w-full h-screen flex justify-center items-center">
+                {(jwtLoading || qrLoading || attendanceLoading) && <ScreenLoading />}
                 <Header>
                     <Link to={`/dashboard`} className="text-sm hover:underline">
                         Go Back
