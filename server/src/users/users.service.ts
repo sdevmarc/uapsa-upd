@@ -74,7 +74,7 @@ export class UsersService {
         const isemail = await this.UserModel.findOne({ email: loweremail })
         if (isemail) return { success: false, message: 'Email already exist!' }
 
-        const data = await this.UserModel.create({ qr, email, password: hashedpassword, role })
+        const data = await this.UserModel.create({ qr, email: loweremail, password: hashedpassword, role })
         return { success: true, message: 'User created successfully', qr: data.qr }
     }
 
