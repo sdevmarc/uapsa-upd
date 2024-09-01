@@ -2,8 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/data-table-components/data-table-column-header";
-import { DataTableRowActions } from "@/components/data-table-components/data-table-row-actions";
 import { IQRSchema } from "../schema";
+import { DataTableRowActionsDashboard } from "@/components/row-actions/data-table-row-actions-dashboard";
 
 export const qrcolumns: ColumnDef<IQRSchema>[] = [
     {
@@ -73,6 +73,6 @@ export const qrcolumns: ColumnDef<IQRSchema>[] = [
     },
     {
         id: "actions",
-        cell: ({ row }) => <DataTableRowActions row={row} />
+        cell: ({ row }) => <DataTableRowActionsDashboard row={row} />
     }
 ];
