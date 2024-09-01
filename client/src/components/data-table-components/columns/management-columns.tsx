@@ -53,7 +53,7 @@ export const managementcolumns: ColumnDef<IManagementSchema>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex w-[100px] items-center">
-                    <span className="capitalize"> {row.getValue("email")}</span>
+                    <span> {row.getValue("email")}</span>
                 </div>
             );
         },
@@ -66,7 +66,7 @@ export const managementcolumns: ColumnDef<IManagementSchema>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex w-[100px] items-center">
-                    <span className="capitalize"> {row.getValue("role")}</span>
+                    <span> {row.getValue("role")}</span>
                 </div>
             );
         },
