@@ -82,7 +82,7 @@ export const API_DATA_QR_HOLDERS = async ({ token }: { token: string }) => {
     }
 }
 
-export const API_CREAT_QR = async ({ idNumber, name, degree }: { idNumber: string, name: string, degree: string }) => {
+export const API_CREATE_QR = async ({ idNumber, name, degree }: { idNumber: string, name: string, degree: string }) => {
     try {
         const response = await axios.post(`${HOST}/qr/create-qr`, {
             idNumber,
@@ -116,6 +116,19 @@ export const API_CREATE_POINT = async ({ qr }: { qr: string }) => {
 export const API_DATA_QR_HOLDER = async ({ qr }: { qr: string }) => {
     try {
         const response = await axios.get(`${HOST}/qr/${qr}`)
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const API_DELETE_USER = async ({ id, token }: { id: string, token: string }) => {
+    try {
+        const response = await axios.post(`${HOST}/users/delete-user`, { id }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
         return response.data
     } catch (error) {
         throw error
