@@ -9,6 +9,8 @@ export interface IQRSchema {
 
 export interface IManagementSchema {
     _id?: string
-    email: string
-    role: string
+    name?: string
+    degree?: string
+    email?: string
+    role?: string
 }
