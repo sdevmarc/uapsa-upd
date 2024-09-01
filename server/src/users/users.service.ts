@@ -69,7 +69,9 @@ export class UsersService {
         const salt = await bcrypt.genSalt()
         const hashedpassword = await bcrypt.hash(password, salt)
 
-        const isemail = await this.UserModel.findOne({ email })
+        const loweremail = email.toLowerCase()
+
+        const isemail = await this.UserModel.findOne({ email: loweremail })
         if (isemail) return { success: false, message: 'Email already exist!' }
 
         const data = await this.UserModel.create({ qr, email, password: hashedpassword, role })
