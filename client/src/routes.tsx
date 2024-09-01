@@ -6,6 +6,7 @@ import Management from "./pages/Management"
 import SignUp from "./pages/SignUp"
 import Home from "./pages/Home"
 import ScanAttendance from "./pages/ScanAttendance"
+import NotFoundPage from "./pages/404Page"
 
 const Routes = createBrowserRouter([
     { path: '/', element: <Home /> },
@@ -15,6 +16,7 @@ const Routes = createBrowserRouter([
     { path: '/scanattendance', element: <ScanAttendance /> },
     { path: '/scanpoints', element: <ScanPoints /> },
     { path: '/management', element: <Management /> },
+    { path: '*', element: <NotFoundPage /> },
 ])
 
 export default Routes
