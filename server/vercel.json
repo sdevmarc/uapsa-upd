@@ -15,5 +15,10 @@
                 "POST"
             ]
         }
-    ]
+    ],
+    "functions": {
+        "api/**/*.js": {
+            "includeFiles": "node_modules/bcrypt/**"
+        }
+    }
 }
