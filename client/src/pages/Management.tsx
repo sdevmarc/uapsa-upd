@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { API_DATA_USER_MANAGEMENT, API_INDEX } from "@/api";
 import { Link, useNavigate } from "react-router-dom"
 import { managementcolumns } from "@/components/data-table-components/columns/management-columns";
+import ScreenLoading from "@/components/screen-loading";
 
 export default function Management() {
     const navigate = useNavigate()
@@ -36,6 +37,7 @@ export default function Management() {
     return (
         <>
             <div className="w-full flex flex-col justify-center items-center">
+                {(jwtLoading || usermanagementLoading) && <ScreenLoading /> }
                 <Header>
                     <Link to={'/dashboard'} className="text-sm hover:underline">
                         Go Back
