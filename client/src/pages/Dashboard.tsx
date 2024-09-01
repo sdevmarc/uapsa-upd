@@ -6,6 +6,7 @@ import HeadSection, { SubHeadSectionDetails } from "@/components/head-section";
 import { useQuery } from "@tanstack/react-query";
 import { API_DATA_QR_HOLDERS, API_INDEX } from "@/api";
 import { useNavigate } from "react-router-dom"
+import ScreenLoading from "@/components/screen-loading";
 
 export default function Dashboard() {
     const navigate = useNavigate()
@@ -34,6 +35,7 @@ export default function Dashboard() {
     return (
         <>
             <div className="w-full flex flex-col justify-center items-center">
+                {(jwtLoading || qrLoading) && <ScreenLoading />}
                 <Header />
                 <div className="w-full max-w-[90rem] px-4 flex flex-col gap-4">
                     <HeadSection>
@@ -44,7 +46,7 @@ export default function Dashboard() {
                     </HeadSection>
                     {(jwtLoading || qrLoading) && 'Loading...'}
                     {(jwtFetched && qrFetched) &&
-                        <DataTable  columns={qrcolumns} data={qrHolders.data} toolbar="dashboard" />
+                        <DataTable columns={qrcolumns} data={qrHolders.data} toolbar="dashboard" />
                     }
                 </div>
             </div>
