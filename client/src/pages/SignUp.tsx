@@ -34,10 +34,10 @@ export default function SignUp() {
     const { mutateAsync: QuerySignUpUser, isPending: SignUpLoading } = useMutation({
         mutationFn: API_SIGN_UP,
         onSuccess: (data) => {
-            if (!data.success) return toast("Uh oh, Something went wrong.", { description: 'User and Qr created successfully!' })
+            if (!data.success) return toast("Uh oh, Something went wrong.", { description: data.message })
             toast("Yay! Success.",
                 {
-                    description: data.message
+                    description: 'User and Qr created successfully!'
                 })
             return navigate('/signin')
         }
