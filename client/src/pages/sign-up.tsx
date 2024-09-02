@@ -82,31 +82,31 @@ export default function SignUp() {
                 {(userexistLoading || SignUpLoading) && <ScreenLoading />}
                 <form onSubmit={handleSignUp} className="w-full md:w-[45%] lg:w-[35%] flex justify-center items-center overflow-auto">
                     <div className="w-full max-w-[40rem] h-full flex flex-col justify-center items-center px-4 gap-4">
-                      
+
                         <h1 className='text-[2rem] font-bold'>Sign Up</h1>
                         <div className="w-full flex flex-col gap-1">
                             <label htmlFor="idNumber" className='text-sm'>
                                 ID Number
                             </label>
-                            <Input placeholder="eg. 00012323" className="placeholder:text-muted placeholder:text-sm" id="idNumber" name="idNumber" onChange={handleOnChange} required />
+                            <Input disabled={userexistLoading || SignUpLoading} placeholder="eg. 00012323" className="placeholder:text-muted placeholder:text-sm" id="idNumber" name="idNumber" onChange={handleOnChange} required />
                         </div>
                         <div className="w-full flex flex-col gap-1">
                             <label htmlFor="name" className='text-sm'>
                                 Name
                             </label>
-                            <Input placeholder="eg. John Doe" className="placeholder:text-muted placeholder:text-sm" id="name" name="name" onChange={handleOnChange} required />
+                            <Input disabled={userexistLoading || SignUpLoading} placeholder="eg. John Doe" className="placeholder:text-muted placeholder:text-sm" id="name" name="name" onChange={handleOnChange} required />
                         </div>
                         <div className="w-full flex flex-col gap-1">
                             <label htmlFor="degree" className='text-sm'>
                                 Course
                             </label>
-                            <Input placeholder="eg. BS--" className="placeholder:text-muted placeholder:text-sm" id="degree" name="degree" onChange={handleOnChange} required />
+                            <Input disabled={userexistLoading || SignUpLoading} placeholder="eg. BS--" className="placeholder:text-muted placeholder:text-sm" id="degree" name="degree" onChange={handleOnChange} required />
                         </div>
                         <div className="w-full flex flex-col gap-1">
                             <label htmlFor="email" className='text-sm'>
                                 Email
                             </label>
-                            <Input type="email" placeholder="eg. m@example.com" className="placeholder:text-muted placeholder:text-sm" id="email" name="email" onChange={handleOnChange} required />
+                            <Input disabled={userexistLoading || SignUpLoading} type="email" placeholder="eg. m@example.com" className="placeholder:text-muted placeholder:text-sm" id="email" name="email" onChange={handleOnChange} required />
                         </div>
                         <div className="w-full flex flex-col gap-1">
                             <label htmlFor="password" className='text-sm'>
@@ -114,6 +114,7 @@ export default function SignUp() {
                             </label>
                             <div className="relative">
                                 <Input
+                                    disabled={userexistLoading || SignUpLoading}
                                     id="password"
                                     required
                                     name="password"
@@ -122,6 +123,7 @@ export default function SignUp() {
                                     onChange={handleOnChange}
                                 />
                                 <button
+                                    disabled={userexistLoading || SignUpLoading}
                                     type="button"
                                     className="absolute inset-y-0 right-0 pr-3 flex items-center"
                                     onClick={toggleShowPassword}
