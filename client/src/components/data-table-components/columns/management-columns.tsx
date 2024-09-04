@@ -7,17 +7,6 @@ import { DataTableRowActionsManagement } from "@/components/row-actions/data-tab
 
 export const managementcolumns: ColumnDef<IManagementSchema>[] = [
     {
-        accessorKey: "idNumber",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="ID No." className="text-text" />
-        ),
-        cell: ({ row }) => (
-            <div className="w-[80px] capitalize">{row.getValue("idNumber")}</div>
-        ),
-        enableSorting: false,
-        enableHiding: false
-    },
-    {
         accessorKey: "name",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Name" className="text-text" />
@@ -31,19 +20,6 @@ export const managementcolumns: ColumnDef<IManagementSchema>[] = [
                 </div>
             );
         }
-    },
-    {
-        accessorKey: "degree",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Course" className="text-text" />
-        ),
-        cell: ({ row }) => {
-            return (
-                <div className="flex w-[100px] items-center">
-                    <span className="capitalize"> {row.getValue("degree")}</span>
-                </div>
-            );
-        },
     },
     {
         accessorKey: "email",
@@ -66,7 +42,7 @@ export const managementcolumns: ColumnDef<IManagementSchema>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex w-[100px] items-center">
-                    <span> {row.getValue("role")}</span>
+                    <span className="capitalize">{row.getValue("role")}</span>
                 </div>
             );
         },
