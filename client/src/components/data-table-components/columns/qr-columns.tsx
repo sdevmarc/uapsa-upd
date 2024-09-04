@@ -33,19 +33,6 @@ export const qrcolumns: ColumnDef<IQRSchema>[] = [
         }
     },
     {
-        accessorKey: "degree",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Course" className="text-text" />
-        ),
-        cell: ({ row }) => {
-            return (
-                <div className="flex w-[100px] items-center">
-                    <span className="capitalize"> {row.getValue("degree")}</span>
-                </div>
-            );
-        },
-    },
-    {
         accessorKey: "attended",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Attended" className="text-text" />
