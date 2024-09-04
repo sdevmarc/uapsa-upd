@@ -8,6 +8,7 @@ import { QrModule } from './qr/qr.module';
 import { PointsModule } from './points/points.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { SystemModule } from './system/system.module';
 
 @Module({
     imports: [
@@ -25,6 +26,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         AttendanceModule,
         QrModule,
         PointsModule,
+        SystemModule,
     ],
     controllers: [AppController],
     providers: [AppService],
