@@ -10,22 +10,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { API_SIGN_UP } from "@/api";
+import { API_CREATE_USER } from "@/api";
 import { toast } from "sonner";
 import ScreenLoading from "../screen-loading";
 import { Eye, EyeOff } from "lucide-react";  // Import the Eye and EyeOff icons
+import { IFormUser } from "@/interface";
+import { ComboBox } from "../combo-box";
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>;
 }
 
-interface IQr {
-    idNumber: string;
-    name: string;
-    degree: string;
-    email: string;
-    password: string;
-}
+const Lists = [
+    { value: 'exeboard', label: 'Exeboard' },
+    { value: 'membership', label: 'Membership' },
+    { value: 'academic', label: 'Academic' },
+    { value: 'external', label: 'External' },
+    { value: 'publicity', label: 'Publicity' },
+    { value: 'finance', label: 'Finance' },
+    { value: 'logistic', label: 'Logistic' },
+    { value: 'internal', label: 'Internal' },
+]
 
 export function DataTableToolbarManagement<TData>({
     table,
@@ -33,20 +38,19 @@ export function DataTableToolbarManagement<TData>({
     const queryClient = useQueryClient();
     const isFiltered = table.getState().columnFilters.length > 0;
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [uservalues, setuservalues] = useState<IQr>({
-        idNumber: "",
+    const [isrole, setRole] = useState<string>('')
+    const [uservalues, setuservalues] = useState<IFormUser>({
         name: "",
-        degree: "",
         email: "",
-        password: "",
+        password: ""
     });
 
     const [isConfirm, setConfirm] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
-    const { mutateAsync: InserUser, isPending: userLoading } = useMutation({
-        mutationFn: API_SIGN_UP,
+    const { mutateAsync: InserUser, isPending: insertuserLoading } = useMutation({
+        mutationFn: API_CREATE_USER,
         onSuccess: (data) => {
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: data.message });
             queryClient.invalidateQueries({ queryKey: ["userManagement"] });
@@ -60,8 +64,15 @@ export function DataTableToolbarManagement<TData>({
             toast("Uh, oh! Something went wrong.", { description: "Your password do not match!" })
             return
         }
-        await InserUser(uservalues);
-
+        await InserUser(
+            {
+                name: uservalues.name,
+                email: uservalues.email,
+                password: uservalues.password,
+                role: isrole
+            }
+        );
+        setRole('')
     };
 
     const handleUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +93,7 @@ export function DataTableToolbarManagement<TData>({
 
     return (
         <div className="flex flex-wrap items-center justify-between">
-            {userLoading && <ScreenLoading />}
+            {insertuserLoading && <ScreenLoading />}
             <canvas ref={canvasRef} style={{ display: "none" }} />
             <div className="flex flex-1 flex-wrap items-center gap-2">
                 <Input
@@ -116,99 +127,101 @@ export function DataTableToolbarManagement<TData>({
                     }
                     children={
                         <>
-                            <Label htmlFor="idNumber" className="text-right">
-                                Id No.
-                            </Label>
-                            <Input
-                                required
-                                id="idNumber"
-                                name="idNumber"
-                                onChange={handleUserChange}
-                                placeholder="eg. 0001"
-                                className="col-span-3 placeholder:text-muted"
-                            />
-                            <Label htmlFor="name" className="text-right">
-                                Name
-                            </Label>
-                            <Input
-                                required
-                                id="name"
-                                name="name"
-                                onChange={handleUserChange}
-                                placeholder="eg. John Doe"
-                                className="col-span-3 placeholder:text-muted"
-                            />
-                            <Label htmlFor="degree" className="text-right">
-                                Course
-                            </Label>
-                            <Input
-                                required
-                                id="degree"
-                                name="degree"
-                                onChange={handleUserChange}
-                                placeholder="eg. BS--"
-                                className="col-span-3 placeholder:text-muted"
-                            />
-                            <Label htmlFor="email" className="text-right">
-                                Email
-                            </Label>
-                            <Input
-                                required
-                                type="email"
-                                id="email"
-                                name="email"
-                                onChange={handleUserChange}
-                                placeholder="eg. m@example.com"
-                                className="col-span-3 placeholder:text-muted"
-                            />
-                            <Label htmlFor="password" className="text-right">
-                                Password
-                            </Label>
-                            <div className="relative col-span-3">
-                                <Input
-                                    required
-                                    id="password"
-                                    name="password"
-                                    type={showPassword ? "text" : "password"}
-                                    onChange={handleUserChange}
-                                    className="pr-10"
-                                />
-                                <button
-                                    type="button"
-                                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                                    onClick={toggleShowPassword}
-                                >
-                                    {showPassword ? (
-                                        <EyeOff className="h-4 w-4 text-gray-400" />
-                                    ) : (
-                                        <Eye className="h-4 w-4 text-gray-400" />
-                                    )}
-                                </button>
+                            <div className="w-full flex flex-col gap-2">
+                                <div className="w-full flex justify-between items-center gap-4">
+                                    <Label htmlFor="name">
+                                        Name
+                                    </Label>
+                                    <Input
+                                        required
+                                        id="name"
+                                        name="name"
+                                        onChange={handleUserChange}
+                                        placeholder="eg. John Doe"
+                                        className="w-[75%] placeholder:text-muted"
+                                    />
+                                </div>
+
+                                <div className="w-full flex justify-between items-center gap-4">
+                                    <h1 className="text-sm font-medium">Role</h1>
+                                    <ComboBox
+                                        type={(e) => setRole(e || '')}
+                                        title='None'
+                                        lists={Lists}
+                                        value={isrole}
+                                    />
+                                </div>
+
+                                <div className="w-full flex justify-between items-center gap-4">
+                                    <Label htmlFor="email">
+                                        Email
+                                    </Label>
+                                    <Input
+                                        required
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        onChange={handleUserChange}
+                                        placeholder="eg. m@example.com"
+                                        className="w-[75%] placeholder:text-muted"
+                                    />
+                                </div>
+
+                                <div className="w-full flex justify-between items-center gap-4">
+                                    <Label htmlFor="password">
+                                        Password
+                                    </Label>
+                                    <div className="w-[75%] relative">
+                                        <Input
+                                            required
+                                            id="password"
+                                            name="password"
+                                            type={showPassword ? "text" : "password"}
+                                            onChange={handleUserChange}
+                                            className="pr-10"
+                                        />
+                                        <button
+                                            type="button"
+                                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                            onClick={toggleShowPassword}
+                                        >
+                                            {showPassword ? (
+                                                <EyeOff className="h-4 w-4 text-gray-400" />
+                                            ) : (
+                                                <Eye className="h-4 w-4 text-gray-400" />
+                                            )}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="w-full flex justify-between items-center gap-4">
+                                    <Label htmlFor="confirmpassword">
+                                        Confirm Password
+                                    </Label>
+                                    <div className="w-[75%] relative">
+                                        <Input
+                                            required
+                                            id="confirmpassword"
+                                            name="confirmpassword"
+                                            type={showConfirmPassword ? "text" : "password"}
+                                            onChange={(e) => setConfirm(e.target.value)}
+                                            className="pr-10"
+                                        />
+                                        <button
+                                            type="button"
+                                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                            onClick={toggleShowConfirmPassword}
+                                        >
+                                            {showConfirmPassword ? (
+                                                <EyeOff className="h-4 w-4 text-gray-400" />
+                                            ) : (
+                                                <Eye className="h-4 w-4 text-gray-400" />
+                                            )}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <Label htmlFor="confirmpassword" className="text-right">
-                                Confirm Password
-                            </Label>
-                            <div className="relative col-span-3">
-                                <Input
-                                    required
-                                    id="confirmpassword"
-                                    name="confirmpassword"
-                                    type={showConfirmPassword ? "text" : "password"}
-                                    onChange={(e) => setConfirm(e.target.value)}
-                                    className="pr-10"
-                                />
-                                <button
-                                    type="button"
-                                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                                    onClick={toggleShowConfirmPassword}
-                                >
-                                    {showConfirmPassword ? (
-                                        <EyeOff className="h-4 w-4 text-gray-400" />
-                                    ) : (
-                                        <Eye className="h-4 w-4 text-gray-400" />
-                                    )}
-                                </button>
-                            </div>
+
                         </>
                     }
                 />
