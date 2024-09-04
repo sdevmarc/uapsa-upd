@@ -3,11 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IAttendance } from './attendance.interface';
 import { IPoints } from 'src/points/points.interface';
+import { IQr } from 'src/qr/qr.interface';
 
 @Injectable()
 export class AttendanceService {
     constructor(
-        @InjectModel('Attendance') private readonly AttendanceModel: Model<IAttendance>
+        @InjectModel('Attendance') private readonly AttendanceModel: Model<IAttendance>,
+        @InjectModel('Qr') private readonly QrModel: Model<IQr>
     ) { }
 
     async findAll()
@@ -19,15 +21,16 @@ export class AttendanceService {
 
     async findOne({ qr }: { qr: string })
         : Promise<{ success: boolean, message: string, data: IAttendance }> {
-
         const data = await this.AttendanceModel.findOne({ qr })
-        if (!data) return { success: true, message: 'Cannot find attendance!', data }
+        if (!data) return { success: false, message: 'Cannot find attendance!', data }
 
         return { success: true, message: 'User attendance retrieved successfully!', data }
     }
 
     async InsertAttended({ qr }: IAttendance)
         : Promise<{ success: boolean, message: string }> {
+        const isqr = await this.QrModel.findById(qr)
+        if (!isqr) return { success: false, message: 'Qr is not registered.' }
         await this.AttendanceModel.findOneAndUpdate(
             { qr },
             { $inc: { attended: 1 } },
