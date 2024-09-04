@@ -1,7 +1,7 @@
 import Header from "@/components/header";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { API_CREATE_POINT, API_DATA_QR_HOLDER, API_INDEX } from "@/api";
+import { API_CREATE_POINT, API_DATA_QR_HOLDER, API_INDEX, API_USER_EXIST } from "@/api";
 import { Link, useNavigate } from "react-router-dom";
 import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
 import { toast } from "sonner"
@@ -41,30 +41,37 @@ export default function ScanAttendance() {
     const [showDetails, setShowDetails] = useState(false);
     const [timer, setTimer] = useState(10);
 
-    useEffect(() => {
-        if (!token) { navigate('/') }
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 2000);
-
-        return () => clearTimeout(timer);
-    }, [token, navigate]);
-
     const { data: jwtAuthorized, isFetched: jwtFetched, isLoading: jwtLoading } = useQuery({
         queryFn: () => API_INDEX({ token: token ?? '' }),
         queryKey: ['pointJwt', { token: token ?? '' }],
         enabled: !!token
     })
 
+    const { data: userexist, isLoading: userexistLoading } = useQuery({
+        queryFn: () => API_USER_EXIST(),
+        queryKey: ['scanpointsUserExist']
+    })
+
     useEffect(() => {
+        if (!token) { navigate('/') }
         if (jwtFetched && !jwtAuthorized) {
             localStorage.clear()
-            toast("Uh oh! something went wrong.", {
-                description: 'Looks like you need to login again.'
-            })
+            toast("Uh oh! something went wrong.", {  description: 'Looks like you need to login again.' })
             return navigate('/')
         }
-    }, [jwtFetched, jwtAuthorized, navigate]);
+        if (!userexistLoading && !userexist.success) {
+            localStorage.clear()
+            return navigate('/')
+        }
+    }, [jwtFetched, jwtAuthorized, userexist, navigate]);    
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 2000);
+
+        return () => clearTimeout(timer);
+    }, [token, navigate]);
 
     const { mutateAsync: InsertPoint, isPending: attendanceLoading } = useMutation({
         mutationFn: API_CREATE_POINT,
@@ -150,9 +157,6 @@ export default function ScanAttendance() {
                                     <div className="flex flex-col justify-center items-center">
                                         <h1 className='text-[3rem] font-semibold'>
                                             {qruser?.data?.name || '---'}
-                                        </h1>
-                                        <h1 className='text-[1.4rem] font-semibold'>
-                                            {qruser?.data?.degree || '---'}
                                         </h1>
                                     </div>
                                     <div className="w-full flex flex-col justify-center items-center gap-4">
