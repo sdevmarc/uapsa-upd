@@ -40,10 +40,8 @@ export function DialogContainer({ Trigger, title, description, children, submit 
                         <DialogTitle>{title}</DialogTitle>
                         <DialogDescription>{description}</DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            {children}
-                        </div>
+                    <div className="w-full py-4">
+                        {children}
                     </div>
                     <DialogFooter>
                         <Button type="submit" variant="outline" size="sm">
