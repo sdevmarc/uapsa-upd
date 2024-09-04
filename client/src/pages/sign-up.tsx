@@ -2,18 +2,30 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useNavigate } from "react-router-dom"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { API_SIGN_UP, API_USER_EXIST } from "@/api"
-import { useEffect, useState } from "react"
+import { API_CREATE_USER, API_USER_EXIST } from "@/api"
+import React, { useEffect, useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
 import Cycling from '@/assets/cycling.svg'
 import { toast } from "sonner"
 import ScreenLoading from "@/components/screen-loading"
+import { ComboBox } from "@/components/combo-box"
+
+const Lists = [
+    { value: 'exeboard', label: 'Exeboard' },
+    { value: 'membership', label: 'Membership' },
+    { value: 'academic', label: 'Academic' },
+    { value: 'external', label: 'External' },
+    { value: 'publicity', label: 'Publicity' },
+    { value: 'finance', label: 'Finance' },
+    { value: 'logistic', label: 'Logistic' },
+    { value: 'internal', label: 'Internal' },
+]
 
 export default function SignUp() {
+    const [imageloading, setImageLoading] = useState<boolean>(true)
+    const [isrole, setRole] = useState<string>('')
     const [values, setValues] = useState({
-        idNumber: '',
         name: '',
-        degree: '',
         email: '',
         password: ''
     })
@@ -21,6 +33,11 @@ export default function SignUp() {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const navigate = useNavigate()
+    const token = localStorage.getItem('token')
+
+    useEffect(() => {
+        if (token) return navigate('/dashboard')
+    }, [token, navigate]);
 
     const { data: userExist, isLoading: userexistLoading } = useQuery({
         queryFn: () => API_USER_EXIST(),
@@ -32,21 +49,20 @@ export default function SignUp() {
     }, [userExist, navigate])
 
     const { mutateAsync: QuerySignUpUser, isPending: SignUpLoading } = useMutation({
-        mutationFn: API_SIGN_UP,
+        mutationFn: API_CREATE_USER,
         onSuccess: (data) => {
             if (!data.success) return toast("Uh oh, Something went wrong.", { description: data.message })
-            toast("Yay! Success.", { description: 'User and Qr created successfully!' })
+            toast("Yay! Success.", { description: data.message })
             return navigate('/signin')
         }
     })
 
-    const handleSignUp = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (confirm !== values.password) return toast("Uh oh, Something went wrong.", { description: 'Password do not match!' })
-        QuerySignUpUser({
-            idNumber: values.idNumber,
+        await QuerySignUpUser({
             name: values.name,
-            degree: values.degree,
+            role: isrole,
             email: values.email,
             password: values.password
         })
@@ -79,28 +95,26 @@ export default function SignUp() {
     return (
         <>
             <div className="w-full h-screen flex justify-between items-center">
-                {(userexistLoading || SignUpLoading) && <ScreenLoading />}
+                {(userexistLoading || SignUpLoading || imageloading) && <ScreenLoading />}
                 <form onSubmit={handleSignUp} className="w-full md:w-[45%] lg:w-[35%] flex justify-center items-center overflow-auto">
                     <div className="w-full max-w-[40rem] h-full flex flex-col justify-center items-center px-4 gap-4">
-
                         <h1 className='text-[2rem] font-bold'>Sign Up</h1>
-                        <div className="w-full flex flex-col gap-1">
-                            <label htmlFor="idNumber" className='text-sm'>
-                                ID Number
-                            </label>
-                            <Input disabled={userexistLoading || SignUpLoading} placeholder="eg. 00012323" className="placeholder:text-muted placeholder:text-sm" id="idNumber" name="idNumber" onChange={handleOnChange} required />
-                        </div>
                         <div className="w-full flex flex-col gap-1">
                             <label htmlFor="name" className='text-sm'>
                                 Name
                             </label>
                             <Input disabled={userexistLoading || SignUpLoading} placeholder="eg. John Doe" className="placeholder:text-muted placeholder:text-sm" id="name" name="name" onChange={handleOnChange} required />
                         </div>
-                        <div className="w-full flex flex-col gap-1">
-                            <label htmlFor="degree" className='text-sm'>
-                                Course
-                            </label>
-                            <Input disabled={userexistLoading || SignUpLoading} placeholder="eg. BS--" className="placeholder:text-muted placeholder:text-sm" id="degree" name="degree" onChange={handleOnChange} required />
+                        <div className="w-full flex justify-between items-center">
+                            <h1 className="text-sm font-normal">
+                                Role
+                            </h1>
+                            <ComboBox
+                                type={(e) => setRole(e || '')}
+                                title='None'
+                                lists={Lists}
+                                value={isrole}
+                            />
                         </div>
                         <div className="w-full flex flex-col gap-1">
                             <label htmlFor="email" className='text-sm'>
@@ -172,7 +186,7 @@ export default function SignUp() {
                 </form>
                 <div className="hidden lg:w-[65%] h-full sm:hidden md:w-[55%] md:flex md:justify-center md:items-center lg:flex lg:justify-center lg:items-center">
                     <div className="w-full h-[80%] flex justify-center items-center">
-                        <img src={Cycling} alt="Image Background" className="object-contain w-full h-full" />
+                        <img src={Cycling} alt="Image Background" className="object-contain w-full h-full" loading='lazy' onLoad={() => setImageLoading(false)} onError={() => setImageLoading(false)} />
                     </div>
                 </div>
             </div>
