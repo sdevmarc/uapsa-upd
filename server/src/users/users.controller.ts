@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { QrService } from 'src/qr/qr.service';
 import { Response } from 'express';
+import { IUsers } from './users.interface';
 
 @Controller('users')
 export class UsersController {
@@ -33,7 +34,7 @@ export class UsersController {
     @UseGuards(AuthGuard)
     @Get(':email')
     async ViewOneIUser(
-        @Param() { email }: { email: string }
+        @Param() { email }: IUsers
     ) {
         try {
             return await this.userService.findOne({ email })
@@ -42,22 +43,10 @@ export class UsersController {
         }
     }
 
-
     @Post('create-user')
-    async CreateUser(@Body() { qr, email, password }: { qr: string, email: string, password: string }) {
+    async CreateUser(@Body() { name, email, password, role }: IUsers) {
         try {
-            return await this.userService.InsertUser({ qr, email, password })
-        } catch (error) {
-            throw new HttpException({ success: false, message: 'User not created successfully!', error }, HttpStatus.BAD_REQUEST)
-        }
-    }
-
-    @Post('create-first-time-user')
-    async CreateFirstTimeUser(@Body() { idNumber, name, degree, email, password }: { idNumber: string, name: string, degree: string, email: string, password: string }) {
-        try {
-            const data = await this.qrservice.InsertQr({ idNumber, name, degree })
-            if (!data.success) return { success: false, message: data.message }
-            return await this.userService.InsertUser({ qr: data.qr, email, password, role: 'admin' })
+            return await this.userService.InsertUser({ name, email, password, role })
         } catch (error) {
             throw new HttpException({ success: false, message: 'User not created successfully!', error }, HttpStatus.BAD_REQUEST)
         }
@@ -65,7 +54,7 @@ export class UsersController {
 
     @Post('login-user')
     async LoginUser(
-        @Body() { email, password }: { email: string, password: string }
+        @Body() { email, password }: IUsers
     ) {
         try {
             return await this.userService.ReadLoginUser({ email, password })
@@ -76,7 +65,7 @@ export class UsersController {
 
     @UseGuards(AuthGuard)
     @Post('update-user')
-    async UpdateUser(@Body() { id, role }: { id: string, role: string }) {
+    async UpdateUser(@Body() { id, role }: IUsers) {
         try {
             return await this.userService.UpdateUser({ id, role })
         } catch (error) {
@@ -86,7 +75,7 @@ export class UsersController {
 
     @UseGuards(AuthGuard)
     @Post('delete-user')
-    async RemoveUser(@Body() { id }: { id: string }) {
+    async RemoveUser(@Body() { id }: IUsers) {
         try {
             return this.userService.DeleteUser({ id })
         } catch (error) {
