@@ -1,7 +1,7 @@
 import Header from "@/components/header";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { API_CREATE_ATTENDANCE, API_DATA_QR_HOLDER, API_INDEX } from "@/api";
+import { API_CREATE_ATTENDANCE, API_DATA_QR_HOLDER, API_INDEX, API_USER_EXIST } from "@/api";
 import { Link, useNavigate } from "react-router-dom";
 import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
 import { toast } from "sonner"
@@ -41,8 +41,31 @@ export default function ScanAttendance() {
     const [showDetails, setShowDetails] = useState(false);
     const [timer, setTimer] = useState(10);
 
+    const { data: jwtAuthorized, isFetched: jwtFetched, isLoading: jwtLoading } = useQuery({
+        queryFn: () => API_INDEX({ token: token ?? '' }),
+        queryKey: ['attendanceJwt', { token: token ?? '' }],
+        enabled: !!token
+    })
+
+    const { data: userexist, isLoading: userexistLoading } = useQuery({
+        queryFn: () => API_USER_EXIST(),
+        queryKey: ['scanattendanceUserExist']
+    })
+
     useEffect(() => {
-        if (!token) { navigate('/') }
+        if (!token) { return navigate('/') }
+        if (jwtFetched && !jwtAuthorized) {
+            localStorage.clear()
+            toast("Uh, oh! Something went wrong.", { description: 'Looks like you need to login again.' })
+            return navigate('/')
+        }
+        if (!userexistLoading && !userexist.success) {
+            localStorage.clear()
+            return navigate('/')
+        }
+    }, [jwtFetched, jwtAuthorized, userexist, navigate]);
+
+    useEffect(() => {
         const timer = setTimeout(() => {
             setIsLoading(false);
         }, 2000);
@@ -50,39 +73,15 @@ export default function ScanAttendance() {
         return () => clearTimeout(timer);
     }, [token, navigate]);
 
-    const { data: jwtAuthorized, isFetched: jwtFetched, isLoading: jwtLoading } = useQuery({
-        queryFn: () => API_INDEX({ token: token ?? '' }),
-        queryKey: ['attendanceJwt', { token: token ?? '' }],
-        enabled: !!token
-    })
-
-    useEffect(() => {
-        if (jwtFetched && !jwtAuthorized) {
-            localStorage.clear()
-            toast("Uh, oh! Something went wrong.", { description: 'Looks like you need to login again.' })
-            return navigate('/')
-        }
-    }, [jwtFetched, jwtAuthorized, navigate]);
-
     const { mutateAsync: InsertAttendance, isPending: attendanceLoading } = useMutation({
         mutationFn: API_CREATE_ATTENDANCE,
         onSuccess: (data) => {
-            if (data.success) {
-                queryClient.invalidateQueries({ queryKey: ['attendanceQr'] })
-                return toast("Attendance recorded!", {
-                    description: currentDate
-                })
-            } else {
-                return toast("Oops! Something went wrong.", {
-                    description: data.message
-                })
-            }
-
+            if (!data.success) return toast("Oops! Something went wrong.", { description: data.message })
+            queryClient.invalidateQueries({ queryKey: ['attendanceQr'] })
+            return toast("Attendance recorded!", { description: `${currentDate}` })
         },
         onError: () => {
-            return toast("Oops! Something went wrong.", {
-                description: 'Attendance failed to record, try again!'
-            })
+            return toast("Oops! Something went wrong.", { description: 'Attendance failed to record, try again!' })
         }
     })
 
@@ -100,7 +99,7 @@ export default function ScanAttendance() {
             }, 1000);
         } else if (timer === 0) {
             setShowDetails(false);
-            setTimer(5);
+            setTimer(3);
             setIsScanning(true);
         }
         return () => clearInterval(interval);
@@ -119,7 +118,7 @@ export default function ScanAttendance() {
     return (
         <>
             <div className="w-full h-screen flex justify-center items-center">
-                {(jwtLoading || qrLoading || attendanceLoading) && <ScreenLoading />}
+                {(jwtLoading || qrLoading || attendanceLoading || userexistLoading) && <ScreenLoading />}
                 <Header>
                     <Link to={`/dashboard`} className="text-sm hover:underline">
                         Go Back
@@ -156,9 +155,6 @@ export default function ScanAttendance() {
                                     <div className="flex flex-col justify-center items-center">
                                         <h1 className='text-[3rem] font-semibold'>
                                             {qruser?.data?.name || '---'}
-                                        </h1>
-                                        <h1 className='text-[1.4rem] font-semibold'>
-                                            {qruser?.data?.degree || '---'}
                                         </h1>
                                     </div>
                                     <div className="w-full flex flex-col justify-center items-center gap-4">
