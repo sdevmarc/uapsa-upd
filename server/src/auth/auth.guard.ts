@@ -44,8 +44,9 @@ export class SessionGuard implements CanActivate {
             const payload = await this.jwtService.verifyAsync(token, { secret: process.env.SECRET_JWT_TOKEN });
             if (!payload) throw new HttpException({ success: false, message: 'You are not authorized.' }, HttpStatus.BAD_REQUEST)
             const role = this.jwtService.decode(token).role;
+            if (!role) return false
+
             request['role'] = role;
-            
             return true;
         } catch (error) {
             throw new HttpException({ success: false, message: 'You are not authorized.' }, HttpStatus.BAD_REQUEST);
