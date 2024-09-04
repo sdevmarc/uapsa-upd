@@ -8,9 +8,5 @@ export const QRSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
-    },
-    degree: {
-        type: String,
-        required: true
     }
 }, { timestamps: true })
