@@ -31,9 +31,9 @@ export class QrController {
     }
 
     @Post('create-qr')
-    async CreateQr(@Body() { idNumber, name, degree }: IQr) {
+    async CreateQr(@Body() { idNumber, name }: IQr) {
         try {
-            return await this.qrService.InsertQr({ idNumber, name, degree })
+            return await this.qrService.InsertQr({ idNumber, name })
         } catch (error) {
             throw new HttpException({ success: false, message: 'Qr failed to create.' }, HttpStatus.BAD_REQUEST)
         }
@@ -41,9 +41,9 @@ export class QrController {
 
     @UseGuards(AuthGuard)
     @Post('delete-qr')
-    async RemoveQrUser(@Body() { idNumber }: { idNumber: string }) {
+    async RemoveQrUser(@Body() { qr }: { qr: string }) {
         try {
-            return await this.qrService.DeleteQr({ idNumber })
+            return await this.qrService.DeleteQr({ qr })
         } catch (error) {
             throw new HttpException({ success: false, message: 'Qr failed to create.' }, HttpStatus.BAD_REQUEST)
         }
