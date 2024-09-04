@@ -19,6 +19,7 @@ module.exports = {
         extend: {
             fontFamily: {
                 poppins: ['Poppins', 'sans-serif'],
+                fredoka: ['Fredoka One']
             },
             colors: {
                 border: "hsl(var(--border))",
