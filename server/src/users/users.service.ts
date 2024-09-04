@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { IUsers } from './users.interface';
+import { IPromiseUsers, IUsers } from './users.interface';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { IQr } from 'src/qr/qr.interface';
@@ -19,93 +19,93 @@ export class UsersService {
     ) { }
 
     async findUsersExist()
-        : Promise<{ success: boolean, message: string }> {
+        : Promise<IPromiseUsers> {
         const response = await this.UserModel.find()
         if (response.length > 0) return { success: true, message: 'Users already exist!' }
         return { success: false, message: 'No users found.' }
     }
 
-    async findAll()
-        : Promise<{ success: boolean, message: string, data: IUsers[] }> {
-        const data = await this.UserModel.aggregate([
-            {
-                $lookup: {
-                    from: 'qrs',
-                    localField: 'qr',
-                    foreignField: '_id',
-                    as: 'qrData'
-                }
-            },
-            {
-                $unwind: {
-                    path: '$qrData',
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-            {
-                $project: {
-                    email: 1,
-                    role: 1,
-                    idNumber: '$qrData.idNumber',
-                    name: '$qrData.name',
-                    degree: '$qrData.degree',
-                }
-            }
-        ]);
+    // async findAll()
+    //     : Promise<IPromiseUsers> {
+    //     const data = await this.UserModel.aggregate([
+    //         {
+    //             $lookup: {
+    //                 from: 'qrs',
+    //                 localField: 'qr',
+    //                 foreignField: '_id',
+    //                 as: 'qrData'
+    //             }
+    //         },
+    //         {
+    //             $unwind: {
+    //                 path: '$qrData',
+    //                 preserveNullAndEmptyArrays: true
+    //             }
+    //         },
+    //         {
+    //             $project: {
+    //                 email: 1,
+    //                 role: 1,
+    //                 idNumber: '$qrData.idNumber',
+    //                 name: '$qrData.name',
+    //                 degree: '$qrData.degree',
+    //             }
+    //         }
+    //     ]);
 
-        if (data.length <= 0) return { success: false, message: 'No existing users!', data }
+    //     if (data.length <= 0) return { success: false, message: 'No existing users!', data }
+    //     return { success: true, message: 'Users retrieved successfully!', data }
+    // }
+
+    async findAll()
+        : Promise<IPromiseUsers> {
+        const data = await this.UserModel.find()
         return { success: true, message: 'Users retrieved successfully!', data }
     }
 
-    async findOne({ email })
-        : Promise<{ success: boolean, message: string, data: IUsers }> {
+    async findOne({ email }: IUsers)
+        : Promise<IPromiseUsers> {
         const data = await this.UserModel.findOne({ email })
-        if (!data) return { success: true, message: 'Cannot find user!', data }
         return { success: true, message: 'User retrieved successfully!', data }
     }
 
-    async InsertUser({ qr, email, password, role }: { qr: string, email: string, password: string, role?: string })
-        : Promise<{ success: boolean, message: string, qr?: string }> {
+    async InsertUser({ name, email, password, role }: IUsers)
+        : Promise<IPromiseUsers> {
         const salt = await bcrypt.genSalt()
         const hashedpassword = await bcrypt.hash(password, salt)
-
         const loweremail = email.toLowerCase()
 
         const isemail = await this.UserModel.findOne({ email: loweremail })
         if (isemail) return { success: false, message: 'Email already exist!' }
 
-        const data = await this.UserModel.create({ qr, email: loweremail, password: hashedpassword, role })
-        return { success: true, message: 'User created successfully', qr: data.qr }
+        await this.UserModel.create({ name, email: loweremail, password: hashedpassword, role })
+        return { success: true, message: 'User created successfully' }
     }
 
-    async ReadLoginUser({ email, password }: { email: string, password: string })
-        : Promise<{ success: boolean, message: string, access_token: string }> {
+    async ReadLoginUser({ email, password }: IUsers)
+        : Promise<IPromiseUsers> {
         const isemail = await this.UserModel.findOne({ email })
-        const existinguser = await this.UserModel.find()
-
-        if (existinguser.length <= 0) return ({ success: false, message: 'No existing account.', access_token: null })
-        if (!isemail) throw new UnauthorizedException('Email does not recognized.')
+        if (!isemail) return ({ success: false, message: 'Email do not exist.' })
 
         const ispassword = await bcrypt.compare(password, isemail.password)
-        if (!ispassword) throw new UnauthorizedException('Password is incorrect.')
+        if (!ispassword) return ({ success: false, message: 'Password is incorrect.' })
 
         const payload = { sub: isemail._id, role: isemail.role }
         const jwt = await this.jwtService.signAsync(payload)
         return { success: true, message: 'Logged in successfully!', access_token: jwt }
     }
 
-    async UpdateUser({ id, role }: { id: string, role: string })
-        : Promise<{ success: boolean, message: string }> {
+    async UpdateUser({ id, role }: IUsers)
+        : Promise<IPromiseUsers> {
         await this.UserModel.findByIdAndUpdate(id, { role }, { new: true })
         return { success: true, message: 'User updated successfully!' }
     }
 
-    async DeleteUser({ id }: { id: string })
-        : Promise<{ success: boolean, message: string }> {
+    async DeleteUser({ id }: IUsers)
+        : Promise<IPromiseUsers> {
         const userdata = await this.UserModel.findById(id)
         if (!userdata) return { success: false, message: 'User not found.' }
 
-        await this.QrModel.findByIdAndDelete(userdata.qr)
         await this.UserModel.findByIdAndDelete(id)
         return { success: true, message: 'User deleted successfully!' }
     }
