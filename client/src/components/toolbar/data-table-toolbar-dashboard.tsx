@@ -24,7 +24,6 @@ interface DataTableToolbarProps<TData> {
 interface IQr {
     idNumber: string
     name: string
-    degree: string
 }
 
 const now = new Date();
@@ -44,13 +43,11 @@ export function DataTableToolbar<TData>({
     const [qrvalues, setQrValues] = useState<IQr>({
         idNumber: '',
         name: '',
-        degree: ''
     })
 
     const { mutateAsync: InsertQr, isPending: qrLoading } = useMutation({
         mutationFn: API_CREATE_QR,
         onSuccess: (data) => {
-            console.log(data)
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: data.message });
             queryClient.invalidateQueries({ queryKey: ['dashboardQr'] })
             return toast("Yay! Success.", { description: "Qr registered successfully!" });
@@ -132,10 +129,6 @@ export function DataTableToolbar<TData>({
                                 Name
                             </Label>
                             <Input required id="name" name="name" onChange={handleQrChange} placeholder="eg. John Doe" className="col-span-3 placeholder:text-muted" />
-                            <Label htmlFor="name" className="text-right">
-                                Course
-                            </Label>
-                            <Input required id="name" name="degree" onChange={handleQrChange} placeholder="eg. BS--" className="col-span-3 placeholder:text-muted" />
                         </>
                     }
 
