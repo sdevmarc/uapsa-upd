@@ -7,11 +7,10 @@ interface ISignIn {
 }
 
 interface ISignUp {
-    idNumber: string
     name: string
-    degree: string
     email: string
     password: string
+    role: string
 }
 
 export const API_INDEX = async ({ token }: { token: string }) => {
@@ -58,10 +57,10 @@ export const API_SIGN_IN = async ({ email, password }: ISignIn) => {
     }
 }
 
-export const API_SIGN_UP = async ({ idNumber, name, degree, email, password }: ISignUp) => {
+export const API_CREATE_USER = async ({ name, email, password, role }: ISignUp) => {
     try {
-        const response = await axios.post(`${HOST}/users/create-first-time-user`,
-            { idNumber, name, degree, email, password }
+        const response = await axios.post(`${HOST}/users/create-user`,
+            { name, email, password, role }
         )
         return response.data
     } catch (error) {
@@ -82,12 +81,11 @@ export const API_DATA_QR_HOLDERS = async ({ token }: { token: string }) => {
     }
 }
 
-export const API_CREATE_QR = async ({ idNumber, name, degree }: { idNumber: string, name: string, degree: string }) => {
+export const API_CREATE_QR = async ({ idNumber, name }: { idNumber: string, name: string }) => {
     try {
         const response = await axios.post(`${HOST}/qr/create-qr`, {
             idNumber,
-            name,
-            degree
+            name
         })
         return response.data
     } catch (error) {
@@ -125,6 +123,19 @@ export const API_DATA_QR_HOLDER = async ({ qr }: { qr: string }) => {
 export const API_DELETE_USER = async ({ id, token }: { id: string, token: string }) => {
     try {
         const response = await axios.post(`${HOST}/users/delete-user`, { id }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const API_DELETE_QR = async ({ qr, token }: { qr: string, token: string }) => {
+    try {
+        const response = await axios.post(`${HOST}/qr/delete-qr`, { qr }, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
