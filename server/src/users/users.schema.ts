@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
 
 export const UserSchema = new mongoose.Schema({
-    qr: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Qr',
+    name: {
+        type: String,
         required: true
     },
     email: {
@@ -21,7 +20,7 @@ export const UserSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['admin', 'user'],
-        default: 'user'
+        enum: ['exeboard', 'membership', 'academic', 'external', 'publicity', 'finance', 'logistic', 'internal'],
+        required: true
     }
 }, { timestamps: true })
