@@ -9,6 +9,7 @@ import { PointsModule } from './points/points.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SystemModule } from './system/system.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
     imports: [
@@ -27,6 +28,7 @@ import { SystemModule } from './system/system.module';
         QrModule,
         PointsModule,
         SystemModule,
+        CloudinaryModule,
     ],
     controllers: [AppController],
     providers: [AppService],
