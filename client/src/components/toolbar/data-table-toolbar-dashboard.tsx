@@ -121,10 +121,10 @@ export function DataTableToolbar<TData>({
                     }
                     children={
                         <>
-                            <Label htmlFor="name" className="text-right">
+                            <Label htmlFor="idNumber" className="text-right">
                                 Id Number
                             </Label>
-                            <Input required id="name" name="idNumber" onChange={handleQrChange} placeholder="eg. 0001" className="col-span-3 placeholder:text-muted" />
+                            <Input required id="idNumber" name="idNumber" onChange={handleQrChange} placeholder="eg. 0001" className="col-span-3 placeholder:text-muted" />
                             <Label htmlFor="name" className="text-right">
                                 Name
                             </Label>
