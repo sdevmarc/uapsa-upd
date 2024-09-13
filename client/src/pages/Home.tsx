@@ -28,9 +28,15 @@ export default function Home() {
                         <p className='text-sm text-primary text-center'>
                             Track attendance and points effortlessly with a click. Simple, smart, and always on top!
                         </p>
-                        <Link to={`/signin`} className='text-sm text-primary px-8 py-2 hover:bg-accent hover:border-none rounded-full duration-300 ease-in-out border-[2px] border-black/20 dark:border-white/20'>
-                            Sign In
-                        </Link>
+                        <div className="flex items-center gap-8">
+                            <Link to={`/signin`} className='text-sm text-primary px-8 py-2 hover:bg-accent hover:border-none rounded-full duration-300 ease-in-out border-[2px] border-black/20 dark:border-white/20'>
+                                Sign In
+                            </Link>
+                            <Link to={`/viewstatus`} className='text-sm text-primary px-8 py-2 hover:bg-accent hover:border-none rounded-full duration-300 ease-in-out border-[2px] border-black/20 dark:border-white/20'>
+                                View Status
+                            </Link>
+                        </div>
+
                     </main>
                 </div>
 
