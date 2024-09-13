@@ -1,47 +1,72 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { IHeader, IPromiseSystemUI, ISystemUI } from './system.interface';
+import { IPromiseSystemUI, ISystemHeader, ISystemSignIn } from './system.interface';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Injectable()
 export class SystemService {
     constructor(
-        @InjectModel('SystemUi') private readonly SystemModel: Model<ISystemUI>,
+        @InjectModel('SystemHeaderUI') private readonly HeaderModel: Model<ISystemHeader>,
+        @InjectModel('SystemSignInUI') private readonly SignInModel: Model<ISystemSignIn>,
         private readonly cloudinaryService: CloudinaryService
     ) { }
 
-
-    // async UpdateTitle({ id, headerTitle, headerIcon }: IHeader)
-    //     : Promise<IPromiseSystemUI> {
-    //     const ispublic_id = await this.SystemModel.findOne({ public_id: id })
-    //     if(ispublic_id) return {success: false, message}
-    //     const system_isicon = await this.SystemModel.findOne({ 'header.headerIcon': headerIcon })
-    //     const cloudinary_isicon = await this.cloudinaryService.getImagesFromFolder.
-    //         if(!isicon) return { success: true, message: 'Header updated successfully!', url: isicon.header.headerIcon }
-
-    //     await this.cloudinaryService.uploadFile(headerIcon)
-
-    //     const response = await this.SystemModel.findOneAndUpdate(
-    //         { 'header.headerIcon': headerIcon },
-    //         {
-    //             'header.headerTitle': headerTitle,
-    //             'header.headerIcon': headerIcon
-    //         },
-    //         { new: true }
-    //     )
-
-    //     return { success: true, message: 'Header updated successfully!', url: response.header.headerIcon }
-    // }
-
-    async UpdateLoginBg({ public_id, loginBgImage }: ISystemUI)
+    async findOneSystemUIHeader({ public_id }: ISystemHeader)
         : Promise<IPromiseSystemUI> {
-        const response = await this.SystemModel.findOneAndUpdate(
-            { public_id },
-            { loginBgImage },
-            { new: true, upsert: true }
-        )
-        console.log(response)
-        return { success: true, message: 'Background image updated successfully!', imageId: '', url: '' }
+        try {
+            const isicon = await this.HeaderModel.findOne({ public_id })
+            if (!isicon) return { success: false, message: 'Header icon does not exist.' }
+            return { success: true, message: 'Header icon exist.', url: isicon.headerIconUrl }
+        } catch (error) {
+            throw new HttpException({ success: false, message: error }, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    async findOneSystemUISignIn({ public_id }: ISystemHeader)
+        : Promise<IPromiseSystemUI> {
+        try {
+            const isicon = await this.SignInModel.findOne({ public_id })
+            if (!isicon) return { success: false, message: 'Header icon does not exist.' }
+            return { success: true, message: 'Header icon exist.', url: isicon.bgImageUrl }
+        } catch (error) {
+            throw new HttpException({ success: false, message: error }, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    // async updateSystemUIHeader()
+    // : Promise<IPromiseSystemUI> {}
+
+    async InsertSystemUIHeader({ headerTitle, headerIconFile }: ISystemHeader)
+        : Promise<IPromiseSystemUI> {
+        try {
+            const uploadimage = await this.cloudinaryService.uploadFile(headerIconFile)
+
+            await this.HeaderModel.create({
+                public_id: uploadimage.public_id,
+                headerTitle,
+                headerIconUrl: uploadimage.secure_url
+            })
+
+            return { success: true, message: 'Header ui created successfully!' }
+        } catch (error) {
+            throw new HttpException({ success: false, message: error }, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    async InsertSystemUISignIn({ bgImageFile }: ISystemSignIn)
+        : Promise<IPromiseSystemUI> {
+        try {
+            const uploadimage = await this.cloudinaryService.uploadFile(bgImageFile)
+
+            await this.SignInModel.create({
+                public_id: uploadimage.public_id,
+                bgImageUrl: uploadimage.secure_url
+            })
+
+            return { success: true, message: 'Background image updated successfully!' }
+        } catch (error) {
+            throw new HttpException({ success: false, message: error }, HttpStatus.BAD_REQUEST)
+        }
     }
 }

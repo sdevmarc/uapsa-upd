@@ -1,13 +1,12 @@
 import mongoose from "mongoose";
 
-export const SystemUISchema = new mongoose.Schema({
-    public_id: {
-        type: String,
-        required: true
-    },
-    loginBgImage: String,
-    header: {
-        headerTitle: String,
-        headerIcon: String
-    }
+export const SystemHeaderUISchema = new mongoose.Schema({
+    public_id: String,
+    headerTitle: String,
+    headerIconUrl: String
+}, { timestamps: true })
+
+export const SystemSignInUISchema = new mongoose.Schema({
+    public_id: String,
+    bgImageUrl: String
 }, { timestamps: true })
