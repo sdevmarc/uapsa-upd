@@ -4,8 +4,9 @@ import SignIn from "./pages/sign-in"
 import SignUp from "./pages/sign-up"
 import ScanAttendance from "./pages/scan-attendance"
 import NotFoundPage from "./pages/error-not-found"
-import Dashboard from "./pages/Dashboard"
-import Management from "./pages/Management"
+import ViewPointsAttendance from "./pages/view-points-attendance"
+import Dashboard from "./pages/dashboard"
+import Management from "./pages/management"
 import Home from "./pages/Home"
 
 const Routes = createBrowserRouter([
@@ -16,6 +17,7 @@ const Routes = createBrowserRouter([
     { path: '/scanattendance', element: <ScanAttendance /> },
     { path: '/scanpoints', element: <ScanPoints /> },
     { path: '/management', element: <Management /> },
+    { path: '/viewstatus', element: <ViewPointsAttendance /> },
     { path: '*', element: <NotFoundPage /> },
 ])
 
