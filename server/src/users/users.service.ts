@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IPromiseUsers, IUsers } from './users.interface';
@@ -24,6 +24,18 @@ export class UsersService {
         if (response.length > 0) return { success: true, message: 'Users already exist!' }
         return { success: false, message: 'No users found.' }
     }
+
+    // async findRole({ email }: IUsers)
+    //     : Promise<IPromiseUsers> {
+    //     try {
+    //         const response = await this.UserModel.findOne({ email })
+    //         if (!response) return { success: false, message: 'No user found.' }
+
+    //         return { success: true, message: 'User role found.', data: response.role }
+    //     } catch (error) {
+    //         throw new HttpException({ success: false, message: 'Failed to find role.' }, HttpStatus.BAD_REQUEST)
+    //     }
+    // }
 
     // async findAll()
     //     : Promise<IPromiseUsers> {
