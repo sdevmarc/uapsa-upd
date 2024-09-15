@@ -2,7 +2,7 @@ import { API_FIND_IDNUMBER } from "@/api";
 import ScreenLoading from "@/components/screen-loading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
