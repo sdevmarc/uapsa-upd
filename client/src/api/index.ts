@@ -111,6 +111,15 @@ export const API_CREATE_POINT = async ({ qr }: { qr: string }) => {
     }
 }
 
+export const API_FIND_IDNUMBER = async ({ idNumber }: { idNumber: string }) => {
+    try {
+        const response = await axios.get(`${HOST}/qr/find/${idNumber}`)
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
 export const API_DATA_QR_HOLDER = async ({ qr }: { qr: string }) => {
     try {
         const response = await axios.get(`${HOST}/qr/${qr}`)

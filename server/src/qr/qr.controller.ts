@@ -30,6 +30,11 @@ export class QrController {
         }
     }
 
+    @Get('find/:idNumber')
+    async findQrUser(@Param() { idNumber }: IQr) {
+        return await this.qrService.findQrUser({ idNumber })
+    }
+
     @Post('create-qr')
     async CreateQr(@Body() { idNumber, name }: IQr) {
         try {
