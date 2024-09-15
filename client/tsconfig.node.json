@@ -10,7 +10,7 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
   },
   "include": ["vite.config.ts"]
 }
