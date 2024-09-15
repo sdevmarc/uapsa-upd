@@ -1,12 +1,12 @@
 export interface IQr {
     idNumber?: string
     name?: string
-    qr?: string
+    qr?: string | {}
 }
 
 export interface IPromiseQr {
     success?: boolean
     message?: string
-    qr?: string
+    qr?: string | {}
     data?: IQr[] | {}
 }
