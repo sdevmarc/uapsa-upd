@@ -1,5 +1,6 @@
 {
-    "buildCommand": "npm run build && npm run start:prod",
-    "installCommand": "npm install && npm install -g @nestjs/cli",
-    "outputDirectory": "dist"
+  "buildCommand": "npx nest build",
+  "installCommand": "npm install",
+  "outputDirectory": "dist",
+  "framework": "none"
 }
