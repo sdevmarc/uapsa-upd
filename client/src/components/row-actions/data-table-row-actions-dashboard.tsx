@@ -47,7 +47,7 @@ export function DataTableRowActionsDashboard<TData>({ row }: DataTableRowActions
                 link.click();
                 document.body.removeChild(link);
             } catch (error) {
-                console.error("Error generating QR code:", error);
+                console.error("Error generating QR code:s", error);
             }
         }
     };
