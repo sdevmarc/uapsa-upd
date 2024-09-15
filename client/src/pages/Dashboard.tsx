@@ -58,7 +58,6 @@ export default function Dashboard() {
                             description="Here's a list of registered qr holders."
                         />
                     </HeadSection>
-                    {(jwtLoading || qrLoading) && 'Loading...'}
                     {(jwtFetched && qrFetched) &&
                         <DataTable columns={qrcolumns} data={qrHolders.data} toolbar="dashboard" />
                     }

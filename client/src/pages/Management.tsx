@@ -62,7 +62,6 @@ export default function Management() {
                             description="Here's a list of registered system user access."
                         />
                     </HeadSection>
-                    {(jwtLoading || usermanagementLoading) && 'Loading...'}
                     {(jwtFetched && usermanagementFetched) &&
                         <DataTable columns={managementcolumns} data={usermanagement.data} toolbar="management" />
                     }
