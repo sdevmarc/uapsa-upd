@@ -1,6 +1,5 @@
 {
    "buildCommand": "npx nest build",
   "installCommand": "npm install",
-  "outputDirectory": "dist",
-  "framework": "none"
+  "outputDirectory": "dist"
 }
