@@ -1,5 +1,5 @@
 {
-    "buildCommand": "npm run build",
-    "installCommand": "npm install && npm install -g @nestjs/cli && npm run start:prod",
+    "buildCommand": "npm run build && npm run start:prod",
+    "installCommand": "npm install && npm install -g @nestjs/cli",
     "outputDirectory": "dist"
 }
