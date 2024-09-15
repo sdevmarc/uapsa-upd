@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { IPromiseQr, IQr } from './qr.interface';
@@ -105,6 +105,21 @@ export class QrService {
         ]);
 
         return { success: true, message: 'Data retrieved successfully!', data: data[0] };
+    }
+
+    async findQrUser({ idNumber }: IQr)
+        : Promise<IPromiseQr> {
+        try {
+            const response = await this.QrModel.findOne({ idNumber })
+            if (!response) return { success: false, message: 'Id Number do not exists' }
+
+            const qr = response._id
+            const hasqr = await this.findOne({ qr: qr.toString() })
+
+            return { success: true, message: 'Qr user retrieved successfully', data: hasqr.data }
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Failed to find user.' }, HttpStatus.BAD_REQUEST)
+        }
     }
 
     async InsertQr({ idNumber, name }: IQr)
