@@ -1,5 +1,5 @@
 {
   "buildCommand": "npm run build; npm run start:prod",
   "installCommand": "npm install -g nestjs/cli; npm install",
-  "outputDirectory": "dist/main.ts"
+  "outputDirectory": "dist"
 }
