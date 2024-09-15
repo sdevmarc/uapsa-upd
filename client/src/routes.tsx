@@ -5,9 +5,9 @@ import SignUp from "./pages/sign-up"
 import ScanAttendance from "./pages/scan-attendance"
 import NotFoundPage from "./pages/error-not-found"
 import ViewPointsAttendance from "./pages/view-points-attendance"
+import Home from "./pages/Home"
 import Dashboard from "./pages/dashboard"
 import Management from "./pages/management"
-import Home from "./pages/Home"
 
 const Routes = createBrowserRouter([
     { path: '/', element: <Home /> },
