@@ -1,12 +1,6 @@
 {
   "buildCommand": "npm run build; npm run start:prod",
   "installCommand": "npm install -g nestjs/cli; npm install",
-  "builds": [
-    {
-      "src": "src/main.ts",
-      "use": "@vercel/node"
-    }
-  ],
   "routes": [
     {
       "src": "/(.*)",
