@@ -1,7 +1,7 @@
 export interface IQr {
     idNumber?: string
     name?: string
-    qr?: string | {}
+    qr?: string
 }
 
 export interface IPromiseQr {
