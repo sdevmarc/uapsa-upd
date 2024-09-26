@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@n
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IPromiseUsers, IUsers } from './users.interface';
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcryptjs'
 import { JwtService } from '@nestjs/jwt';
 import { IQr } from 'src/qr/qr.interface';
 import { IPoints } from 'src/points/points.interface';
