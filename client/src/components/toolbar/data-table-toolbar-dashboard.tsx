@@ -57,7 +57,7 @@ export function DataTableToolbar<TData>({
     const handleAddQr = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const response = await InsertQr(qrvalues)
-        downloadQRCode({ qr: response.qr })
+        downloadQRCode({ qr: response.qr.new_qr, idNumber: response.qr.idNumber })
     }
 
     const handleQrChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,14 +68,15 @@ export function DataTableToolbar<TData>({
         }))
     }
 
-    const downloadQRCode = async ({ qr }: { qr: string }) => {
+    const downloadQRCode = async ({ qr, idNumber }: { qr: string, idNumber: string }) => {
         if (canvasRef.current) {
             try {
                 await QRCode.toCanvas(canvasRef.current, qr, { width: 500 });
                 const image = canvasRef.current.toDataURL("image/png");
                 const link = document.createElement('a');
-                link.href = image;
-                link.download = `qrcode-${qr}.png`;
+                link.href = image
+
+                link.download = `qrcode-${idNumber}.png`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
