@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import BlurImage from '@/assets/BlurBlob.png'
 import ScreenLoading from '@/components/screen-loading';
 import '@fontsource/fredoka-one';
-import GradientText from '@/components/react-bits/gradient-text';
 
 export default function Home() {
     const [imageloading, setImageLoading] = useState<boolean>(true)
@@ -29,21 +28,9 @@ export default function Home() {
                         <p className='text-sm text-primary text-center'>
                             Track attendance and points effortlessly with a click. Simple, smart, and always on top!
                         </p>
-                        <div className="flex flex-col items-center gap-4">
-                            <Link to={`/signin`} className='text-sm text-primary px-8 py-2 hover:bg-accent rounded-full duration-300 ease-in-out border-[2px] border-black/20 dark:border-white/20'>
-                                Sign In
-                            </Link>
-                            <Link to={`/viewstatus`} >
-                                <GradientText
-                                    colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
-                                    animationSpeed={3}
-                                    showBorder={true}
-                                    className='px-8 py-2 text-sm'
-                                >
-                                    View Status
-                                </GradientText>
-                            </Link>
-                        </div>
+                        <Link to={`/signin`} className='text-sm text-primary px-8 py-2 hover:bg-accent rounded-full duration-300 ease-in-out border-[2px] border-black/20 dark:border-white/20'>
+                            Sign In
+                        </Link>
                     </main>
                 </div>
             </div>
