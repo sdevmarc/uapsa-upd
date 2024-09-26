@@ -107,14 +107,16 @@ export class QrService {
         return { success: true, message: 'Data retrieved successfully!', data: data[0] };
     }
 
-    async findQrUser({ idNumber }: IQr)
+    async findQrUser(qr: string)
         : Promise<IPromiseQr> {
         try {
-            const response = await this.QrModel.findOne({ idNumber })
+            const decoded_base64 = this.decodeBase64(qr)
+
+            const response = await this.QrModel.findById(decoded_base64)
             if (!response) return { success: false, message: 'Id Number do not exists' }
 
-            const qr = response._id
-            const hasqr = await this.findOne({ qr: qr.toString() })
+            const new_qr = response._id
+            const hasqr = await this.findOne({ qr: new_qr.toString() })
 
             return { success: true, message: 'Qr user retrieved successfully', data: hasqr.data }
         } catch (error) {
@@ -128,7 +130,10 @@ export class QrService {
         if (qruser) return { success: false, message: 'Id number already exist!' }
 
         const data = await this.QrModel.create({ idNumber, name })
-        return { success: true, message: 'Qr created successfully!', qr: data._id.toString() }
+        const base64_qr = this.encodeBase64(data._id.toString())
+        const new_qr = `${process.env.SERVER_HOST}${base64_qr}`
+
+        return { success: true, message: 'Qr created successfully!', qr: { new_qr, idNumber } }
     }
 
     async DeleteQr({ qr }: IQr)
@@ -141,5 +146,13 @@ export class QrService {
         : Promise<IPromiseQr> {
         await this.QrModel.deleteMany({})
         return { success: true, message: 'Qr resetted successfully!' }
+    }
+
+    encodeBase64(data: string): string {
+        return Buffer.from(data, 'utf-8').toString('base64');
+    }
+
+    decodeBase64(encodedData: string): string {
+        return Buffer.from(encodedData, 'base64').toString('utf-8');
     }
 }
