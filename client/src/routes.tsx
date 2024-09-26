@@ -17,7 +17,7 @@ const Routes = createBrowserRouter([
     { path: '/scanattendance', element: <ScanAttendance /> },
     { path: '/scanpoints', element: <ScanPoints /> },
     { path: '/management', element: <Management /> },
-    { path: '/viewstatus', element: <ViewPointsAttendance /> },
+    { path: '/viewstatus/:qr', element: <ViewPointsAttendance /> },
     { path: '*', element: <NotFoundPage /> },
 ])
 
