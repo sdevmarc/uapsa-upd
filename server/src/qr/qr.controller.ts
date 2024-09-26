@@ -20,19 +20,13 @@ export class QrController {
     }
 
     @Get(':qr')
-    async ViewOneQrUser(
-        @Param() { qr }: { qr: string }
-    ) {
-        try {
-            return await this.qrService.findOne({ qr })
-        } catch (error) {
-            throw new HttpException({ success: false, message: 'Qr user data failed to retrieved!' }, HttpStatus.BAD_REQUEST)
-        }
+    async ViewOneQrUser(@Param('qr') qr: string) {
+        return await this.qrService.findOne({ qr })
     }
 
-    @Get('find/:idNumber')
-    async findQrUser(@Param() { idNumber }: IQr) {
-        return await this.qrService.findQrUser({ idNumber })
+    @Get('find/:qr')
+    async findQrUser(@Param('qr') qr: string) {
+        return await this.qrService.findQrUser(qr)
     }
 
     @Post('create-qr')
