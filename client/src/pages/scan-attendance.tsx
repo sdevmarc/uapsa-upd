@@ -1,45 +1,46 @@
-import Header from "@/components/header";
-import { useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { API_CREATE_ATTENDANCE, API_DATA_QR_HOLDER, API_INDEX, API_USER_EXIST } from "@/api";
-import { Link, useNavigate } from "react-router-dom";
-import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
+import Header from "@/components/header"
+import { useEffect, useState } from "react"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { API_CREATE_ATTENDANCE, API_DATA_QR_HOLDER, API_INDEX, API_USER_EXIST } from "@/api"
+import { Link, useNavigate } from "react-router-dom"
+import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner"
 import { toast } from "sonner"
-import ScreenLoading from "@/components/screen-loading";
+import ScreenLoading from "@/components/screen-loading"
+const { VITE_SITE_SERVER } = import.meta.env
 
 function formatCurrentDate() {
-    const date = new Date();
+    const date = new Date()
 
     const dateFormatter = new Intl.DateTimeFormat('en-US', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
         day: '2-digit'
-    });
+    })
 
     const timeFormatter = new Intl.DateTimeFormat('en-US', {
         hour: 'numeric',
         minute: '2-digit',
         hour12: true
-    });
+    })
 
-    const formattedDate = dateFormatter.format(date);
-    const formattedTime = timeFormatter.format(date);
+    const formattedDate = dateFormatter.format(date)
+    const formattedTime = timeFormatter.format(date)
 
-    return `${formattedDate} at ${formattedTime}`;
+    return `${formattedDate} at ${formattedTime}`
 }
 
-const currentDate = formatCurrentDate();
+const currentDate = formatCurrentDate()
 
 export default function ScanAttendance() {
     const queryClient = useQueryClient()
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
-    const [isScanning, setIsScanning] = useState(true);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isScanning, setIsScanning] = useState(true)
+    const [isLoading, setIsLoading] = useState(true)
     const [qr, setQr] = useState('')
-    const [showDetails, setShowDetails] = useState(false);
-    const [timer, setTimer] = useState(10);
+    const [showDetails, setShowDetails] = useState(false)
+    const [timer, setTimer] = useState(3)
 
     const { data: jwtAuthorized, isFetched: jwtFetched, isLoading: jwtLoading } = useQuery({
         queryFn: () => API_INDEX({ token: token ?? '' }),
@@ -54,7 +55,7 @@ export default function ScanAttendance() {
 
     useEffect(() => {
         if (!token) { return navigate('/') }
-        if (jwtFetched && !jwtAuthorized) {
+        if (jwtFetched && !jwtAuthorized.success) {
             localStorage.clear()
             toast("Uh, oh! Something went wrong.", { description: 'Looks like you need to login again.' })
             return navigate('/')
@@ -63,21 +64,21 @@ export default function ScanAttendance() {
             localStorage.clear()
             return navigate('/')
         }
-    }, [jwtFetched, jwtAuthorized, userexist, navigate]);
+    }, [jwtFetched, jwtAuthorized, userexist, navigate])
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 2000);
+            setIsLoading(false)
+        }, 2000)
 
-        return () => clearTimeout(timer);
-    }, [token, navigate]);
+        return () => clearTimeout(timer)
+    }, [token, navigate])
 
     const { mutateAsync: InsertAttendance, isPending: attendanceLoading } = useMutation({
         mutationFn: API_CREATE_ATTENDANCE,
         onSuccess: (data) => {
             if (!data.success) return toast("Oops! Something went wrong.", { description: data.message })
-            queryClient.invalidateQueries({ queryKey: ['attendanceQr'] })
+            queryClient.invalidateQueries({ queryKey: ['qrstatus'] })
             return toast("Attendance recorded!", { description: `${currentDate}` })
         },
         onError: () => {
@@ -87,33 +88,45 @@ export default function ScanAttendance() {
 
     const { data: qruser, isLoading: qrLoading } = useQuery({
         queryFn: () => API_DATA_QR_HOLDER({ qr }),
-        queryKey: ['attendanceQr', { qr }],
+        queryKey: ['qrstatus', { qr }],
         enabled: !!qr
     })
 
     useEffect(() => {
-        let interval: NodeJS.Timeout;
+        let interval: NodeJS.Timeout
         if (showDetails && timer > 0) {
             interval = setInterval(() => {
-                setTimer((prevTimer) => prevTimer - 1);
-            }, 1000);
+                setTimer((prevTimer) => prevTimer - 1)
+            }, 1000)
         } else if (timer === 0) {
-            setShowDetails(false);
-            setTimer(3);
-            setIsScanning(true);
+            setShowDetails(false)
+            setTimer(3)
+            setIsScanning(true)
         }
-        return () => clearInterval(interval);
-    }, [showDetails, timer]);
+        return () => clearInterval(interval)
+    }, [showDetails, timer])
 
-    const handleScan = (detectedCodes: IDetectedBarcode[]) => {
+    const handleScan = async (detectedCodes: IDetectedBarcode[]) => {
         if (detectedCodes) {
-            InsertAttendance({ qr: detectedCodes[0].rawValue })
-            setIsScanning(false);
-            setQr(detectedCodes[0].rawValue)
-            setShowDetails(true);
-            setTimer(5);
+            const new_qr = removeBaseUrl(detectedCodes[0].rawValue)
+            const decodedBase64 = decodeBase64(new_qr)
+
+            await InsertAttendance({ qr: new_qr })
+            setIsScanning(false)
+            setQr(decodedBase64)
+            setShowDetails(true)
+            setTimer(3)
         }
+    }
+
+    const decodeBase64 = (encodedData: string): string => {
+        return atob(encodedData);
     };
+
+    const removeBaseUrl = (data: string): string => {
+        const baseUrl = `${VITE_SITE_SERVER}`
+        return data.replace(baseUrl, '')
+    }
 
     return (
         <>
