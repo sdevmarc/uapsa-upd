@@ -49,7 +49,7 @@ export default function Management() {
     return (
         <>
             <div className="w-full flex flex-col justify-center items-center">
-                {(jwtLoading || usermanagementLoading || userexistLoading) && <ScreenLoading /> }
+                {(jwtLoading || usermanagementLoading || userexistLoading) && <ScreenLoading />}
                 <Header>
                     <Link to={'/dashboard'} className="text-sm hover:underline">
                         Go Back
@@ -58,8 +58,8 @@ export default function Management() {
                 <div className="w-full max-w-[90rem] px-4 flex flex-col gap-4">
                     <HeadSection>
                         <SubHeadSectionDetails
-                            title="RECORD OF REGISTERED USER ACCESS"
-                            description="Here's a list of registered system user access."
+                            title="RECORD OF REGISTERED USERS' ACCESS"
+                            description="Here is a list of registered users' system access."
                         />
                     </HeadSection>
                     {(jwtFetched && usermanagementFetched) &&
