@@ -75,8 +75,8 @@ export const API_CREATE_POINT = async ({ qr }: { qr: string }) => {
     return response.data
 }
 
-export const API_FIND_IDNUMBER = async ({ idNumber }: { idNumber: string }) => {
-    const response = await axios.get(`${HOST}/qr/find/${idNumber}`)
+export const API_FIND_IDNUMBER = async ({ qr }: { qr: string | undefined }) => {
+    const response = await axios.get(`${HOST}/qr/find/${qr}`)
     return response.data
 }
 
