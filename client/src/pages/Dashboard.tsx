@@ -54,12 +54,12 @@ export default function Dashboard() {
                 <div className="w-full max-w-[90rem] px-4 flex flex-col gap-4">
                     <HeadSection>
                         <SubHeadSectionDetails
-                            title="RECORD OF REGISTERED QR"
+                            title="REGISTERED QR USERS"
                             description="Here's a list of registered qr holders."
                         />
                     </HeadSection>
                     {(jwtFetched && qrFetched) &&
-                        <DataTable columns={qrcolumns} data={qrHolders.data} toolbar="dashboard" />
+                        <DataTable columns={qrcolumns} data={qrHolders.data || []} toolbar="dashboard" />
                     }
                 </div>
             </div>
