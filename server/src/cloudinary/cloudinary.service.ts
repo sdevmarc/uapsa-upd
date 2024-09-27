@@ -37,15 +37,15 @@ export class CloudinaryService {
         }
     }
 
-    async findImageById(publicId: string): Promise<IPromiseSystemUI> {
-        try {
-            const result = await cloudinary.api.resource(publicId);
-            // const encodedPublicId = encodeURIComponent(publicId);
-            // console.log(encodedPublicId)
+    // async findImageById(publicId: string): Promise<IPromiseSystemUI> {
+    //     try {
+    //         const result = await cloudinary.api.resource(publicId);
+    //         // const encodedPublicId = encodeURIComponent(publicId);
+    //         // console.log(encodedPublicId)
 
-            return { success: true, message: 'Image retrieved successfully', url: result };
-        } catch (error) {
-            throw new Error(`Failed to find image: ${error.message}`);
-        }
-    }
+    //         return { success: true, message: 'Image retrieved successfully', url: result };
+    //     } catch (error) {
+    //         throw new Error(`Failed to find image: ${error.message}`);
+    //     }
+    // }
 }
