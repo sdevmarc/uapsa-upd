@@ -17,8 +17,8 @@ export class CloudinaryController {
         return this.cloudinaryService.getImagesFromFolder(folder);
     }
 
-    @Get('find/:publicId')
-    async findImage(@Param('publicId') publicId: string) {
-        return this.cloudinaryService.findImageById(publicId);
-    }
+    // @Get('find/:publicId')
+    // async findImage(@Param('publicId') publicId: string) {
+    //     return this.cloudinaryService.findImageById(publicId);
+    // }
 }
