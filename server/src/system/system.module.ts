@@ -3,12 +3,11 @@ import { SystemService } from './system.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SystemController } from './system.controller';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
-import { SystemHeaderUISchema, SystemSignInUISchema } from './system.schema';
+import { SystemUISchema } from './system.schema';
 
 @Module({
   imports: [MongooseModule.forFeature([
-    { name: 'SystemHeaderUI', schema: SystemHeaderUISchema },
-    { name: 'SystemSignInUI', schema: SystemSignInUISchema },
+    { name: 'SystemUI', schema: SystemUISchema },
   ])],
   providers: [SystemService, CloudinaryService],
   controllers: [SystemController]
