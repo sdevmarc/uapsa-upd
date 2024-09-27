@@ -1,10 +1,10 @@
 import { DataTable } from "@/components/data-table-components/data-table";
 import Header from "@/components/header";
 import { useEffect } from "react";
-import HeadSection, { SubHeadSectionDetails } from "@/components/head-section";
+import HeadSection, { BackHeadSection, SubHeadSectionDetails } from "@/components/head-section";
 import { useQuery } from "@tanstack/react-query";
 import { API_DATA_USER_MANAGEMENT, API_INDEX, API_USER_EXIST } from "@/api";
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { managementcolumns } from "@/components/data-table-components/columns/management-columns";
 import ScreenLoading from "@/components/screen-loading";
 import { toast } from "sonner";
@@ -50,15 +50,12 @@ export default function Management() {
         <>
             <div className="w-full flex flex-col justify-center items-center">
                 {(jwtLoading || usermanagementLoading || userexistLoading) && <ScreenLoading />}
-                <Header>
-                    <Link to={'/dashboard'} className="text-sm hover:underline">
-                        Go Back
-                    </Link>
-                </Header>
+                <Header />
                 <div className="w-full max-w-[90rem] px-4 flex flex-col gap-4">
                     <HeadSection>
+                        <BackHeadSection />
                         <SubHeadSectionDetails
-                            title="RECORD OF REGISTERED USERS' ACCESS"
+                            title="REGISTERED USERS' ACCESS"
                             description="Here is a list of registered users' system access."
                         />
                     </HeadSection>
