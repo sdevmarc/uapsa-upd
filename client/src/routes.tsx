@@ -8,6 +8,7 @@ import ViewPointsAttendance from "@/pages/view-points-attendance"
 import Home from "@/pages/Home"
 import Dashboard from "./pages/Dashboard"
 import Management from "./pages/Management"
+import Settings from "./pages/settings"
 
 const Routes = createBrowserRouter([
     { path: '/', element: <Home /> },
@@ -18,6 +19,7 @@ const Routes = createBrowserRouter([
     { path: '/scanpoints', element: <ScanPoints /> },
     { path: '/management', element: <Management /> },
     { path: '/viewstatus/:qr', element: <ViewPointsAttendance /> },
+    { path: '/settings', element: <Settings /> },
     { path: '*', element: <NotFoundPage /> },
 ])
 
