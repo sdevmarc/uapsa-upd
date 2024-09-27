@@ -24,7 +24,7 @@ export default function ViewPointsAttendance() {
         <>
             {
                 qrLoading ? <ScreenLoading /> :
-                    (qrFetched && !qruser.success) ? <NotFoundPage />
+                    (qrFetched && !qruser) ? <NotFoundPage />
                         : <div className="w-full h-screen bg-background flex justify-center items-center">
                             <div className="w-full max-w-[90rem] h-full px-4 flex justify-center items-center">
                                 {qrLoading && <ScreenLoading />}
