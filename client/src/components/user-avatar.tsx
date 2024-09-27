@@ -3,7 +3,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
@@ -11,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { IAvatar } from "@/interface/index"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 export const UserAvatar = ({ image, initials }: IAvatar) => {
     const navigate = useNavigate()
@@ -34,14 +33,13 @@ export const UserAvatar = ({ image, initials }: IAvatar) => {
             <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    <DropdownMenuItem asChild>
-                        <Link to={`/management`}>
-                            Management
-                        </Link>
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => navigate('/management')}>
+                    Management
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate('/settings')}>
+                    Settings
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                     <a href="https://www.linkedin.com/in/sdevmarc/" target="_blank">
@@ -52,7 +50,6 @@ export const UserAvatar = ({ image, initials }: IAvatar) => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
                     Log out
-                    {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
