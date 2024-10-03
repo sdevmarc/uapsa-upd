@@ -5,8 +5,10 @@ import ScreenLoading from '@/components/screen-loading';
 import '@fontsource/fredoka-one';
 import { API_FIND_SYSTEM_UI } from '@/api';
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 export default function Home() {
+    axios.defaults.withCredentials = true
     const [imageloading, setImageLoading] = useState<boolean>(true)
     const navigate = useNavigate()
     const token = localStorage.getItem('token')

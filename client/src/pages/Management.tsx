@@ -8,8 +8,10 @@ import { useNavigate } from "react-router-dom"
 import { managementcolumns } from "@/components/data-table-components/columns/management-columns";
 import ScreenLoading from "@/components/screen-loading";
 import { toast } from "sonner";
+import axios from "axios";
 
 export default function Management() {
+    axios.defaults.withCredentials = true
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
 

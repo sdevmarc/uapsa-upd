@@ -8,8 +8,10 @@ import { API_DATA_QR_HOLDERS, API_INDEX, API_USER_EXIST } from "@/api";
 import { useNavigate } from "react-router-dom"
 import ScreenLoading from "@/components/screen-loading";
 import { toast } from "sonner";
+import axios from "axios";
 
 export default function Dashboard() {
+    axios.defaults.withCredentials = true
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
 

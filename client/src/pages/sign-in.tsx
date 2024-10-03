@@ -8,8 +8,10 @@ import { Eye, EyeOff } from "lucide-react"
 import { toast } from "sonner"
 import ScreenLoading from "@/components/screen-loading"
 import bg_signin from '@/assets/sapiens.svg'
+import axios from "axios"
 
 export default function SignIn() {
+    axios.defaults.withCredentials = true
     const [imageloading, setImageLoading] = useState<boolean>(true)
     const [values, setValues] = useState({
         email: '',

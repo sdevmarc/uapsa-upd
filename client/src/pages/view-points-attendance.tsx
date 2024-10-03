@@ -4,8 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import NotFoundPage from "./error-not-found";
+import axios from "axios";
 
 export default function ViewPointsAttendance() {
+    axios.defaults.withCredentials = true
     const { qr } = useParams<{ qr: string }>();
     const navigate = useNavigate()
     const token = localStorage.getItem('token')

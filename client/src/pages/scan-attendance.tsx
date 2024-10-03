@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner"
 import { toast } from "sonner"
 import ScreenLoading from "@/components/screen-loading"
+import axios from "axios"
 const { VITE_SITE_SERVER } = import.meta.env
 
 function formatCurrentDate() {
@@ -33,6 +34,7 @@ function formatCurrentDate() {
 const currentDate = formatCurrentDate()
 
 export default function ScanAttendance() {
+    axios.defaults.withCredentials = true
     const queryClient = useQueryClient()
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
