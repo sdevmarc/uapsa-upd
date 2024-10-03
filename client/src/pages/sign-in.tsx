@@ -2,10 +2,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useNavigate } from "react-router-dom"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { API_SIGN_IN, API_USER_EXIST } from "@/api"
+import { API_FIND_SYSTEM_UI, API_SIGN_IN, API_USER_EXIST } from "@/api"
 import { useEffect, useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
-import bgImage from '@/assets/sign.jpg'
 import { toast } from "sonner"
 import ScreenLoading from "@/components/screen-loading"
 
@@ -43,6 +42,11 @@ export default function SignIn() {
         }
     })
 
+    const { data: systemui, isLoading: systemuiLoading, isFetched: systemuiFetched } = useQuery({
+        queryFn: () => API_FIND_SYSTEM_UI(),
+        queryKey: ['systemui']
+    })
+
     const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (!userexist.success) return navigate('/signup')
@@ -68,19 +72,23 @@ export default function SignIn() {
     return (
         <>
             <div className="w-full h-screen flex justify-between items-center">
-                {(SignInloading || imageloading || userexistLoading) && <ScreenLoading />}
+                {(SignInloading || imageloading || userexistLoading || systemuiLoading) && <ScreenLoading />}
                 <form onSubmit={handleSignIn} className="w-full md:w-[45%] lg:w-[35%] flex justify-center items-center overflow-auto">
                     <div className="w-full max-w-[40rem] h-full flex flex-col justify-center items-center px-4 gap-4">
-                        <div className="w-[60%] sm:flex sm:justify-center sm:items-center md:hidden">
-                            <img src={bgImage} alt="Image Background" className="object-contain w-full h-full" loading="lazy" onLoad={() => setImageLoading(false)} />
-                        </div>
+                        {
+                            systemuiFetched &&
+                            <div className="w-[60%] sm:flex sm:justify-center sm:items-center md:hidden">
+                                <img src={systemui.data.sign_in.bg_image_url} alt="Image Background" className="object-contain w-full h-full" loading="lazy" onLoad={() => setImageLoading(false)} />
+                            </div>
+                        }
+
                         <h1 className='text-[2rem] font-bold'>Sign In</h1>
                         <div className="w-full flex flex-col gap-1">
-                            <label htmlFor="email" className='text-sm'>
+                            <label htmlFor="email-input" className='text-sm'>
                                 Email
                             </label>
                             <Input
-                                type="email"
+                                type="email-input"
                                 placeholder="eg. m@example.com"
                                 className="placeholder:text-muted placeholder:text-sm text-sm"
                                 id="email"
@@ -90,12 +98,12 @@ export default function SignIn() {
                             />
                         </div>
                         <div className="w-full flex flex-col gap-1">
-                            <label htmlFor="password" className="text-sm">
+                            <label htmlFor="password-input" className="text-sm">
                                 Password
                             </label>
                             <div className="relative">
                                 <Input
-                                    id="password"
+                                    id="password-input"
                                     required
                                     name="password"
                                     className="text-sm pr-10"
@@ -124,9 +132,12 @@ export default function SignIn() {
                     </div>
                 </form>
                 <div className="hidden lg:w-[65%] h-full sm:hidden md:w-[55%] md:flex md:justify-center md:items-center lg:flex lg:justify-center lg:items-center">
-                    <div className="w-full h-[80%] flex justify-center items-center">
-                        <img src={bgImage} alt="Image Background" className="object-contain w-full h-full" loading='lazy' onLoad={() => setImageLoading(false)} onError={() => setImageLoading(false)} />
-                    </div>
+                    {
+                        systemuiFetched &&
+                        <div className="w-full h-[80%] flex justify-center items-center">
+                            <img src={systemui.data.sign_in.bg_image_url} alt="Image Background" className="object-contain w-full h-full" loading='lazy' onLoad={() => setImageLoading(false)} onError={() => setImageLoading(false)} />
+                        </div>
+                    }
                 </div>
             </div>
         </>
