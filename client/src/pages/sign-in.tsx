@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
 import { toast } from "sonner"
 import ScreenLoading from "@/components/screen-loading"
+import bg_signin from '@/assets/sapiens.svg'
 
 export default function SignIn() {
     const [imageloading, setImageLoading] = useState<boolean>(true)
@@ -78,7 +79,7 @@ export default function SignIn() {
                         {
                             systemuiFetched &&
                             <div className="w-[60%] sm:flex sm:justify-center sm:items-center md:hidden">
-                                <img src={systemui.data.sign_in.bg_image_url} alt="Image Background" className="object-contain w-full h-full" loading="lazy" onLoad={() => setImageLoading(false)} />
+                                <img src={systemui.data?.sign_in.bg_image_url || bg_signin} alt="Image Background" className="object-contain w-full h-full" loading="lazy" onLoad={() => setImageLoading(false)} />
                             </div>
                         }
 
@@ -135,7 +136,7 @@ export default function SignIn() {
                     {
                         systemuiFetched &&
                         <div className="w-full h-[80%] flex justify-center items-center">
-                            <img src={systemui.data.sign_in.bg_image_url} alt="Image Background" className="object-contain w-full h-full" loading='lazy' onLoad={() => setImageLoading(false)} onError={() => setImageLoading(false)} />
+                            <img src={systemui.data?.sign_in.bg_image_url || bg_signin} alt="Image Background" className="object-contain w-full h-full" loading='lazy' onLoad={() => setImageLoading(false)} onError={() => setImageLoading(false)} />
                         </div>
                     }
                 </div>
