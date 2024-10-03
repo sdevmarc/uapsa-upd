@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { API_FIND_SYSTEM_UI, API_INDEX, API_UPDATE_SYSTEM_UI, API_USER_EXIST } from '@/api'
 import { useNavigate } from 'react-router-dom'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import ScreenLoading from '@/components/screen-loading'
 
 export default function Settings() {
@@ -32,6 +32,7 @@ export default function Settings() {
 }
 
 const UpdateSettings = () => {
+    const queryClient = useQueryClient()
     const [values, setValues] = useState({
         header_title: '',
         icon: null as File | null,
@@ -112,8 +113,8 @@ const UpdateSettings = () => {
 
     const { mutateAsync: updateUI, isPending: updateLoading } = useMutation({
         mutationFn: (formData: FormData) => API_UPDATE_SYSTEM_UI(formData, token ?? ''),
-        onSuccess: (data) => {
-            console.log(data)
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['systemui'] })
             toast("Settings updated successfully!")
         },
         onError: (error) => {
