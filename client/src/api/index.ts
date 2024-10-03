@@ -102,3 +102,20 @@ export const API_DELETE_QR = async ({ qr, token }: { qr: string, token: string }
     })
     return response.data
 }
+
+//SYSTEM UI
+export const API_FIND_SYSTEM_UI = async () => {
+    const response = await axios.get(`${HOST}/system`)
+    return response.data
+}
+
+
+export const API_UPDATE_SYSTEM_UI = async (formData: FormData, token: string) => {
+    const response = await axios.post(`${HOST}/system/update-ui`, formData, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+    return response.data
+}
