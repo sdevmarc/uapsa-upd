@@ -30,8 +30,9 @@ const App = () => {
             }
         }
         if (systemuiFetched && systemui) {
-            const logo = systemui.data.header_icon.header_icon_url
-            const title = systemui.data.header_title;
+            const logo = systemui.data?.header_icon?.header_icon_url
+            const title = systemui.data?.header_title;
+     
             changeFavicon(logo || logo_placeholder)
             document.title = title || 'UAPSA-UPD';
         }
