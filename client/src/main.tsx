@@ -7,6 +7,7 @@ import { ThemeProvider } from './hooks/useTheme'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { Toaster } from "@/components/ui/sonner"
 import { API_FIND_SYSTEM_UI } from './api'
+import logo_placeholder from '@/assets/logo.png'
 
 const queryClient = new QueryClient()
 
@@ -31,7 +32,7 @@ const App = () => {
         if (systemuiFetched && systemui) {
             const logo = systemui.data.header_icon.header_icon_url
             const title = systemui.data.header_title;
-            changeFavicon(logo)
+            changeFavicon(logo || logo_placeholder)
             document.title = title || 'UAPSA-UPD';
         }
 
