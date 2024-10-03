@@ -1,6 +1,8 @@
-import { Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { SystemService } from './system.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { ISystemUI } from './system.interface';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('system')
 export class SystemController {
@@ -8,37 +10,28 @@ export class SystemController {
         private readonly systemService: SystemService
     ) { }
 
-    // @Post('update-settings')
-    // @UseInterceptors(FileInterceptor('file'))  // 'file' is the key for file upload
-    // async UpdateSystemSettings(
-    //     @Body() body: ISystemUI,             // Extract the other fields from the bod
-    //     @UploadedFile() file: Express.Multer.File // Extract the uploaded file
-    // ) {
-    //     const { public_id, headerTitle } = body; // Destructure the body
-    //     const headerIconFile = file;             // The uploaded file
-
-    //     // const decodedPublicId = decodeURIComponent(public_id)
-    //     const response = await this.systemService.findOneSystemUIHeader({ public_id });
-    //     if (!response.success) return await this.systemService.InsertSystemUIHeader({ headerTitle, headerIconFile })
-    //     return response
-    // }
-
-    @Post('update-title')
-    async updateHeaderTitle(@Body() { header_title }: { header_title: string }) {
-        return this.systemService.updateHeaderTitle({ header_title })
+    @Get()
+    async findSystemUi() {
+        return this.systemService.getSystemUi()
     }
 
-    @Post('update-header')
-    @UseInterceptors(FileInterceptor('file'))
-    async updateHeaderIcon(@UploadedFile() file: Express.Multer.File) {
-        const header_icon_file = file;
-        return this.systemService.updateHeaderIcon({ header_icon_file })
-    }
+    @UseGuards(AuthGuard)
+    @Post('update-ui')
+    @UseInterceptors(FileFieldsInterceptor([
+        { name: 'icon', maxCount: 1 },
+        { name: 'background', maxCount: 1 },
+    ]))
+    async updateHeaderIcon(
+        @Body() { header_title }: ISystemUI,
+        @UploadedFiles() files: { icon?: Express.Multer.File[], background?: Express.Multer.File[] }
+    ) {
 
-    @Post('update-signin-bg')
-    @UseInterceptors(FileInterceptor('file'))
-    async updateSignBG(@UploadedFile() file: Express.Multer.File) {
-        const bg_image_file = file;
-        return this.systemService.updateSignInBG({ bg_image_file })
+        const header_icon_file = files.icon?.[0];
+        const bg_image_file = files.background?.[0];
+        // console.log({ header_title, header_icon_file, bg_image_file })
+
+        return this.systemService.updateUI({ header_title, header_icon_file, bg_image_file })
+        // return { header_title, header_icon_file, bg_image_file }
+
     }
 }
