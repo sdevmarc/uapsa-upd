@@ -8,12 +8,10 @@ import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-quer
 import { Toaster } from "@/components/ui/sonner"
 import { API_FIND_SYSTEM_UI } from './api'
 import logo_placeholder from '@/assets/logo.png'
-import axios from 'axios'
 
 const queryClient = new QueryClient()
 
 const App = () => {
-    axios.defaults.withCredentials = true
     const { data: systemui, isFetched: systemuiFetched } = useQuery({
         queryFn: () => API_FIND_SYSTEM_UI(),
         queryKey: ['systemui']

@@ -1,23 +1,21 @@
-import { DataTable } from "@/components/data-table-components/data-table";
-import Header from "@/components/header";
-import { useEffect } from "react";
-import HeadSection, { BackHeadSection, SubHeadSectionDetails } from "@/components/head-section";
-import { useQuery } from "@tanstack/react-query";
-import { API_DATA_USER_MANAGEMENT, API_INDEX, API_USER_EXIST } from "@/api";
+import { DataTable } from "@/components/data-table-components/data-table"
+import Header from "@/components/header"
+import { useEffect } from "react"
+import HeadSection, { BackHeadSection, SubHeadSectionDetails } from "@/components/head-section"
+import { useQuery } from "@tanstack/react-query"
+import { API_DATA_USER_MANAGEMENT, API_INDEX, API_USER_EXIST } from "@/api"
 import { useNavigate } from "react-router-dom"
-import { managementcolumns } from "@/components/data-table-components/columns/management-columns";
-import ScreenLoading from "@/components/screen-loading";
-import { toast } from "sonner";
-import axios from "axios";
+import { managementcolumns } from "@/components/data-table-components/columns/management-columns"
+import ScreenLoading from "@/components/screen-loading"
+import { toast } from "sonner"
 
 export default function Management() {
-    axios.defaults.withCredentials = true
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
 
     useEffect(() => {
         if (!token) { navigate('/') }
-    }, [token, navigate]);
+    }, [token, navigate])
 
     const { data: jwtAuthorized, isFetched: jwtFetched, isLoading: jwtLoading } = useQuery({
         queryFn: () => API_INDEX({ token: token ?? '' }),
@@ -40,7 +38,7 @@ export default function Management() {
             localStorage.clear()
             return navigate('/')
         }
-    }, [jwtFetched, jwtAuthorized, userexist, navigate]);
+    }, [jwtFetched, jwtAuthorized, userexist, navigate])
 
     const { data: usermanagement = [], isLoading: usermanagementLoading, isFetched: usermanagementFetched } = useQuery({
         queryFn: () => API_DATA_USER_MANAGEMENT({ token: token ?? '' }),

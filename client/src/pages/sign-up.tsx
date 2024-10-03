@@ -9,7 +9,6 @@ import Cycling from '@/assets/cycling.svg'
 import { toast } from "sonner"
 import ScreenLoading from "@/components/screen-loading"
 import { ComboBox } from "@/components/combo-box"
-import axios from "axios"
 
 const Lists = [
     { value: 'exeboard', label: 'Exeboard' },
@@ -23,7 +22,6 @@ const Lists = [
 ]
 
 export default function SignUp() {
-    axios.defaults.withCredentials = true
     const [imageloading, setImageLoading] = useState<boolean>(true)
     const [isrole, setRole] = useState<string>('')
     const [values, setValues] = useState({

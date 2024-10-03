@@ -1,21 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import BlurImage from '@/assets/BlurBlob.png'
-import ScreenLoading from '@/components/screen-loading';
-import '@fontsource/fredoka-one';
-import { API_FIND_SYSTEM_UI } from '@/api';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import ScreenLoading from '@/components/screen-loading'
+import '@fontsource/fredoka-one'
+import { API_FIND_SYSTEM_UI } from '@/api'
+import { useQuery } from '@tanstack/react-query'
 
 export default function Home() {
-    axios.defaults.withCredentials = true
     const [imageloading, setImageLoading] = useState<boolean>(true)
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
 
     useEffect(() => {
         if (token) return navigate('/dashboard')
-    }, [token, navigate]);
+    }, [token, navigate])
 
     const { data: systemui, isLoading: systemuiLoading, isFetched: systemuiFetched } = useQuery({
         queryFn: () => API_FIND_SYSTEM_UI(),
