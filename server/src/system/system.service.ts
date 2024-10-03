@@ -11,29 +11,14 @@ export class SystemService {
         private readonly cloudinaryService: CloudinaryService
     ) { }
 
-    // async findOneSystemUIHeader({ public_id }: ISystemHeader)
-    //     : Promise<IPromiseSystemUI> {
-    //     try {
-    //         const isicon = await this.SystemModel.findOne({ public_id })
-    //         if (!isicon) return { success: false, message: 'Header icon does not exist.' }
-
-    //         return { success: true, message: 'Header icon exist.', url: isicon.headerIconUrl }
-    //     } catch (error) {
-    //         throw new HttpException({ success: false, message: error }, HttpStatus.INTERNAL_SERVER_ERROR)
-    //     }
-    // }
-
-    // async findOneSystemUISignIn({ public_id }: ISystemHeader)
-    //     : Promise<IPromiseSystemUI> {
-    //     try {
-    //         const isicon = await this.SystemModel.findOne({ public_id })
-    //         if (!isicon) return { success: false, message: 'Header icon does not exist.' }
-
-    //         return { success: true, message: 'Header icon exist.', url: isicon.bgImageUrl }
-    //     } catch (error) {
-    //         throw new HttpException({ success: false, message: error }, HttpStatus.INTERNAL_SERVER_ERROR)
-    //     }
-    // }
+    async getSystemUi(): Promise<IPromiseSystemUI> {
+        try {
+            const response = await this.SystemModel.findOne({ index: 1 })
+            return { success: true, message: 'System ui fetched successfully!', data: response }
+        } catch (error) {
+            throw new HttpException({ success: false, message: error }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
 
     async updateHeaderTitle({ header_title }: { header_title: string }): Promise<IPromiseSystemUI> {
         try {
@@ -44,7 +29,7 @@ export class SystemService {
                 },
                 { new: true, upsert: true }
             )
-            return { success: true, message: 'Settings updated successfully.' }
+            return { success: true, message: 'Header title updated successfully.' }
         } catch (error) {
             throw new HttpException({ success: false, message: error }, HttpStatus.INTERNAL_SERVER_ERROR)
         }
@@ -64,7 +49,7 @@ export class SystemService {
                 },
                 { new: true, upsert: true }
             )
-            return { success: true, message: 'Settings updated successfully.' }
+            return { success: true, message: 'Header icon updated successfully.' }
         } catch (error) {
             throw new HttpException({ success: false, message: error }, HttpStatus.INTERNAL_SERVER_ERROR)
         }
@@ -84,103 +69,39 @@ export class SystemService {
                 },
                 { new: true, upsert: true }
             )
-            return { success: true, message: 'Settings updated successfully.' }
+            return { success: true, message: 'Background image updated successfully.' }
         } catch (error) {
             throw new HttpException({ success: false, message: error }, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
-    //     async upsertHeaderTitle({ headerTitle, headerIconFile }: ISystemHeader)
-    //         : Promise<IPromiseSystemUI> {
-    //         try {
-    //             const uploadimage = await this.cloudinaryService.uploadFile(headerIconFile)
+    async updateUI({ header_title, header_icon_file, bg_image_file }): Promise<IPromiseSystemUI> {
+        try {
+            let update_header_icon_file, update_bg_image_file, update_header_title;
 
-    //             await this.SystemModel.findOneAndUpdate(
-    //                 { index: 1 },
-    //                 {
-    //                     index: 1,
-    //                     'header.public_id': uploadimage.public_id,
+            // Update icon file if provided
+            if (header_icon_file) {
+                update_header_icon_file = await this.updateHeaderIcon({ header_icon_file });
+                if (!update_header_icon_file?.success) return update_header_icon_file;
+            }
 
-    //                 }
-    //             )
+            // Update background image if provided
+            if (bg_image_file) {
+                update_bg_image_file = await this.updateSignInBG({ bg_image_file });
+                if (!update_bg_image_file?.success) return update_bg_image_file;
+            }
 
-    //             await this.SystemModel.create({
-    //                 public_id: uploadimage.public_id,
-    //                 headerTitle,
-    //                 headerIconUrl: uploadimage.secure_url
-    //             })
+            // Update header title if provided
+            if (header_title) {
+                update_header_title = await this.updateHeaderTitle({ header_title });
+                if (!update_header_title?.success) return update_header_title;
+            }
 
-    //             return { success: true, message: 'Header ui created successfully!' }
-    //         } catch (error) {
-    //             throw new HttpException({ success: false, message: error }, HttpStatus.INTERNAL_SERVER_ERROR)
-    //         }
-    //     }
+            // If all updates were successful
+            return { success: true, message: 'Settings updated successfully.' };
+        } catch (error) {
+            throw new HttpException({ success: false, message: error }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
 
-    //     async upsertHeaderIcon({ headerTitle, headerIconFile }: ISystemHeader)
-    //     : Promise<IPromiseSystemUI> {
-    //     try {
-    //         const uploadimage = await this.cloudinaryService.uploadFile(headerIconFile)
-
-    //         await this.SystemModel.findOneAndUpdate(
-    //             { index: 1 },
-    //             {
-    //                 index: 1,
-    //                 'header.public_id': uploadimage.public_id,
-
-    //             }
-    //         )
-
-    //         await this.SystemModel.create({
-    //             public_id: uploadimage.public_id,
-    //             headerTitle,
-    //             headerIconUrl: uploadimage.secure_url
-    //         })
-
-    //         return { success: true, message: 'Header ui created successfully!' }
-    //     } catch (error) {
-    //         throw new HttpException({ success: false, message: error }, HttpStatus.INTERNAL_SERVER_ERROR)
-    //     }
-    // }
-
-    //     async InsertSystemUIHeader({ headerTitle, headerIconFile }: ISystemHeader)
-    //         : Promise<IPromiseSystemUI> {
-    //         try {
-    //             const uploadimage = await this.cloudinaryService.uploadFile(headerIconFile)
-
-    //             await this.SystemModel.findOneAndUpdate(
-    //                 { index: 1 },
-    //                 {
-    //                     index: 1,
-    //                     'header.public_id': uploadimage.public_id,
-
-    //                 }
-    //             )
-
-    //             await this.SystemModel.create({
-    //                 public_id: uploadimage.public_id,
-    //                 headerTitle,
-    //                 headerIconUrl: uploadimage.secure_url
-    //             })
-
-    //             return { success: true, message: 'Header ui created successfully!' }
-    //         } catch (error) {
-    //             throw new HttpException({ success: false, message: error }, HttpStatus.INTERNAL_SERVER_ERROR)
-    //         }
-    //     }
-
-    //     async InsertSystemUISignIn({ bgImageFile }: ISystemSignIn)
-    //         : Promise<IPromiseSystemUI> {s
-    //         try {
-    //             const uploadimage = await this.cloudinaryService.uploadFile(bgImageFile)
-
-    //             await this.SystemModel.create({
-    //                 public_id: uploadimage.public_id,
-    //                 bgImageUrl: uploadimage.secure_url
-    //             })
-
-    //             return { success: true, message: 'Background image updated successfully!' }
-    //         } catch (error) {
-    //             throw new HttpException({ success: false, message: error }, HttpStatus.INTERNAL_SERVER_ERROR)
-    //         }
-    //     }
 }
