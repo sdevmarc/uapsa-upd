@@ -6,26 +6,27 @@ export const SystemUISchema = new mongoose.Schema({
         required: true,
         default: 1
     },
-    header: {
-        public_id: {
+    header_title: {
+        type: String,
+        required: true,
+        default: 'UAPSA-UPD'
+    },
+    header_icon: {
+        header_icon_public_id: {
             type: String,
             default: ''
         },
-        headerTitle: {
-            type: String,
-            default: ''
-        },
-        headerIconUrl: {
+        header_icon_url: {
             type: String,
             default: ''
         }
     },
-    signin: {
-        public_id: {
+    sign_in: {
+        bg_image_public_id: {
             type: String,
             default: ''
         },
-        bgImageUrl: {
+        bg_image_url: {
             type: String,
             default: ''
         },
