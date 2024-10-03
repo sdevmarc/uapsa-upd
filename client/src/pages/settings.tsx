@@ -8,6 +8,7 @@ import { API_FIND_SYSTEM_UI, API_INDEX, API_UPDATE_SYSTEM_UI, API_USER_EXIST } f
 import { useNavigate } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import ScreenLoading from '@/components/screen-loading'
+import axios from 'axios'
 
 export default function Settings() {
     return (
@@ -32,6 +33,7 @@ export default function Settings() {
 }
 
 const UpdateSettings = () => {
+    axios.defaults.withCredentials = true
     const queryClient = useQueryClient()
     const [values, setValues] = useState({
         header_title: '',
@@ -112,7 +114,7 @@ const UpdateSettings = () => {
     const isLoading = jwtLoading || userexistLoading || systemuiLoading
 
     const { mutateAsync: updateUI, isPending: updateLoading } = useMutation({
-        mutationFn: (formData: FormData) => API_UPDATE_SYSTEM_UI(formData, token ?? ''),
+        mutationFn: async (formData: FormData) => await API_UPDATE_SYSTEM_UI(formData, token ?? ''),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['systemui'] })
             toast("Settings updated successfully!")
@@ -151,7 +153,7 @@ const UpdateSettings = () => {
                                 <div className="flex flex-col px-4 gap-1">
                                     <h1 className='text-[.83rem]'>Website Title</h1>
                                     <Input
-                                        value={values.header_title}
+                                        value={values.header_title || ''}
                                         onChange={handleOnChange}
                                         name='header_title'
                                         type='text'

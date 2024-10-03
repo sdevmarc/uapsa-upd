@@ -15,9 +15,9 @@ async function bootstrap(): Promise<Server> {
 
         // Enable CORS
         nestApp.enableCors({
-            origin: '*', // You might want to restrict this in production
+            origin: '*',
             methods: 'GET,POST',
-            credentials: true,
+            credentials: true
         });
 
         await nestApp.init();
