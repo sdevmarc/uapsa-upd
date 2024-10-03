@@ -76,10 +76,10 @@ const UpdateSettings = () => {
     })
 
     useEffect(() => {
-        if (systemuiFetched && systemui) {
-            const header_title = systemui.data.header_title
-            const icon_image_url = systemui.data.header_icon.header_icon_url
-            const bg_image_url = systemui.data.sign_in.bg_image_url
+        if (systemuiFetched && systemui && systemui.data) {
+            const header_title = systemui.data?.header_title || ''
+            const icon_image_url = systemui.data.header_icon?.header_icon_url || ''
+            const bg_image_url = systemui.data.sign_in?.bg_image_url || ''
 
             setValues((prev) => ({
                 ...prev,
