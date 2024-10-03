@@ -17,7 +17,7 @@ async function bootstrap(): Promise<Server> {
         nestApp.enableCors({
             origin: '*',
             methods: 'GET,POST',
-            credentials: true
+            credentials: false
         });
 
         await nestApp.init();

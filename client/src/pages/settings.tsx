@@ -8,6 +8,7 @@ import { API_FIND_SYSTEM_UI, API_INDEX, API_UPDATE_SYSTEM_UI, API_USER_EXIST } f
 import { useNavigate } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import ScreenLoading from '@/components/screen-loading'
+import axios from 'axios'
 
 export default function Settings() {
     return (
@@ -32,6 +33,7 @@ export default function Settings() {
 }
 
 const UpdateSettings = () => {
+    axios.defaults.withCredentials = true
     const queryClient = useQueryClient()
     const [values, setValues] = useState({
         header_title: '',
