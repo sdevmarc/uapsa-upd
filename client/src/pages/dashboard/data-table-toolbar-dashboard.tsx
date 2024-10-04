@@ -106,7 +106,7 @@ export function DataTableToolbarDashboard<TData>({
         mutationFn: API_CREATE_POINT,
         onSuccess: (data) => {
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: 'Failed to add point.' })
-            queryClient.invalidateQueries({ queryKey: ['qrstatus'] })
+            queryClient.invalidateQueries({ queryKey: ['qrstatus', 'dashboardQr'] })
             return toast("Yay, Success!", { description: data.message })
         }
     })
