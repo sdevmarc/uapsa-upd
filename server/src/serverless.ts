@@ -27,18 +27,31 @@ async function bootstrap(): Promise<Server> {
 }
 
 export const handler: Handler = async (event: any, context: Context) => {
-    if (event.httpMethod === 'OPTIONS') {
+    try {
+        if (event.httpMethod === 'OPTIONS') {
+            return {
+                statusCode: 200,
+                headers: {
+                    'Access-Control-Allow-Origin': 'https://uapsa-upd.vercel.app',
+                    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                    'Access-Control-Allow-Credentials': 'true',
+                },
+                body: null,
+            };
+        }
+        const server = await bootstrap();
+        return serverlessExpress.proxy(server, event, context, 'PROMISE').promise;
+    } catch (error) {
         return {
-            statusCode: 200,
+            statusCode: 500,
             headers: {
                 'Access-Control-Allow-Origin': 'https://uapsa-upd.vercel.app',
                 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type, Authorization',
                 'Access-Control-Allow-Credentials': 'true',
             },
-            body: null,
+            body: JSON.stringify({ message: 'Internal Server Error' }),
         };
     }
-    const server = await bootstrap();
-    return serverlessExpress.proxy(server, event, context, 'PROMISE').promise;
 };

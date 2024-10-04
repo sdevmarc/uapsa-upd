@@ -1,6 +1,6 @@
 // cloudinary.service.ts
 
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryResponse } from './cloudinary.interface';
 import { IPromiseSystemUI } from 'src/system/system.interface';
@@ -9,19 +9,23 @@ const streamifier = require('streamifier');
 @Injectable()
 export class CloudinaryService {
     uploadFile(file: Express.Multer.File, folder: string = 'uapsa_upd'): Promise<CloudinaryResponse> {
-        return new Promise<CloudinaryResponse>((resolve, reject) => {
-            const uploadStream = cloudinary.uploader.upload_stream(
-                {
-                    folder: folder, // Specify the folder where you want to store the file
-                },
-                (error, result) => {
-                    if (error) return reject(error);
-                    resolve(result);
-                },
-            );
+        try {
+            return new Promise<CloudinaryResponse>((resolve, reject) => {
+                const uploadStream = cloudinary.uploader.upload_stream(
+                    {
+                        folder: folder, // Specify the folder where you want to store the file
+                    },
+                    (error, result) => {
+                        if (error) return reject(error);
+                        resolve(result);
+                    },
+                );
 
-            streamifier.createReadStream(file.buffer).pipe(uploadStream);
-        });
+                streamifier.createReadStream(file.buffer).pipe(uploadStream);
+            });
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Cloudinary error', error }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
     async getImagesFromFolder(folder: string): Promise<any> {
