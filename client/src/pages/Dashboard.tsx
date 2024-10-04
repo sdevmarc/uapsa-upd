@@ -1,16 +1,18 @@
-import { DataTable } from "@/components/data-table-components/data-table"
 import Header from "@/components/header"
-import { useEffect } from "react"
-import { qrcolumns } from "@/components/data-table-components/columns/qr-columns"
+import { useEffect, useState } from "react"
 import HeadSection, { SubHeadSectionDetails } from "@/components/head-section"
 import { useQuery } from "@tanstack/react-query"
 import { API_DATA_QR_HOLDERS, API_INDEX, API_USER_EXIST } from "@/api"
 import { useNavigate } from "react-router-dom"
 import ScreenLoading from "@/components/screen-loading"
 import { toast } from "sonner"
+import { DataTableDashboard } from "./dashboard/data-table-dashboard"
+import { DashboardColumns } from "./dashboard/dashboard-columns"
+// import { IQRSchema } from "@/components/data-table-components/schema"
 
 export default function Dashboard() {
     const navigate = useNavigate()
+    const [resetSelection, setResetSelection] = useState(false)
     const token = localStorage.getItem('token')
 
     useEffect(() => {
@@ -40,11 +42,15 @@ export default function Dashboard() {
         }
     }, [jwtFetched, jwtAuthorized, userexist, navigate])
 
-    const { data: qrHolders = [], isLoading: qrLoading, isFetched: qrFetched } = useQuery({
+    const { data: qrHolders, isLoading: qrLoading, isFetched: qrFetched } = useQuery({
         queryFn: () => API_DATA_QR_HOLDERS({ token: token ?? '' }),
-        queryKey: ['dashboardQr', { token: token ?? '' }],
+        queryKey: ['qrstatus', { token: token ?? '' }],
         enabled: !!token
     })
+
+    // const handleCheckChange = (selectedQr: IQRSchema[]) => {
+    
+    // }
 
     return (
         <>
@@ -59,7 +65,13 @@ export default function Dashboard() {
                         />
                     </HeadSection>
                     {(jwtFetched && qrFetched) &&
-                        <DataTable columns={qrcolumns} data={qrHolders.data || []} toolbar="dashboard" />
+                        <DataTableDashboard
+                            columns={DashboardColumns}
+                            data={qrHolders.data || []}
+                            // fetchCheck={handleCheckChange}
+                            resetSelection={resetSelection}
+                            onResetComplete={() => setResetSelection(false)}
+                        />
                     }
                 </div>
             </div>
