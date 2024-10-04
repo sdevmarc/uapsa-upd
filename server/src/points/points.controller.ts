@@ -9,8 +9,8 @@ export class PointsController {
     ) { }
 
     @Post('add-point')
-    async CreatePoint(@Body() { qr }: { qr: string }) {
-        return await this.pointService.InsertPoint({ qr })
+    async CreatePoint(@Body() { idNumbers, points }: { idNumbers: string[], points: number }) {
+        return await this.pointService.insertPoint({ idNumbers, points })
     }
 
     @UseGuards(AuthGuard)
