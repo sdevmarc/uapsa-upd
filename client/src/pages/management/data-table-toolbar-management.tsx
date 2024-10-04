@@ -117,6 +117,7 @@ export function DataTableToolbarManagement<TData>({
             </div>
             <div className="flex gap-2">
                 <DialogContainer
+                    disabled={insertuserLoading}
                     submit={handleAddUserAccess}
                     title="Add User Access"
                     description="Please fill-out the required fields."

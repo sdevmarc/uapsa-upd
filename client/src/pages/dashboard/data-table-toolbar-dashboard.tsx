@@ -57,6 +57,7 @@ export function DataTableToolbarDashboard<TData>({
         onSuccess: (data) => {
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: data.message })
             queryClient.invalidateQueries({ queryKey: ['dashboardQr'] })
+            location.reload()
             return toast("Yay! Success.", { description: "Qr registered successfully!" })
         }
     })
@@ -164,6 +165,7 @@ export function DataTableToolbarDashboard<TData>({
                     isrows &&
                     <>
                         <DialogContainer
+                            disabled={insertpointLoading}
                             submit={handleAddPoint}
                             title="Add Point"
                             description="Please fill-out the required fields."
@@ -210,6 +212,7 @@ export function DataTableToolbarDashboard<TData>({
             </div >
             <div className="flex gap-2">
                 <DialogContainer
+                    disabled={qrLoading}
                     submit={handleAddQr}
                     title="Add Qr"
                     description="Please fill-out the required fields."

@@ -15,10 +15,11 @@ interface DialogContainerProps {
     title?: string;
     description?: string;
     children?: React.ReactNode;
+    disabled: boolean
     submit?: (e: React.FormEvent<HTMLFormElement>) => Promise<void> | void;
 }
 
-export function DialogContainer({ Trigger, title, description, children, submit }: DialogContainerProps) {
+export function DialogContainer({ Trigger, title, description, children, submit, disabled }: DialogContainerProps) {
     const [open, setOpen] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -44,7 +45,7 @@ export function DialogContainer({ Trigger, title, description, children, submit 
                         {children}
                     </div>
                     <DialogFooter>
-                        <Button type="submit" variant="outline" size="sm">
+                        <Button disabled={disabled} type="submit" variant="outline" size="sm">
                             Submit
                         </Button>
                     </DialogFooter>
