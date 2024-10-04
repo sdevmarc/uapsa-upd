@@ -16,8 +16,10 @@ async function bootstrap(): Promise<Server> {
         // Enable CORS
         nestApp.enableCors({
             origin: 'https://uapsa-upd.vercel.app',
-            methods: 'GET,POST,OPTIONS',
-            credentials: true
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+            credentials: true,
+            maxAge: 3600,
         });
 
         await nestApp.init();
