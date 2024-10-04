@@ -24,3 +24,10 @@ export interface IFormUser {
     email: string
     password: string
 }
+
+export interface IAPIDashboard {
+    idNumber?: string
+    name?: string
+    points?: string
+    attended?: string
+}
