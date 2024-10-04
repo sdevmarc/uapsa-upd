@@ -1,10 +1,9 @@
 export interface IQRSchema {
     _id?: string
-    idNumber: string
-    name: string
-    degree: string
-    attended: string
-    points: string
+    idNumber?: string | string[]
+    name?: string
+    attended?: string
+    points?: string | number
 }
 
 export interface IManagementSchema {
