@@ -70,8 +70,8 @@ export const API_CREATE_ATTENDANCE = async ({ qr }: { qr: string }) => {
     return response.data
 }
 
-export const API_CREATE_POINT = async ({ qr }: { qr: string }) => {
-    const response = await axios.post(`${HOST}/points/add-point`, { qr })
+export const API_CREATE_POINT = async ({ idNumbers, points }: { idNumbers: string[], points: number }) => {
+    const response = await axios.post(`${HOST}/points/add-point`, { idNumbers, points })
     return response.data
 }
 
