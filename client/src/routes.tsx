@@ -10,7 +10,7 @@ import Home from "./pages/home"
 import Management from "./pages/management"
 
 const Routes = createBrowserRouter([
-    { path: '/', element: <Home /> },
+    { path: '/s', element: <Home /> },
     { path: '/signin', element: <SignIn /> },
     { path: '/signup', element: <SignUp /> },
     { path: '/dashboard', element: <Dashboard /> },
