@@ -44,7 +44,7 @@ export default function Dashboard() {
 
     const { data: qrHolders, isLoading: qrLoading, isFetched: qrFetched } = useQuery({
         queryFn: () => API_DATA_QR_HOLDERS({ token: token ?? '' }),
-        queryKey: ['dashboardQr', { token: token ?? '' }],
+        queryKey: ['qrstatus', { token: token ?? '' }],
         enabled: !!token
     })
 

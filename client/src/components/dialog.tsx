@@ -46,7 +46,7 @@ export function DialogContainer({ Trigger, title, description, children, submit,
                     </div>
                     <DialogFooter>
                         <Button disabled={disabled} type="submit" variant="outline" size="sm">
-                            Submit
+                            {disabled ? 'Submitting...' : 'Submit'}
                         </Button>
                     </DialogFooter>
                 </form>

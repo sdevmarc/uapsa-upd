@@ -106,7 +106,7 @@ export function DataTableToolbarDashboard<TData>({
         mutationFn: API_CREATE_POINT,
         onSuccess: async (data) => {
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: 'Failed to add point.' })
-            await queryClient.invalidateQueries({ queryKey: ['qrstatus', 'dashboardQr'] })
+            await queryClient.invalidateQueries({ queryKey: ['qrstatus'] })
             // location.reload()
             return toast("Yay, Success!", { description: data.message })
         }
@@ -179,7 +179,7 @@ export function DataTableToolbarDashboard<TData>({
                                     <Label htmlFor="points" className="text-right">
                                         Please input a valid number.
                                     </Label>
-                                    <Input required id="points" name="points" onChange={handleAddPointChange} placeholder="eg. 2" className="col-span-3 placeholder:text-muted" />
+                                    <Input disabled={insertpointLoading} required id="points" name="points" onChange={handleAddPointChange} placeholder="eg. 2" className="col-span-3 placeholder:text-muted" />
                                 </>
                             }
                         />
