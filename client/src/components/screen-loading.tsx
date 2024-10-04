@@ -40,7 +40,9 @@ export default function ScreenLoading() {
                                 speed="1"
                                 color={`${htmlClass === 'dark' ? 'white' : 'black'}`}
                             ></l-waveform>
-                            <h1 className='text-lg'>Wait, I'm loading the map. </h1>
+                            <h1 className='text-md font-medium text-center'>
+                                Hold on... I'm loading
+                            </h1>
                         </div>
                     </div >
                     :
@@ -49,7 +51,7 @@ export default function ScreenLoading() {
                             <div className="w-[20%] flex justify-center items-center">
                                 <img src={Cycling} alt="Loading image" className='w-full h-full object-contain' loading='lazy' onLoad={() => setLoading(false)} onError={() => setLoading(false)} />
                             </div>
-                            <h1 className='font-medium text-[1rem] text-primary text-center'>
+                            <h1 className='text-md font-medium text-center'>
                                 Hold on... I'm loading
                             </h1>
                             <l-waveform
