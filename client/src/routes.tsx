@@ -5,12 +5,12 @@ import ScanAttendance from "@/pages/scan-attendance"
 import NotFoundPage from "@/pages/error-not-found"
 import ViewPointsAttendance from "@/pages/view-points-attendance"
 import Settings from "./pages/settings"
-import Dashboard from "./pages/dashboard"
-import Home from "./pages/home"
-import Management from "./pages/management"
+import Dashboard from "./pages/Dashboard"
+import Home from "./pages/Home"
+import Management from "./pages/Management"
 
 const Routes = createBrowserRouter([
-    { path: '/s', element: <Home /> },
+    { path: '/', element: <Home /> },
     { path: '/signin', element: <SignIn /> },
     { path: '/signup', element: <SignUp /> },
     { path: '/dashboard', element: <Dashboard /> },
