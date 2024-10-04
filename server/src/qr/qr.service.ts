@@ -132,6 +132,7 @@ export class QrService {
         const data = await this.QrModel.create({ idNumber, name })
         const base64_qr = this.encodeBase64(data._id.toString())
         const new_qr = `${process.env.SERVER_HOST}${base64_qr}`
+        console.log(base64_qr, new_qr)
 
         return { success: true, message: 'Qr created successfully!', qr: { new_qr, idNumber } }
     }
