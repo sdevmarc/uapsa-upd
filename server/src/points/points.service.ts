@@ -11,19 +11,38 @@ export class PointsService {
         @InjectModel('Qr') private readonly QrModel: Model<IQr>,
     ) { }
 
-    async InsertPoint({ qr }: { qr: string })
+    async InsertPointFromAttendance({ qr }: { qr: string })
         : Promise<{ success: boolean, message: string, qr?: string }> {
         try {
             const decoded_base64 = this.decodeBase64(qr)
 
             const isqr = await this.QrModel.findById(decoded_base64)
             if (!isqr) return { success: false, message: 'Qr is not registered.' }
+
             await this.PointModel.findOneAndUpdate(
                 { qr: decoded_base64 },
-                { $inc: { points: 1 } },
+                { $inc: { points: 5 } },
                 { new: true, upsert: true }
             )
             return { success: true, message: 'Point added to the user successfully!', qr: isqr._id.toString() }
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Qr user data failed to insert from attendance.', error }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async insertPoint({ idNumbers, points }: { idNumbers: string[], points: number })
+        : Promise<{ success: boolean, message: string }> {
+        try {
+            idNumbers.map(async (item) => {
+                const idNumber = item
+                const { _id: qr } = await this.QrModel.findOne({ idNumber })
+                await this.PointModel.findOneAndUpdate(
+                    { qr },
+                    { $inc: { points: points } },
+                    { new: true, upsert: true }
+                )
+            })
+            return { success: true, message: 'Point added successfully!' }
         } catch (error) {
             throw new HttpException({ success: false, message: 'Qr user data failed to insert.', error }, HttpStatus.INTERNAL_SERVER_ERROR)
         }
