@@ -112,7 +112,7 @@ const UpdateSettings = () => {
     const isLoading = jwtLoading || userexistLoading || systemuiLoading
 
     const { mutateAsync: updateUI, isPending: updateLoading } = useMutation({
-        mutationFn: async (formData: FormData) => await API_UPDATE_SYSTEM_UI(formData, token ?? ''),
+        mutationFn: async (formData: FormData) => await API_UPDATE_SYSTEM_UI(formData),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['systemui'] })
             toast("Settings updated successfully!")

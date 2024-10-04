@@ -118,10 +118,10 @@ export const API_FIND_SYSTEM_UI = async () => {
 }
 
 
-export const API_UPDATE_SYSTEM_UI = async (formData: FormData, token: string) => {
+export const API_UPDATE_SYSTEM_UI = async (formData: FormData) => {
     const response = await axiosInstance.post('/system/update-ui', formData, {
         headers: {
-            Authorization: `Bearer ${token}`,
+            // Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
         },
     });

@@ -2,7 +2,6 @@ import { Body, Controller, Get, Post, UploadedFiles, UseGuards, UseInterceptors 
 import { SystemService } from './system.service';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ISystemUI } from './system.interface';
-import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('system')
 export class SystemController {
@@ -15,7 +14,7 @@ export class SystemController {
         return this.systemService.getSystemUi()
     }
 
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     @Post('update-ui')
     @UseInterceptors(FileFieldsInterceptor([
         { name: 'icon', maxCount: 1 },
