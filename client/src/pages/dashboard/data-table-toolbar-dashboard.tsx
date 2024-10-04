@@ -57,7 +57,6 @@ export function DataTableToolbarDashboard<TData>({
         onSuccess: (data) => {
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: data.message })
             queryClient.invalidateQueries({ queryKey: ['dashboardQr'] })
-            location.reload()
             return toast("Yay! Success.", { description: "Qr registered successfully!" })
         }
     })
@@ -108,6 +107,7 @@ export function DataTableToolbarDashboard<TData>({
         onSuccess: (data) => {
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: 'Failed to add point.' })
             queryClient.invalidateQueries({ queryKey: ['qrstatus', 'dashboardQr'] })
+            location.reload()
             return toast("Yay, Success!", { description: data.message })
         }
     })
