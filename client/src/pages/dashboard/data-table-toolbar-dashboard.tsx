@@ -104,10 +104,10 @@ export function DataTableToolbarDashboard<TData>({
 
     const { mutateAsync: insertPoint, isPending: insertpointLoading } = useMutation({
         mutationFn: API_CREATE_POINT,
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: 'Failed to add point.' })
-            queryClient.invalidateQueries({ queryKey: ['qrstatus', 'dashboardQr'] })
-            location.reload()
+            await queryClient.invalidateQueries({ queryKey: ['qrstatus', 'dashboardQr'] })
+            // location.reload()
             return toast("Yay, Success!", { description: data.message })
         }
     })
