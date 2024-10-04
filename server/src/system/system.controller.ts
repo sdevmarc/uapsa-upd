@@ -25,12 +25,12 @@ export class SystemController {
         @UploadedFiles() files: { icon?: Express.Multer.File[], background?: Express.Multer.File[] }
     ) {
 
+        console.log('Received header title:', header_title);
         const header_icon_file = files.icon?.[0];
         const bg_image_file = files.background?.[0];
-        // console.log({ header_title, header_icon_file, bg_image_file })
+
+        console.log('Received files:', header_icon_file, bg_image_file);
 
         return this.systemService.updateUI({ header_title, header_icon_file, bg_image_file })
-        // return { header_title, header_icon_file, bg_image_file }
-
     }
 }

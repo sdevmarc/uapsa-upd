@@ -13,14 +13,6 @@ interface ISignUp {
     role: string
 }
 
-const axiosInstance = axios.create({
-    baseURL: `${HOST}`,
-    withCredentials: true,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
-
 export const API_INDEX = async ({ token }: { token: string }) => {
     const response = await axios.get(`${HOST}`, {
         headers: {
@@ -119,11 +111,10 @@ export const API_FIND_SYSTEM_UI = async () => {
 
 
 export const API_UPDATE_SYSTEM_UI = async (formData: FormData) => {
-    const response = await axiosInstance.post('/system/update-ui', formData, {
+    const response = await axios.post(`${HOST}/system/update-ui`, formData, {
         headers: {
-            // Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
         },
-    });
-    return response.data;
+    })
+    return response.data
 }
