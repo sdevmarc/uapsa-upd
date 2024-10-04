@@ -1,18 +1,17 @@
 import { API_FIND_IDNUMBER } from "@/api"
 import ScreenLoading from "@/components/screen-loading"
 import { useQuery } from "@tanstack/react-query"
-import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import NotFoundPage from "./error-not-found"
+import { useEffect } from "react"
 
 export default function ViewPointsAttendance() {
     const { qr } = useParams<{ qr: string }>()
     const navigate = useNavigate()
-    const token = localStorage.getItem('token')
 
     useEffect(() => {
-        if (token) return navigate('/dashboard')
-    }, [token, navigate])
+        if (!qr) { navigate('/') }
+    }, [])
 
     const { data: qruser, isLoading: qrLoading, isFetched: qrFetched } = useQuery({
         queryFn: () => API_FIND_IDNUMBER({ qr }),
