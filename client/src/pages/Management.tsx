@@ -1,13 +1,13 @@
-import { DataTable } from "@/components/data-table-components/data-table"
 import Header from "@/components/header"
 import { useEffect } from "react"
 import HeadSection, { BackHeadSection, SubHeadSectionDetails } from "@/components/head-section"
 import { useQuery } from "@tanstack/react-query"
 import { API_DATA_USER_MANAGEMENT, API_INDEX, API_USER_EXIST } from "@/api"
 import { useNavigate } from "react-router-dom"
-import { managementcolumns } from "@/components/data-table-components/columns/management-columns"
 import ScreenLoading from "@/components/screen-loading"
 import { toast } from "sonner"
+import { DataTableManagement } from "./management/data-table-management"
+import { ManagementColumns } from "./management/management-columns"
 
 export default function Management() {
     const navigate = useNavigate()
@@ -40,7 +40,7 @@ export default function Management() {
         }
     }, [jwtFetched, jwtAuthorized, userexist, navigate])
 
-    const { data: usermanagement = [], isLoading: usermanagementLoading, isFetched: usermanagementFetched } = useQuery({
+    const { data: usermanagement, isLoading: usermanagementLoading, isFetched: usermanagementFetched } = useQuery({
         queryFn: () => API_DATA_USER_MANAGEMENT({ token: token ?? '' }),
         queryKey: ['userManagement', { token: token ?? '' }],
         enabled: !!token
@@ -60,7 +60,7 @@ export default function Management() {
                         />
                     </HeadSection>
                     {(jwtFetched && usermanagementFetched) &&
-                        <DataTable columns={managementcolumns} data={usermanagement.data} toolbar="management" />
+                        <DataTableManagement columns={ManagementColumns} data={usermanagement.data || []} />
                     }
                 </div>
             </div>
