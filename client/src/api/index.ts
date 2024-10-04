@@ -115,7 +115,8 @@ export const API_UPDATE_SYSTEM_UI = async (formData: FormData, token: string) =>
         headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
-        }
+        },
+        withCredentials: true,
     })
     return response.data
 }

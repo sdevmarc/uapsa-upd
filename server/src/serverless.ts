@@ -16,7 +16,7 @@ async function bootstrap(): Promise<Server> {
         // Enable CORS
         nestApp.enableCors({
             origin: 'https://uapsa-upd.vercel.app',
-            methods: 'GET,POST',
+            methods: 'GET,POST,OPTIONS',
             credentials: true
         });
 
@@ -27,6 +27,18 @@ async function bootstrap(): Promise<Server> {
 }
 
 export const handler: Handler = async (event: any, context: Context) => {
+    if (event.httpMethod === 'OPTIONS') {
+        return {
+            statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': 'https://uapsa-upd.vercel.app',
+                'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                'Access-Control-Allow-Credentials': 'true',
+            },
+            body: null,
+        };
+    }
     const server = await bootstrap();
     return serverlessExpress.proxy(server, event, context, 'PROMISE').promise;
 };
