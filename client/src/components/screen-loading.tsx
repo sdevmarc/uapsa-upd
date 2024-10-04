@@ -32,7 +32,7 @@ export default function ScreenLoading() {
         <>
             {
                 isLoading ?
-                    <div className="fixed top-0 left-0 w-full h-screen bg-background flex justify-center items-center z-[1]">
+                    <div className="fixed top-0 left-0 w-full h-screen bg-background flex justify-center items-center z-[5]">
                         <div className="w-full h-full max-w-[90rem] px-4 flex flex-col justify-center items-center">
                             <l-waveform
                                 size="20"
@@ -46,7 +46,7 @@ export default function ScreenLoading() {
                         </div>
                     </div >
                     :
-                    <div className="fixed top-0 left-0 w-full h-screen bg-background flex justify-center items-center z-[1]">
+                    <div className="fixed top-0 left-0 w-full h-screen bg-background flex justify-center items-center z-[5]">
                         <div className="w-full h-full max-w-[90rem] px-4 flex flex-col justify-center items-center gap-4">
                             <div className="w-[20%] flex justify-center items-center">
                                 <img src={Cycling} alt="Loading image" className='w-full h-full object-contain' loading='lazy' onLoad={() => setLoading(false)} onError={() => setLoading(false)} />
