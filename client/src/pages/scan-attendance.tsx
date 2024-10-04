@@ -109,7 +109,9 @@ export default function ScanAttendance() {
     const handleScan = async (detectedCodes: IDetectedBarcode[]) => {
         if (detectedCodes) {
             const new_qr = removeBaseUrl(detectedCodes[0].rawValue)
+            console.log(new_qr)
             const decodedBase64 = decodeBase64(new_qr)
+            console.log(decodedBase64)
 
             await InsertAttendance({ qr: new_qr })
             setIsScanning(false)
