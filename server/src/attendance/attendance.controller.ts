@@ -33,7 +33,7 @@ export class AttendanceController {
     @Post('create-attended')
     async CreateAttended(@Body() { qr }: { qr: string }) {
         try {
-            await this.pointService.InsertPoint({ qr })
+            await this.pointService.InsertPointFromAttendance({ qr })
             return await this.attendanceService.InsertAttended({ qr })
         } catch (error) {
             throw new HttpException({ success: false, message: 'Creating attended failed to create.', error }, HttpStatus.BAD_REQUEST)
