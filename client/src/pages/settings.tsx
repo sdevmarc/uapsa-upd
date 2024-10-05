@@ -12,7 +12,7 @@ import ScreenLoading from '@/components/screen-loading'
 export default function Settings() {
     return (
         <>
-            <div className="flex flex-col min-h-screen items-center">
+            <div className="w-full flex flex-col justify-center items-center">
                 <Header />
                 <div className="w-full max-w-[90rem] flex flex-col pb-[20rem]">
                     <HeadSection>
@@ -27,6 +27,7 @@ export default function Settings() {
                     </main>
                 </div>
             </div>
+
         </>
     )
 }
