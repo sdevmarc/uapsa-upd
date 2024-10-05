@@ -99,7 +99,18 @@ export function DataTableDashboard<TData, TValue>({
 
     return (
         <div className="space-y-4 pb-[13rem]">
-            <DataTableToolbarDashboard table={table} isrows={isrows} checks={selected} />
+            <DataTableToolbarDashboard
+                table={table}
+                isrows={isrows}
+                checks={selected}
+                onResetRows={
+                    () => {
+                        setRows(false)
+                        table.resetRowSelection()
+                    }
+                } 
+                onResetSelections={() =>  table.resetRowSelection()}
+                />
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
