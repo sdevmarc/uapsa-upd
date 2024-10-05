@@ -76,9 +76,10 @@ export default function ScanAttendance() {
 
     const { mutateAsync: InsertAttendance, isPending: attendanceLoading } = useMutation({
         mutationFn: API_CREATE_ATTENDANCE,
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             if (!data.success) return toast("Oops! Something went wrong.", { description: data.message })
-            queryClient.invalidateQueries({ queryKey: ['qrstatus'] })
+            await queryClient.invalidateQueries({ queryKey: ['qrstatus'] })
+            await queryClient.refetchQueries({ queryKey: ['qrstatus'] })
             return toast("Attendance recorded!", { description: `${currentDate}` })
         },
         onError: () => {
