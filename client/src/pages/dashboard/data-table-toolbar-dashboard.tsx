@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import React, { useEffect, useRef, useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { API_CREATE_POINT, API_CREATE_QR } from "@/api"
+import { API_CREATE_POINT, API_CREATE_QR, API_DELETE_MULTIPLE_QR, API_RESET_QR_PROGRESS } from "@/api"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import ScreenLoading from "@/components/screen-loading"
@@ -22,6 +22,8 @@ interface DataTableToolbarProps<TData> {
     table: Table<TData>
     isrows: boolean
     checks: IQRSchema[]
+    onResetRows: () => void
+    onResetSelections: () => void
 }
 
 interface IQr {
@@ -39,7 +41,9 @@ const formattedDate = `${month}/${day}/${year}`
 export function DataTableToolbarDashboard<TData>({
     table,
     isrows,
-    checks
+    checks,
+    onResetRows,
+    onResetSelections
 }: DataTableToolbarProps<TData>) {
     const navigate = useNavigate()
     const queryClient = useQueryClient()
@@ -51,12 +55,17 @@ export function DataTableToolbarDashboard<TData>({
     })
     const [idNumbers, setIdNumbers] = useState<string[]>([])
     const [point, setPoint] = useState<number>(0)
+    const token = localStorage.getItem('token') || ''
+
+    useEffect(() => {
+        if (!token) { navigate('/') }
+    }, [token, navigate])
 
     const { mutateAsync: InsertQr, isPending: qrLoading } = useMutation({
         mutationFn: API_CREATE_QR,
         onSuccess: (data) => {
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: data.message })
-            queryClient.invalidateQueries({ queryKey: ['dashboardQr'] })
+            queryClient.invalidateQueries({ queryKey: ['qrstatus'] })
             return toast("Yay! Success.", { description: "Qr registered successfully!" })
         }
     })
@@ -107,24 +116,27 @@ export function DataTableToolbarDashboard<TData>({
         onSuccess: async (data) => {
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: 'Failed to add point.' })
             await queryClient.invalidateQueries({ queryKey: ['qrstatus'] })
-            // location.reload()
             return toast("Yay, Success!", { description: data.message })
         }
     })
 
-    // const { mutateAsync: deleteqruser, isPending: deleteqruserLoading, isFetched: deleteqruserFetched } = useMutation({
-    //     mutationFn: ,
-    //     onSuccess: () => {
+    const { mutateAsync: deletemultipleqruser, isPending: deleteqruserLoading } = useMutation({
+        mutationFn: API_DELETE_MULTIPLE_QR,
+        onSuccess: async (data) => {
+            if (!data.success) return toast("Uh, oh! Something went wrong.", { description: 'Failed to delete users.' })
+            await queryClient.invalidateQueries({ queryKey: ['qrstatus'] })
+            return toast("Yay, Success!", { description: data.message })
+        }
+    })
 
-    //     }
-    // })
-
-    // const { mutateAsync: resetprogress, isPending: resetprogressLoading, isFetched: resetprogressFetched } = useMutation({
-    //     mutationFn: ,
-    //     onSuccess: () => {
-
-    //     }
-    // })
+    const { mutateAsync: resetprogress, isPending: resetprogressLoading } = useMutation({
+        mutationFn: API_RESET_QR_PROGRESS,
+        onSuccess: async (data) => {
+            if (!data.success) return toast("Uh, oh! Something went wrong.", { description: 'Failed to reset users.' })
+            await queryClient.invalidateQueries({ queryKey: ['qrstatus'] })
+            return toast("Yay, Success!", { description: data.message })
+        }
+    })
 
     const handleAddPointChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target
@@ -138,19 +150,24 @@ export function DataTableToolbarDashboard<TData>({
             return
         }
         await insertPoint({ idNumbers, points: point })
+        onResetSelections()
     }
 
-    // const handleDeleteQrUser = () => {
+    const handleDeleteQrUser = async () => {
+        await deletemultipleqruser({ idNumber: idNumbers, token })
+        onResetRows()
+    }
 
-    // }
+    const handleResetProgress = async () => {
+        await resetprogress({ idNumber: idNumbers, token })
+        onResetSelections()
+    }
 
-    // const handleResetProgress = () => {
-
-    // }
+    const isLoading = qrLoading || insertpointLoading || deleteqruserLoading || resetprogressLoading
 
     return (
         <div className="flex flex-wrap items-center justify-between" >
-            {(qrLoading || insertpointLoading) && <ScreenLoading />}
+            {isLoading && <ScreenLoading />}
             < canvas ref={canvasRef} style={{ display: 'none' }} />
             < div className="flex flex-1 flex-wrap items-center gap-2" >
                 <Input
@@ -183,7 +200,7 @@ export function DataTableToolbarDashboard<TData>({
                                 </>
                             }
                         />
-                        {/* <AlertDialogConfirmation
+                        <AlertDialogConfirmation
                             btnTitle="Reset Progress"
                             title="Are you sure?"
                             description={`This will reset its attendance and points.`}
@@ -194,7 +211,7 @@ export function DataTableToolbarDashboard<TData>({
                             title="Are you sure?"
                             description={`This will permanently delete the user and its progress.`}
                             btnContinue={handleDeleteQrUser}
-                        /> */}
+                        />
                     </>
                 }
                 {
