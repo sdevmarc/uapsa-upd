@@ -49,10 +49,30 @@ export class QrController {
     }
 
     @UseGuards(AuthGuard)
-    @Post('reset')
-    async DeleteQr() {
+    @Post('reset-progress')
+    async ResetProgress(@Body() { idNumber }: { idNumber: string[] }) {
         try {
-            return await this.qrService.ResetQr()
+            return await this.qrService.resetAllProgress({ idNumber })
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Qr failed to create.' }, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    @UseGuards(AuthGuard)
+    @Post('delete-multiple-qr')
+    async DeleteMultipleQr(@Body() { idNumber }: { idNumber: string[] }) {
+        try {
+            return await this.qrService.deleteMultipleQr({ idNumber })
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Qr failed to create.' }, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    @UseGuards(AuthGuard)
+    @Post('reset-all-progress')
+    async ResetAllProgressQr(@Body() { idNumber }: { idNumber: string[] }) {
+        try {
+            return await this.qrService.resetAllProgress({ idNumber })
         } catch (error) {
             throw new HttpException({ success: false, message: 'Qr failed to clear data.' }, HttpStatus.BAD_REQUEST)
         }
