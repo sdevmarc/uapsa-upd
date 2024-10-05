@@ -116,6 +116,7 @@ export function DataTableToolbarDashboard<TData>({
         onSuccess: async (data) => {
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: 'Failed to add point.' })
             await queryClient.invalidateQueries({ queryKey: ['qrstatus'] })
+            await queryClient.refetchQueries({ queryKey: ['qrstatus'] })
             return toast("Yay, Success!", { description: data.message })
         }
     })
@@ -125,6 +126,7 @@ export function DataTableToolbarDashboard<TData>({
         onSuccess: async (data) => {
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: 'Failed to delete users.' })
             await queryClient.invalidateQueries({ queryKey: ['qrstatus'] })
+            await queryClient.refetchQueries({ queryKey: ['qrstatus'] })
             return toast("Yay, Success!", { description: data.message })
         }
     })
@@ -134,6 +136,7 @@ export function DataTableToolbarDashboard<TData>({
         onSuccess: async (data) => {
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: 'Failed to reset users.' })
             await queryClient.invalidateQueries({ queryKey: ['qrstatus'] })
+            await queryClient.refetchQueries({ queryKey: ['qrstatus'] })
             return toast("Yay, Success!", { description: data.message })
         }
     })
