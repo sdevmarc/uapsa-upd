@@ -32,9 +32,7 @@ export default function SignIn() {
     const { mutateAsync: QuerySignInUser, isPending: SignInloading } = useMutation({
         mutationFn: API_SIGN_IN,
         onSuccess: (data) => {
-            if (!data.success) {
-                return toast("Oops, Something went wrong!", { description: data.message })
-            }
+            if (!data.success) return toast("Oops, Something went wrong!", { description: data.message })
             localStorage.setItem('token', data.access_token)
             return navigate('/dashboard')
         },
