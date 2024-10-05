@@ -58,9 +58,10 @@ export function DataTableRowActionsDashboard<TData>({ row }: DataTableRowActions
 
     const { mutateAsync: deleteQr, isPending: deleteqrLoading } = useMutation({
         mutationFn: API_DELETE_QR,
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             if (!data.success) return toast("Uh oh! something went wrong.", { description: 'Qr failed to delete.' })
-            queryClient.invalidateQueries({ queryKey: ['dashboardQr'] })
+            await queryClient.invalidateQueries({ queryKey: ['qrstatus'] })
+            await queryClient.refetchQueries({ queryKey: ['qrstatus'] })
             return toast("Yay! Success.", { description: data.message })
         }
     })
