@@ -32,10 +32,10 @@ export function DataTableRowActionsManagement<TData>({ row }: DataTableRowAction
 
     const { mutateAsync: deleteUser, isPending: userLoading } = useMutation({
         mutationFn: API_DELETE_USER,
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             if (!data.success) return toast("Uh oh! something went wrong.", { description: 'User failed to delete.' })
-
-            queryClient.invalidateQueries({ queryKey: ['userManagement'] })
+            await queryClient.invalidateQueries({ queryKey: ['userManagement'] })
+            await queryClient.refetchQueries({ queryKey: ['userManagement'] })
             return toast("Uh oh! something went wrong.", { description: 'User successfully deleted!' })
         }
     })
