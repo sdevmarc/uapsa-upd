@@ -51,9 +51,10 @@ export function DataTableToolbarManagement<TData>({
 
     const { mutateAsync: InserUser, isPending: insertuserLoading } = useMutation({
         mutationFn: API_CREATE_USER,
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: data.message })
-            queryClient.invalidateQueries({ queryKey: ["userManagement"] })
+            await queryClient.invalidateQueries({ queryKey: ["userManagement"] })
+            await queryClient.refetchQueries({ queryKey: ['userManagement'] })
             return toast("Yay! Success.", { description: "User registered successfully!" })
         },
     })
