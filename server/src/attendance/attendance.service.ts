@@ -53,20 +53,20 @@ export class AttendanceService {
         }
     }
 
-    async InsertAbsent({ qr }: IAttendance)
-        : Promise<{ success: boolean, message: string }> {
-        try {
-            await this.AttendanceModel.findOneAndUpdate(
-                { qr },
-                { $inc: { absences: 1 } },
-                { new: true, upsert: true }
-            )
+    // async InsertAbsent({ qr }: IAttendance)
+    //     : Promise<{ success: boolean, message: string }> {
+    //     try {
+    //         await this.AttendanceModel.findOneAndUpdate(
+    //             { qr },
+    //             { $inc: { absences: 1 } },
+    //             { new: true, upsert: true }
+    //         )
 
-            return { success: true, message: 'Absent created sucessfully!' }
-        } catch (error) {
-            throw new HttpException({ success: false, message: 'Qr user data failed to insert absent.', error }, HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-    }
+    //         return { success: true, message: 'Absent created sucessfully!' }
+    //     } catch (error) {
+    //         throw new HttpException({ success: false, message: 'Qr user data failed to insert absent.', error }, HttpStatus.INTERNAL_SERVER_ERROR)
+    //     }
+    // }
 
     async ResetAttendance()
         : Promise<{ success: boolean, message: string }> {
