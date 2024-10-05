@@ -103,6 +103,24 @@ export const API_DELETE_QR = async ({ qr, token }: { qr: string, token: string }
     return response.data
 }
 
+export const API_DELETE_MULTIPLE_QR = async ({ idNumber, token }: { idNumber: string[], token: string }) => {
+    const response = await axios.post(`${HOST}/qr/delete-multiple-qr`, { idNumber }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    return response.data
+}
+
+export const API_RESET_QR_PROGRESS = async ({ idNumber, token }: { idNumber: string[], token: string }) => {
+    const response = await axios.post(`${HOST}/qr/reset-all-progress`, { idNumber }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    return response.data
+}
+
 //SYSTEM UI
 export const API_FIND_SYSTEM_UI = async () => {
     const response = await axios.get(`${HOST}/system`)
