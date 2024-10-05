@@ -63,9 +63,10 @@ export function DataTableToolbarDashboard<TData>({
 
     const { mutateAsync: InsertQr, isPending: qrLoading } = useMutation({
         mutationFn: API_CREATE_QR,
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             if (!data.success) return toast("Uh, oh! Something went wrong.", { description: data.message })
             queryClient.invalidateQueries({ queryKey: ['qrstatus'] })
+            await queryClient.refetchQueries({ queryKey: ['qrstatus'] })
             return toast("Yay! Success.", { description: "Qr registered successfully!" })
         }
     })
