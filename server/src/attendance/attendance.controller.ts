@@ -40,14 +40,14 @@ export class AttendanceController {
         }
     }
 
-    @Post('create-absent')
-    async CreateAbsent(@Body() { qr }: { qr: string }) {
-        try {
-            return await this.attendanceService.InsertAbsent({ qr })
-        } catch (error) {
-            throw new HttpException({ success: false, message: 'Creating absent failed to create.', error }, HttpStatus.BAD_REQUEST)
-        }
-    }
+    // @Post('create-absent')
+    // async CreateAbsent(@Body() { qr }: { qr: string }) {
+    //     try {
+    //         return await this.attendanceService.InsertAbsent({ qr })
+    //     } catch (error) {
+    //         throw new HttpException({ success: false, message: 'Creating absent failed to create.', error }, HttpStatus.BAD_REQUEST)
+    //     }
+    // }
 
     @UseGuards(AuthGuard)
     @Post('reset')
