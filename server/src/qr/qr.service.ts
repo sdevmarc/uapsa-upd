@@ -137,6 +137,46 @@ export class QrService {
         return { success: true, message: 'Qr created successfully!', qr: { new_qr, idNumber } }
     }
 
+    async resetAllProgress({ idNumber }: { idNumber: string[] })
+        : Promise<IPromiseQr> {
+        try {
+            console.log(idNumber)
+            idNumber.map(async (item) => {
+                const { _id: qr } = await this.QrModel.findOne({ idNumber: item })
+                if (!qr) return
+
+                await this.AttendanceModel.findOneAndUpdate(
+                    { qr },
+                    { attended: 0, absences: 0 },
+                    { new: true }
+                )
+                await this.PointModel.findOneAndUpdate(
+                    { qr },
+                    { points: 0 },
+                    { new: true }
+                )
+            })
+            return { success: true, message: 'Qr progress reset successfully.' }
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Failed to reset all progress.' }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async deleteMultipleQr({ idNumber }: { idNumber: string[] })
+        : Promise<IPromiseQr> {
+        try {
+            idNumber.map(async (item) => {
+                const { _id: qr } = await this.QrModel.findOne({ idNumber: item })
+                await this.QrModel.findOneAndDelete({ idNumber: item })
+                await this.AttendanceModel.findOneAndDelete({ qr })
+                await this.PointModel.findOneAndDelete({ qr })
+            })
+            return { success: true, message: 'Qr deleted successfully!' }
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Failed to delete multiple qrs.', error }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
     async DeleteQr({ qr }: IQr)
         : Promise<IPromiseQr> {
         await this.QrModel.findByIdAndDelete(qr)
