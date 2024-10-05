@@ -1,4 +1,5 @@
 export interface IQr {
+    id?: string
     idNumber?: string
     name?: string
     qr?: string
