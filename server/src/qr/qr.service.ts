@@ -1,9 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
-import { IPromiseQr, IQr } from './qr.interface';
-import { IAttendance } from 'src/attendance/attendance.interface';
-import { IPoints } from 'src/points/points.interface';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+import mongoose, { Model } from 'mongoose'
+import { IPromiseQr, IQr } from './qr.interface'
+import { IAttendance } from 'src/attendance/attendance.interface'
+import { IPoints } from 'src/points/points.interface'
 
 @Injectable()
 export class QrService {
@@ -102,9 +102,9 @@ export class QrService {
                     attended: { $ifNull: ['$attendanceData.attended', 0] }
                 }
             }
-        ]);
+        ])
 
-        return { success: true, message: 'Data retrieved successfully!', data: data[0] };
+        return { success: true, message: 'Data retrieved successfully!', data: data[0] }
     }
 
     async findQrUser(qr: string)
@@ -136,6 +136,56 @@ export class QrService {
         return { success: true, message: 'Qr created successfully!', qr: { new_qr, idNumber } }
     }
 
+    async lessPointQr({ idNumber, points }: { idNumber: string[], points: number })
+        : Promise<IPromiseQr> {
+        try {
+            if (points === 0) return { success: true, message: 'Qr points deducted successfully.' }
+            idNumber.map(async (item) => {
+                const { _id: qr } = await this.QrModel.findOne({ idNumber: item })
+                if (!qr) return
+
+                const pointDoc = await this.PointModel.findOne({ qr })
+                if (!pointDoc) return
+
+                const newPoints = Math.max(0, pointDoc.points - points) // Ensure poinwts don't go below 0
+
+                await this.PointModel.findOneAndUpdate(
+                    { qr },
+                    { points: newPoints },
+                    { new: true }
+                )
+            })
+            return { success: true, message: 'Qr points deducted successfully.' }
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Failed to reset all progress.' }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async lessAttendanceQr({ idNumber, attended }: { idNumber: string[], attended: number })
+        : Promise<IPromiseQr> {
+        try {
+            if (attended === 0) return { success: true, message: 'Qr attendance deducted successfully.' }
+            idNumber.map(async (item) => {
+                const { _id: qr } = await this.QrModel.findOne({ idNumber: item })
+                if (!qr) return
+
+                const attendanceDoc = await this.AttendanceModel.findOne({ qr })
+                if (!attendanceDoc) return
+
+                const newAttendanceCount = Math.max(0, attendanceDoc.attended - attended) // Ensure attendance doesn't go below 0
+
+                await this.AttendanceModel.findOneAndUpdate(
+                    { qr },
+                    { attended: newAttendanceCount },
+                    { new: true }
+                )
+            })
+            return { success: true, message: 'Qr attendance deducted successfully.' }
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Failed to reset all progress.' }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
     async resetAllProgress({ idNumber }: { idNumber: string[] })
         : Promise<IPromiseQr> {
         try {
@@ -145,7 +195,7 @@ export class QrService {
 
                 await this.AttendanceModel.findOneAndUpdate(
                     { qr },
-                    { attended: 0, absences: 0 },
+                    { attended: 0 },
                     { new: true }
                 )
                 await this.PointModel.findOneAndUpdate(
@@ -188,10 +238,10 @@ export class QrService {
     }
 
     encodeBase64(data: string): string {
-        return Buffer.from(data, 'utf-8').toString('base64');
+        return Buffer.from(data, 'utf-8').toString('base64')
     }
 
     decodeBase64(encodedData: string): string {
-        return Buffer.from(encodedData, 'base64').toString('utf-8');
+        return Buffer.from(encodedData, 'base64').toString('utf-8')
     }
 }
