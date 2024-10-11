@@ -9,33 +9,43 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "./ui/button"
+import { cn } from "@/lib/utils"
 
 interface DialogContainerProps {
-    Trigger?: React.ReactNode;
-    title?: string;
-    description?: string;
-    children?: React.ReactNode;
+    Trigger?: React.ReactNode
+    title?: string
+    description?: string
+    children?: React.ReactNode
     disabled: boolean
-    submit?: (e: React.FormEvent<HTMLFormElement>) => Promise<void> | void;
+    submit?: (e: React.FormEvent<HTMLFormElement>) => Promise<void> | void
+    className?: string
 }
 
-export function DialogContainer({ Trigger, title, description, children, submit, disabled }: DialogContainerProps) {
-    const [open, setOpen] = useState(false);
+export function DialogContainer({
+    Trigger,
+    title,
+    description,
+    children,
+    submit,
+    disabled,
+    className
+}: DialogContainerProps) {
+    const [open, setOpen] = useState(false)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+        e.preventDefault()
         if (submit) {
-            await submit(e);
-            setOpen(false);
+            await submit(e)
+            setOpen(false)
         }
-    };
+    }
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
+            <DialogTrigger asChild className={cn("sm:max-w-[425px]", className)}>
                 {Trigger}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className={"sm:max-w-[425px]"}>
                 <form onSubmit={handleSubmit}>
                     <DialogHeader>
                         <DialogTitle>{title}</DialogTitle>
