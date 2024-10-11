@@ -39,6 +39,26 @@ export class QrController {
     }
 
     @UseGuards(AuthGuard)
+    @Post('less/points')
+    async LessQrPoints(@Body() { idNumber, points }: {idNumber: string[], points: number }) {
+        try {
+            return await this.qrService.lessPointQr({ idNumber, points })
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Qr failed to create.' }, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    @UseGuards(AuthGuard)
+    @Post('less/attendance')
+    async LessQrAttendance(@Body() { idNumber, attended }: {idNumber: string[], attended: number }) {
+        try {
+            return await this.qrService.lessAttendanceQr({ idNumber, attended })
+        } catch (error) {
+            throw new HttpException({ success: false, message: 'Qr failed to create.' }, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    @UseGuards(AuthGuard)
     @Post('delete-qr')
     async RemoveQrUser(@Body() { qr }: { qr: string }) {
         try {
