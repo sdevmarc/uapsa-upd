@@ -112,6 +112,24 @@ export const API_DELETE_MULTIPLE_QR = async ({ idNumber, token }: { idNumber: st
     return response.data
 }
 
+export const API_LESS_MULTIPLE_POINTS = async ({ idNumber, points, token }: { idNumber: string[], points: number, token: string }) => {
+    const response = await axios.post(`${HOST}/qr/less/points`, { idNumber, points }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    return response.data
+}
+
+export const API_LESS_MULTIPLE_ATTENDANCE = async ({ idNumber, attended, token }: { idNumber: string[], attended: number, token: string }) => {
+    const response = await axios.post(`${HOST}/qr/less/attendance`, { idNumber, attended }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    return response.data
+}
+
 export const API_RESET_QR_PROGRESS = async ({ idNumber, token }: { idNumber: string[], token: string }) => {
     const response = await axios.post(`${HOST}/qr/reset-all-progress`, { idNumber }, {
         headers: {
