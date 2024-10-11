@@ -24,7 +24,7 @@ export default function SignIn() {
     }, [token, navigate]);
 
 
-    const { data: userexist, isLoading: userexistLoading } = useQuery({
+    const { data: userexist, isLoading: userexistLoading, isFetched: userFetched } = useQuery({
         queryFn: () => API_USER_EXIST(),
         queryKey: ['signinUserExist']
     })
@@ -48,7 +48,7 @@ export default function SignIn() {
 
     const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (!userexist.success) return navigate('/signup')
+        if (userFetched && !userexist.success) return navigate('/signup')
         return await QuerySignInUser({ email: values.email, password: values.password })
     }
 
