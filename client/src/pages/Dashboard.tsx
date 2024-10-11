@@ -48,10 +48,6 @@ export default function Dashboard() {
         enabled: !!token
     })
 
-    // const handleCheckChange = (selectedQr: IQRSchema[]) => {
-    
-    // }
-
     return (
         <>
             <div className="w-full flex flex-col justify-center items-center">
